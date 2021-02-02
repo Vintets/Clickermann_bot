@@ -1,0 +1,99 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import telebot
+from telebot import types
+from configs.config import CLICKERMANN_BOT_TOKEN
+
+
+bot = telebot.TeleBot(CLICKERMANN_BOT_TOKEN, parse_mode='HTML')  # None, HTML or MARKDOWN
+
+
+@bot.message_handler(commands=['start'])
+def process_start_command(message: types.Message):
+    msg = ('Привет, сейчас я расскажу тебе про Clickermann.\n'
+                'Используй /help, '
+                'чтобы узнать список доступных команд!')
+    # bot.reply_to(message, msg)
+    bot.send_message(message.from_user.id, msg)
+
+@bot.message_handler(commands=['help'])
+def process_help_command(message: types.Message):
+    msg = ('Я могу ответить на следующие команды:\n'
+                '<b>/programm_help</b> - cправочник по процедурам и функциям')
+    bot.send_message(message.from_user.id, msg)
+
+@bot.message_handler(commands=['programm_help'])
+def process_programm_help_command(message: types.Message):
+    programm_help(message)
+
+@bot.message_handler(content_types=['text'])
+def get_text_messages(message: types.Message):
+    if message.text.lower() == 'привет':
+        bot.send_message(message.from_user.id, f'Привет {str(message.from_user.first_name)}, сейчас я расскажу тебе про Clickermann.')
+    # elif message.text == '/programm_help':
+        # programm_help(message)
+    # else:
+        # bot.send_message(message.from_user.id, 'Я тебя не понимаю. Напиши /help.')
+
+def programm_help_inline(message: types.Message):
+    Готовим кнопки
+    keyboard_main = types.InlineKeyboardMarkup()
+    key_numbers = types.InlineKeyboardButton(text='Работа с числами', callback_data='numbers')
+    key_strings = types.InlineKeyboardButton(text='Строки и файлы', callback_data='strings')
+    keyboard_main.add(key_numbers, key_strings)
+
+    bot.send_message(message.from_user.id, 'Справочник по процедурам и функциям Clickermann')
+    bot.send_message(message.from_user.id, text='Выберите раздел', reply_markup=keyboard_main)
+
+def programm_help(message: types.Message):
+    keyboard_main = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True, one_time_keyboard=True)
+    key_numbers = types.KeyboardButton(text='Работа с числами')
+    key_strings = types.KeyboardButton(text='Строки и файлы')
+    keyboard_main.add(key_numbers, key_strings)
+
+    # Показываем все кнопки сразу и пишем сообщение о выборе
+    bot.send_message(message.from_user.id, 'Справочник по процедурам и функциям Clickermann')
+    bot.send_message(message.from_user.id, text='Выберите раздел', reply_markup=keyboard_main)
+
+    # Убрать клавиатуру
+    # menu_remove = types.ReplyKeyboardRemove()
+    # bot.send_message(message.from_user.id, text='...', reply_markup=menu_remove)
+
+
+# Обработчик нажатий на кнопки
+@bot.callback_query_handler(func=lambda call: True)
+def callback_worker(call):
+    if call.data == 'numbers':
+        msg = 'В этом разделе описаны процедуры и функции работы с числами, переменными и массивами'
+        # Отправляем текст в Телеграм
+        bot.send_message(call.message.chat.id, msg)
+    elif call.data == 'strings':
+        msg = 'Работа со строками'
+        bot.send_message(call.message.chat.id, msg)
+
+
+# @bot.message_handler(func=lambda commands: True)
+# def unknown_command(message: types.Message):
+    # bot.send_message(message.from_user.id, 'Я тебя не понимаю.')
+
+@bot.message_handler(func=lambda commands: True)
+def unknown_message(message: types.Message):
+    msg = ('Я не знаю, что с этим делать:\n'
+                        '<i>Я просто напомню,</i> что есть'
+                        '<code>команда</code> /help')
+    bot.reply(msg)
+
+def server_started():
+    bot.send_message('829838425', 'Server <b>started</b>')
+
+
+if __name__ == '__main__':
+    server_started()
+    bot.polling(none_stop=True, interval=1)
+
+
+
+# Send Markdown or HTML, if you want Telegram apps to show
+# bold, italic, fixed-width text or inline URLs in the media caption
+

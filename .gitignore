@@ -1,0 +1,23 @@
+# System
+Thumbs.db
+
+# Venv
+
+# Configs
+
+# Project files
+*.pyc
+/configs/config.py
+cm_bot.db
+
+# Project dirs
+*/__pycache__/
+/zClickermann_bot_development/
+
+# Other files
+Очистка_компил_py3.bat
+help.chm*
+
+# User other data
+
+
