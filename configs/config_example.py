@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*-
 
 CLICKERMANN_BOT_TOKEN = 'token'
-
 DBNAME = 'cm_bot'
 
+ECHO_SQL = False
 
 # db mysql
 # engine = create_engine(f'mysql+mysqlconnector://user:pwd@localhost/{DBNAME}', echo = True)

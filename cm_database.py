@@ -7,7 +7,7 @@ from datetime import datetime
 from sqlalchemy import create_engine
 from sqlalchemy.engine.url import URL
 from sqlalchemy.orm import sessionmaker
-from configs.config import DATABASE
+from configs.config import DATABASE, ECHO_SQL
 from cm_db_models import Base, Partitions, Elements, Users, LogRequests, create_db_tables
 from sqlalchemy.exc import IntegrityError
 from data_help.partitions import DATA_PARTITIONS
@@ -18,7 +18,7 @@ import accessory.authorship as auth_sh
 
 
 class DB():
-    engine = create_engine(URL(**DATABASE), echo = True)
+    engine = create_engine(URL(**DATABASE), echo=ECHO_SQL)
     def __init__(self):
         self.session = self.create_session()
 
