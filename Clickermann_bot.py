@@ -1,13 +1,19 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import os
+import sys
 import telebot
 from telebot import types
 from configs.config import CLICKERMANN_BOT_TOKEN
+from cm_database import DB
+import accessory.colorprint as cp
+import accessory.clear_consol as cc
+import accessory.authorship as auth_sh
 
 
 bot = telebot.TeleBot(CLICKERMANN_BOT_TOKEN, parse_mode='HTML')  # None, HTML or MARKDOWN
-
+db = DB()
 
 @bot.message_handler(commands=['start'])
 def process_start_command(message: types.Message):
@@ -89,6 +95,22 @@ def server_started():
 
 
 if __name__ == '__main__':
+    _width = 100
+    _hight = 50
+    if sys.platform == 'win32':
+        os.system('color 71')
+        os.system('mode con cols=%d lines=%d' % (_width, _hight))
+    cur_script = __file__
+    PATH_SCRIPT = os.path.abspath(os.path.dirname(cur_script))
+    os.chdir(PATH_SCRIPT)
+    cc.clearConsol()
+
+    __author__ = 'master by Vint'
+    __title__ = '--- Clickermann_bot ---'
+    __version__ = '0.1.0'
+    __copyright__ = 'Copyright 2020 (c)  bitbucket.org/Vintets'
+    auth_sh.authorship(__author__, __title__, __version__, __copyright__, width=_width)
+
     server_started()
     bot.polling(none_stop=True, interval=1)
 

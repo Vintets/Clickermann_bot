@@ -12,6 +12,9 @@ from cm_db_models import Base, Partitions, Elements, Users, LogRequests, create_
 from sqlalchemy.exc import IntegrityError
 from data_help.partitions import DATA_PARTITIONS
 from data_help.elements import DATA_ELEMENTS
+import accessory.colorprint as cp
+import accessory.clear_consol as cc
+import accessory.authorship as auth_sh
 
 
 class DB():
@@ -50,8 +53,24 @@ class DB():
 
 
 if __name__ == '__main__':
-    main()
-    print('Ok')
+    _width = 100
+    _hight = 50
+    if sys.platform == 'win32':
+        os.system('color 71')
+        os.system('mode con cols=%d lines=%d' % (_width, _hight))
+    cur_script = __file__
+    PATH_SCRIPT = os.path.abspath(os.path.dirname(cur_script))
+    os.chdir(PATH_SCRIPT)
+    cc.clearConsol()
+
+    __author__ = 'master by Vint'
+    __title__ = '--- Clickermann_bot database ---'
+    __version__ = '0.1.0'
+    __copyright__ = 'Copyright 2020 (c)  bitbucket.org/Vintets'
+    auth_sh.authorship(__author__, __title__, __version__, __copyright__, width=_width)
+
+    db = DB()
+    db.create_and_filling()
 
 
 # --------------------------------------------------------------------------------------------------
