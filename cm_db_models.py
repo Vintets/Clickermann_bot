@@ -35,6 +35,8 @@ class Partitions(BaseModel):
     parent_id = Column(Integer, nullable=False, default='0', server_default='0')
     description = Column(Text)
 
+    def __repr__(self):
+        return '<{0.__class__.__name__}(id={0.id!r} name={0.name})>'.format(self)
 
 class Elements(BaseModel):
     __tablename__ = 'elements'
@@ -57,7 +59,7 @@ class Elements(BaseModel):
         return self.header
 
     def __repr__(self):
-        return 'Element: {}'.format(self.header)
+        return '<{0.__class__.__name__}(id={0.id!r} header={0.header})>'.format(self)
 
 
 class Users(BaseModel):
