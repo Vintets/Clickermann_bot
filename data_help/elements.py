@@ -17,7 +17,7 @@ DATA_ELEMENTS = (
         version_cm_minor=2,
         version_cm_build=0,
         version_cm_releaselevel='beta',
-    ),
+        ),
     dict(header='операции сравнения',
         parent_id=1,
         description=(
@@ -34,7 +34,7 @@ DATA_ELEMENTS = (
         version_cm_minor=2,
         version_cm_build=0,
         version_cm_releaselevel='RC1',
-    ),
+        ),
     dict(header='логические операции',
         parent_id=1,
         description=(
@@ -48,7 +48,7 @@ DATA_ELEMENTS = (
         version_cm_minor=7,
         version_cm_build=0,
         version_cm_releaselevel='',
-    ),
+        ),
     dict(header='#name',
         parent_id=2,
         description=('Позволяет задать скрипту имя, которое будет отображаться рядом с названием программы.'),
@@ -61,7 +61,7 @@ DATA_ELEMENTS = (
         version_cm_minor=6,
         version_cm_build=0,
         version_cm_releaselevel='',
-    ),
+        ),
     dict(header='#include',
         parent_id=2,
         description=('Вставляет в это место содержимое текстового файла из папки проекта.\nЭто позволяет "прятать" объемный код, повышая читаемость скрипта.'),
@@ -74,7 +74,7 @@ DATA_ELEMENTS = (
         version_cm_minor=6,
         version_cm_build=0,
         version_cm_releaselevel='',
-    ),
+        ),
     dict(header='#logfile',
         parent_id=2,
         description=('Включает ведение лог-файла в папке проекта, куда дублируется весь вывод через logwrite / print'),
@@ -87,7 +87,7 @@ DATA_ELEMENTS = (
         version_cm_minor=8,
         version_cm_build=0,
         version_cm_releaselevel='',
-    ),
+        ),
     dict(header='#autorun',
         parent_id=2,
         description=('Автостарт. Сценарий начинает выполняться сразу после загрузки'),
@@ -100,7 +100,7 @@ DATA_ELEMENTS = (
         version_cm_minor=8,
         version_cm_build=0,
         version_cm_releaselevel='',
-    ),
+        ),
     dict(header='#ps2_keyboard',
         parent_id=2,
         description=('Включает режим PS/2 клавиатуры'),
@@ -113,7 +113,7 @@ DATA_ELEMENTS = (
         version_cm_minor=8,
         version_cm_build=0,
         version_cm_releaselevel='',
-    ),
+        ),
     dict(header='#ps2_mouse',
         parent_id=2,
         description=('Включает режим PS/2 мыши'),
@@ -126,7 +126,7 @@ DATA_ELEMENTS = (
         version_cm_minor=8,
         version_cm_build=0,
         version_cm_releaselevel='',
-    ),
+        ),
     dict(header='#define',
         parent_id=2,
         description=('Объявляет макрос - заменяет один текст на другой'),
@@ -143,7 +143,7 @@ DATA_ELEMENTS = (
         version_cm_minor=11,
         version_cm_build=0,
         version_cm_releaselevel='alpha',
-    ),
+        ),
     dict(header='шестнадцатиричная запись',
         parent_id=1,
         description=('Помимо обычного способа написания числа, вы можете использовать шестнадцатиричную запись'),
@@ -156,22 +156,22 @@ DATA_ELEMENTS = (
         version_cm_minor=7,
         version_cm_build=0,
         version_cm_releaselevel='',
-    ),
+        ),
     dict(header='служебные переменные, координаты и мышь',
         parent_id=3,
         description=(
-                'Имя переменной - Значение\n',
-                '$_xmouse Текущие координаты мыши по оси Х\n',
-                '$_ymouse Текущие координаты мыши по оси Y\n',
-                '$_xmax Максимально допустимое значение X, вычисляется из конфигурации рабочего стола\n',
-                '$_ymax Максимально допустимое значение Y, (..)\n',
-                '$_xmin Минимально допустимое значение X, (..)\n',
-                '$_ymin Минимально допустимое значение Y, (..)\n',
-                '$_return1 Используется для возврата в неё значения определенными инструкциями\n',
-                '$_return2 Используется для возврата в неё значения определенными инструкциями\n',
-                '$_cursor Текущий вид указателя мыши (стрелка, палец и т.п.)',
+                'Имя переменной - Значение\n'
+                '$_xmouse Текущие координаты мыши по оси Х\n'
+                '$_ymouse Текущие координаты мыши по оси Y\n'
+                '$_xmax Максимально допустимое значение X, вычисляется из конфигурации рабочего стола\n'
+                '$_ymax Максимально допустимое значение Y, (..)\n'
+                '$_xmin Минимально допустимое значение X, (..)\n'
+                '$_ymin Минимально допустимое значение Y, (..)\n'
+                '$_return1 Используется для возврата в неё значения определенными инструкциями\n'
+                '$_return2 Используется для возврата в неё значения определенными инструкциями\n'
+                '$_cursor Текущий вид указателя мыши (стрелка, палец и т.п.)'
                     ),
-        syntax='',
+        # syntax='',
         # parameters='',
         example='LCLICK($_xmouse, $_ymouse) - клик в текущих координатах\nPRINT($_cursor) - номер текущего вида курсора',
         # notes='',
@@ -180,22 +180,23 @@ DATA_ELEMENTS = (
         version_cm_minor=2,
         version_cm_build=0,
         version_cm_releaselevel='',
-    ),
+        ),
     dict(header='служебные переменные, время и дата',
         parent_id=3,
         description=(
-                '$_ms Системный таймер Windows, отсчитывающий миллисекунды с момента старта ОС\n',
-                '$_time_t Текущее время в формате Unix-систем\n',
-                '$_time_h Текущий час\n',
-                '$_time_m Текущая минута\n',
-                '$_time_s Текущая секунда\n',
-                '$_date_y Текущий год\n',
-                '$_date_m Текущий месяц\n',
-                '$_date_d Текущие число\n',
-                '$_time_str Текущие время\n',
-                '$_date_str Текущая дата',
+                'Имя переменной - Значение\n'
+                '$_ms Системный таймер Windows, отсчитывающий миллисекунды с момента старта ОС\n'
+                '$_time_t Текущее время в формате Unix-систем\n'
+                '$_time_h Текущий час\n'
+                '$_time_m Текущая минута\n'
+                '$_time_s Текущая секунда\n'
+                '$_date_y Текущий год\n'
+                '$_date_m Текущий месяц\n'
+                '$_date_d Текущие число\n'
+                '$_time_str Текущие время\n'
+                '$_date_str Текущая дата'
                 ),
-        syntax='',
+        # syntax='',
         # parameters='',
         example='PRINT($_date_str, " ", $_time_str) - выводит в лог текущую дату и время',
         # notes='',
@@ -204,28 +205,29 @@ DATA_ELEMENTS = (
         version_cm_minor=7,
         version_cm_build=0,
         version_cm_releaselevel='SE',
-    ),
+        ),
     dict(header='служебные переменные, разное',
         parent_id=3,
         description=(
-                '$_hwnd Текущий hwnd привязки (если 0, то привязки к окну нет)\n',
-                '$_hwnd_self Собственный hwnd кликера\n',
-                '$_pdir Текущая рабочая директория\n',
-                '$_ver_self Версия программы\n',
-                '$_ver_sys Версия системы\n',
-                '$_arch_sys Разрядность системы\n',
-                '$_param_str Параметры запуска программы, разделенные ";"',
+                'Имя переменной - Значение\n'
+                '$_hwnd Текущий hwnd привязки (если 0, то привязки к окну нет)\n'
+                '$_hwnd_self Собственный hwnd кликера\n'
+                '$_pdir Текущая рабочая директория\n'
+                '$_ver_self Версия программы\n'
+                '$_ver_sys Версия системы\n'
+                '$_arch_sys Разрядность системы\n'
+                '$_param_str Параметры запуска программы, разделенные ";"'
                 ),
-        syntax='',
+        # syntax='',
         # parameters='',
-        example='',
+        example='PRINT($_ver_self) - вывести в лог версию программы',
         # notes='',
         keywords='служебные переменные, системные переменные, hwnd привязки, hwnd кликера, текущая рабочая директория, текущая директория, версия программы, версия системы, разрядность системы, параметры программы, hwnd, hwnd_self, pdir, ver_self, ver_sys, arch_sys, param_str',
         version_cm_major=4,
         version_cm_minor=13,
         version_cm_build=14,
         version_cm_releaselevel='',
-    ),
+        ),
 )
 
 
@@ -245,6 +247,6 @@ DATA_ELEMENTS = (
         version_cm_minor=2,
         version_cm_build=0,
         version_cm_releaselevel='',
-    ),
+        ),
 '''
 
