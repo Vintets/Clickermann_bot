@@ -35,16 +35,29 @@ class DB():
     def filling_db(self):
         for partition in DATA_PARTITIONS:
             new_partition = Partitions(**partition)
-            self.session.add(new_partition)
-
-        for element in DATA_ELEMENTS:
-            new_element = Elements(**element)
-            self.session.add(new_element)
+            has_name = self.session.query(Partitions).filter(Partitions.name==partition['name'])
+            if has_name.count() == 0:
+                self.session.add(new_partition)
+                cp.cprint(f"2Добавляем раздел '{partition['name']}'")
 
         try:
             self.session.commit()
         except IntegrityError:
-            cp.cprint('12Дубль уникальных значений')
+            # self.session.rollback()
+            cp.cprint('12Дубль уникальных значений разделов')
+
+        for element in DATA_ELEMENTS:
+            new_element = Elements(**element)
+            has_name = self.session.query(Elements).filter(Elements.header==element['header'])
+            if has_name.count() == 0:
+                self.session.add(new_element)
+                cp.cprint(f"2Добавляем элемент' '{element['header']}'")
+
+        try:
+            self.session.commit()
+        except IntegrityError:
+            # self.session.rollback()
+            cp.cprint('12Дубль уникальных значений элементов')
 
     def create_and_filling(self):
         self.create_tables()
@@ -57,7 +70,7 @@ if __name__ == '__main__':
     _hight = 50
     if sys.platform == 'win32':
         os.system('color 71')
-        os.system('mode con cols=%d lines=%d' % (_width, _hight))
+        # os.system('mode con cols=%d lines=%d' % (_width, _hight))
     cur_script = __file__
     PATH_SCRIPT = os.path.abspath(os.path.dirname(cur_script))
     os.chdir(PATH_SCRIPT)
