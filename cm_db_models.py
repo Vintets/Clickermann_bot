@@ -75,7 +75,7 @@ class LogRequests(BaseModel):
     rtime = Column(DateTime, nullable=False, default=current_timestamp(), server_default='2000-01-01 00:00:00')
 
 
-def create_db(engine):
+def create_db_tables(engine):
     '''создает таблиц в БД'''
 
     Base.metadata.create_all(engine)
@@ -83,7 +83,7 @@ def create_db(engine):
 
 if __name__ == '__main__':
     engine = create_engine(URL(**DATABASE), echo = True)
-    create_db(engine)
+    create_db_tables(engine)
 
 
 # --------------------------------------------------------------------------------------------------
