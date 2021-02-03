@@ -32,7 +32,7 @@ class Partitions(BaseModel):
     __tablename__ = 'partitions'
     name = Column(String(255), nullable=False, unique=True)
     visible = Column(Integer, nullable=False, default='1', server_default='1')
-    parent = Column(Integer, nullable=False, default='0', server_default='0')
+    parent_id = Column(Integer, nullable=False, default='0', server_default='0')
     description = Column(Text)
 
 
