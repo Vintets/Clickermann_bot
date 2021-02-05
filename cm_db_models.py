@@ -41,8 +41,8 @@ class Partitions(BaseModel):
 
 class Elements(BaseModel):
     __tablename__ = 'elements'
-    header = Column(String(255), nullable=False, unique=True)
-    header_isupper = Column(Integer, nullable=False, default='0', server_default='0')
+    name = Column(String(255), nullable=False, unique=True)
+    name_isupper = Column(Integer, nullable=False, default='0', server_default='0')
     visible = Column(Integer, nullable=False, default='1', server_default='1')
     # parent_id = Column(Integer, nullable=False, default='0', server_default='0', index=True)
     parent_id = Column(Integer, ForeignKey('partitions.id', ondelete='CASCADE'), nullable=False, default='0', server_default='0', index=True)
@@ -58,10 +58,10 @@ class Elements(BaseModel):
     version_cm_releaselevel = Column(String(16), nullable=True, default=None, server_default=None)
 
     def __unicode__(self):
-        return self.header
+        return self.name
 
     def __repr__(self):
-        return '<{0.__class__.__name__}(id={0.id!r} header={0.header})>'.format(self)
+        return '<{0.__class__.__name__}(id={0.id!r} name={0.name})>'.format(self)
 
 
 class Users(BaseModel):
