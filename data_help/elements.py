@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 DATA_ELEMENTS = (
-    dict(header='математические операции',
+    dict(name='математические операции',
         parent_id=1,
         description=(
                     'Операция                Приоритет Пример\n'
@@ -18,7 +18,7 @@ DATA_ELEMENTS = (
         version_cm_build=0,
         version_cm_releaselevel='beta',
         ),
-    dict(header='операции сравнения',
+    dict(name='операции сравнения',
         parent_id=1,
         description=(
                     'Операция          Синтаксис\n'
@@ -35,7 +35,7 @@ DATA_ELEMENTS = (
         version_cm_build=0,
         version_cm_releaselevel='RC1',
         ),
-    dict(header='логические операции',
+    dict(name='логические операции',
         parent_id=1,
         description=(
                     'Операция                    Синтаксис\n'
@@ -49,7 +49,7 @@ DATA_ELEMENTS = (
         version_cm_build=0,
         version_cm_releaselevel='',
         ),
-    dict(header='#name',
+    dict(name='#name',
         parent_id=2,
         description=('Позволяет задать скрипту имя, которое будет отображаться рядом с названием программы.'),
         syntax='#name "ИмяСкрипта"',
@@ -62,7 +62,7 @@ DATA_ELEMENTS = (
         version_cm_build=0,
         version_cm_releaselevel='',
         ),
-    dict(header='#include',
+    dict(name='#include',
         parent_id=2,
         description=('Вставляет в это место содержимое текстового файла из папки проекта.\nЭто позволяет "прятать" объемный код, повышая читаемость скрипта.'),
         syntax='#include "ИмяСкрипта"',
@@ -75,7 +75,7 @@ DATA_ELEMENTS = (
         version_cm_build=0,
         version_cm_releaselevel='',
         ),
-    dict(header='#logfile',
+    dict(name='#logfile',
         parent_id=2,
         description=('Включает ведение лог-файла в папке проекта, куда дублируется весь вывод через logwrite / print'),
         syntax='#logfile "LogName.txt"',
@@ -88,7 +88,7 @@ DATA_ELEMENTS = (
         version_cm_build=0,
         version_cm_releaselevel='',
         ),
-    dict(header='#autorun',
+    dict(name='#autorun',
         parent_id=2,
         description=('Автостарт. Сценарий начинает выполняться сразу после загрузки'),
         syntax='#autorun',
@@ -101,7 +101,7 @@ DATA_ELEMENTS = (
         version_cm_build=0,
         version_cm_releaselevel='',
         ),
-    dict(header='#ps2_keyboard',
+    dict(name='#ps2_keyboard',
         parent_id=2,
         description=('Включает режим PS/2 клавиатуры'),
         syntax='#ps2_keyboard',
@@ -114,7 +114,7 @@ DATA_ELEMENTS = (
         version_cm_build=0,
         version_cm_releaselevel='',
         ),
-    dict(header='#ps2_mouse',
+    dict(name='#ps2_mouse',
         parent_id=2,
         description=('Включает режим PS/2 мыши'),
         syntax='#ps2_mouse',
@@ -127,7 +127,7 @@ DATA_ELEMENTS = (
         version_cm_build=0,
         version_cm_releaselevel='',
         ),
-    dict(header='#define',
+    dict(name='#define',
         parent_id=2,
         description=('Объявляет макрос - заменяет один текст на другой'),
         syntax='#define find:replace',
@@ -144,7 +144,7 @@ DATA_ELEMENTS = (
         version_cm_build=0,
         version_cm_releaselevel='alpha',
         ),
-    dict(header='шестнадцатиричная запись',
+    dict(name='шестнадцатиричная запись',
         parent_id=1,
         description=('Помимо обычного способа написания числа, вы можете использовать шестнадцатиричную запись'),
         syntax='0xFF',
@@ -157,7 +157,7 @@ DATA_ELEMENTS = (
         version_cm_build=0,
         version_cm_releaselevel='',
         ),
-    dict(header='служебные переменные, координаты и мышь',
+    dict(name='служебные переменные, координаты и мышь',
         parent_id=3,
         description=(
                 'Имя переменной - Значение\n'
@@ -181,7 +181,7 @@ DATA_ELEMENTS = (
         version_cm_build=0,
         version_cm_releaselevel='',
         ),
-    dict(header='служебные переменные, время и дата',
+    dict(name='служебные переменные, время и дата',
         parent_id=3,
         description=(
                 'Имя переменной - Значение\n'
@@ -206,7 +206,7 @@ DATA_ELEMENTS = (
         version_cm_build=0,
         version_cm_releaselevel='SE',
         ),
-    dict(header='служебные переменные, разное',
+    dict(name='служебные переменные, разное',
         parent_id=3,
         description=(
                 'Имя переменной - Значение\n'
@@ -235,8 +235,8 @@ DATA_ELEMENTS = (
 # --------------------------------------------------------------------------------------------------
 
 '''
-    dict(header='',
-        # header_isupper=1,
+    dict(name='',
+        # name_isupper=1,
         parent_id=,
         description=(''),
         syntax='',

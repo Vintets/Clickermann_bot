@@ -49,10 +49,10 @@ class DB():
 
         for element in DATA_ELEMENTS:
             new_element = Elements(**element)
-            has_name = self.session.query(Elements).filter(Elements.header==element['header'])
+            has_name = self.session.query(Elements).filter(Elements.name == element['name'])
             if has_name.count() == 0:
                 self.session.add(new_element)
-                cp.cprint(f"2Добавляем элемент' '{element['header']}'")
+                cp.cprint(f"2Добавляем элемент' '{element['name']}'")
 
         try:
             self.session.commit()
