@@ -42,6 +42,7 @@ class Partitions(BaseModel):
 class Elements(BaseModel):
     __tablename__ = 'elements'
     header = Column(String(255), nullable=False, unique=True)
+    header_isupper = Column(Integer, nullable=False, default='0', server_default='0')
     visible = Column(Integer, nullable=False, default='1', server_default='1')
     # parent_id = Column(Integer, nullable=False, default='0', server_default='0', index=True)
     parent_id = Column(Integer, ForeignKey('partitions.id', ondelete='CASCADE'), nullable=False, default='0', server_default='0', index=True)

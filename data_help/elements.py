@@ -236,6 +236,7 @@ DATA_ELEMENTS = (
 
 '''
     dict(header='',
+        # header_isupper=1,
         parent_id=,
         description=(''),
         syntax='',
