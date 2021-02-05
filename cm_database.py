@@ -10,6 +10,7 @@ from sqlalchemy.orm import sessionmaker
 from configs.config import DATABASE, ECHO_SQL
 from cm_db_models import Base, Partitions, Elements, Users, LogRequests, create_db_tables
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy import and_
 from data_help.partitions import DATA_PARTITIONS
 from data_help.elements import DATA_ELEMENTS
 import accessory.colorprint as cp
@@ -63,6 +64,10 @@ class DB():
         self.create_tables()
         self.filling_db()
         cp.cprint('2Database created Ok')
+
+    def get_partitions(self, parent=0, visible=1):
+        return self.session.query(Partitions).filter(
+                            and_(Partitions.parent_id==parent, Partitions.visible==visible))
 
 
 if __name__ == '__main__':

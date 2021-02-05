@@ -38,6 +38,7 @@ class Partitions(BaseModel):
     def __repr__(self):
         return '<{0.__class__.__name__}(id={0.id!r} name={0.name})>'.format(self)
 
+
 class Elements(BaseModel):
     __tablename__ = 'elements'
     header = Column(String(255), nullable=False, unique=True)
@@ -65,6 +66,9 @@ class Elements(BaseModel):
 class Users(BaseModel):
     __tablename__ = 'users'
     chat_id = Column(String(32), nullable=False, unique=True)
+    username = Column(String(64))
+    first_name = Column(String(64))
+    last_name = Column(String(64))
     # created = Column(TIMESTAMP, nullable=False)
     created = Column(DateTime, nullable=False, default=current_timestamp(), server_default='2000-01-01 00:00:00')
     last_update = Column(DateTime, nullable=False, default=datetime(2000, 1, 1, 0, 0, 0), server_default='2000-01-01 00:00:00')

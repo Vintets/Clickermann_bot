@@ -26,24 +26,29 @@ def process_start_command(message: types.Message):
 @bot.message_handler(commands=['help'])
 def process_help_command(message: types.Message):
     msg = ('Я могу ответить на следующие команды:\n'
-                '<b>/programm_help</b> - cправочник по процедурам и функциям')
+                '<b>/cm_help</b> - cправочник по процедурам и функциям')
     bot.send_message(message.from_user.id, msg)
 
-@bot.message_handler(commands=['programm_help'])
-def process_programm_help_command(message: types.Message):
-    programm_help(message)
+@bot.message_handler(content_types=['sticker'])
+def get_sticker_id(message: types.Message):
+    print(message)
+
+@bot.message_handler(commands=['cm_help'])
+def process_cm_help_command(message: types.Message):
+    cm_help(message)
 
 @bot.message_handler(content_types=['text'])
 def get_text_messages(message: types.Message):
     if message.text.lower() == 'привет':
         bot.send_message(message.from_user.id, f'Привет {str(message.from_user.first_name)}, сейчас я расскажу тебе про Clickermann.')
-    # elif message.text == '/programm_help':
-        # programm_help(message)
+    # elif message.text == '/cm_help':
+        # cm_help(message)
     # else:
         # bot.send_message(message.from_user.id, 'Я тебя не понимаю. Напиши /help.')
+    pass
 
-def programm_help_inline(message: types.Message):
-    Готовим кнопки
+def cm_help_inline(message: types.Message):
+    # Готовим кнопки
     keyboard_main = types.InlineKeyboardMarkup()
     key_numbers = types.InlineKeyboardButton(text='Работа с числами', callback_data='numbers')
     key_strings = types.InlineKeyboardButton(text='Строки и файлы', callback_data='strings')
@@ -52,19 +57,22 @@ def programm_help_inline(message: types.Message):
     bot.send_message(message.from_user.id, 'Справочник по процедурам и функциям Clickermann')
     bot.send_message(message.from_user.id, text='Выберите раздел', reply_markup=keyboard_main)
 
-def programm_help(message: types.Message):
-    keyboard_main = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True, one_time_keyboard=True)
-    key_numbers = types.KeyboardButton(text='Работа с числами')
-    key_strings = types.KeyboardButton(text='Строки и файлы')
-    keyboard_main.add(key_numbers, key_strings)
+def cm_help(message: types.Message):
+    core_partitions = db.get_partitions(parent=0)
+    
+    keyboard_main = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True, row_width=1)
+    for partition in core_partitions:
+        key = types.KeyboardButton(partition.name)
+        keyboard_main.add(key)
 
     # Показываем все кнопки сразу и пишем сообщение о выборе
     bot.send_message(message.from_user.id, 'Справочник по процедурам и функциям Clickermann')
     bot.send_message(message.from_user.id, text='Выберите раздел', reply_markup=keyboard_main)
 
-    # Убрать клавиатуру
+    # Убрать клавиатуру принудительно
     # menu_remove = types.ReplyKeyboardRemove()
     # bot.send_message(message.from_user.id, text='...', reply_markup=menu_remove)
+    pass
 
 
 # Обработчик нажатий на кнопки
@@ -92,6 +100,7 @@ def unknown_message(message: types.Message):
 
 def server_started():
     bot.send_message('829838425', 'Server <b>started</b>')
+    cp.cprint('9Clickermann_bot запущен!')
 
 
 if __name__ == '__main__':
@@ -112,6 +121,7 @@ if __name__ == '__main__':
     auth_sh.authorship(__author__, __title__, __version__, __copyright__, width=_width)
 
     server_started()
+    
     bot.polling(none_stop=True, interval=1)
 
 
