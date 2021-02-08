@@ -10,6 +10,7 @@ from cm_database import DB
 import accessory.colorprint as cp
 import accessory.clear_consol as cc
 import accessory.authorship as auth_sh
+import configs.msg_const as msg_const
 
 
 bot = telebot.TeleBot(CLICKERMANN_BOT_TOKEN, parse_mode='HTML')  # None, HTML or MARKDOWN
@@ -17,17 +18,11 @@ db = DB()
 
 @bot.message_handler(commands=['start'])
 def process_start_command(message: types.Message):
-    msg = ('Привет, сейчас я расскажу тебе про Clickermann.\n'
-                'Используй /help, '
-                'чтобы узнать список доступных команд!')
-    # bot.reply_to(message, msg)
-    bot.send_message(message.from_user.id, msg)
+    bot.send_message(message.from_user.id, msg_const.MSG_WELCOME)
 
 @bot.message_handler(commands=['help'])
 def process_help_command(message: types.Message):
-    msg = ('Я могу ответить на следующие команды:\n'
-                '<b>/cm_help</b> - cправочник по процедурам и функциям')
-    bot.send_message(message.from_user.id, msg)
+    bot.send_message(message.from_user.id, msg_const.MSG_HELP)
 
 @bot.message_handler(content_types=['sticker'])
 def get_sticker_id(message: types.Message):
@@ -40,12 +35,10 @@ def process_cm_help_command(message: types.Message):
 @bot.message_handler(content_types=['text'])
 def get_text_messages(message: types.Message):
     if message.text.lower() == 'привет':
-        bot.send_message(message.from_user.id, f'Привет {str(message.from_user.first_name)}, сейчас я расскажу тебе про Clickermann.')
-    # elif message.text == '/cm_help':
-        # cm_help(message)
-    # else:
-        # bot.send_message(message.from_user.id, 'Я тебя не понимаю. Напиши /help.')
-    pass
+        bot.send_message(message.from_user.id, msg_const.MSG_HELLO.format(username=str(message.from_user.first_name)))
+    text_ok = processing_text_types(message)
+    if not text_ok:
+        bot.reply(message.from_user.id, msg_const.MSG_NOT_UNDERSTAND)
 
 def cm_help_inline(message: types.Message):
     # Готовим кнопки
@@ -54,20 +47,19 @@ def cm_help_inline(message: types.Message):
     key_strings = types.InlineKeyboardButton(text='Строки и файлы', callback_data='strings')
     keyboard_main.add(key_numbers, key_strings)
 
-    bot.send_message(message.from_user.id, 'Справочник по процедурам и функциям Clickermann')
-    bot.send_message(message.from_user.id, text='Выберите раздел', reply_markup=keyboard_main)
+    bot.send_message(message.from_user.id, msg_const.MSG_CM_HELP_MAIN1)
+    bot.send_message(message.from_user.id, text=msg_const.MSG_CM_HELP_MAIN2, reply_markup=keyboard_main)
 
 def cm_help(message: types.Message):
-    core_partitions = db.get_partitions(parent=0)
-    
+    bot.send_message(message.from_user.id, msg_const.MSG_CM_HELP_MAIN1)
+
     keyboard_main = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True, row_width=1)
     for partition in core_partitions:
         key = types.KeyboardButton(partition.name)
         keyboard_main.add(key)
 
     # Показываем все кнопки сразу и пишем сообщение о выборе
-    bot.send_message(message.from_user.id, 'Справочник по процедурам и функциям Clickermann')
-    bot.send_message(message.from_user.id, text='Выберите раздел', reply_markup=keyboard_main)
+    bot.send_message(message.from_user.id, text=msg_const.MSG_CM_HELP_MAIN2, reply_markup=keyboard_main)
 
     # Убрать клавиатуру принудительно
     # menu_remove = types.ReplyKeyboardRemove()
@@ -89,17 +81,14 @@ def callback_worker(call):
 
 # @bot.message_handler(func=lambda commands: True)
 # def unknown_command(message: types.Message):
-    # bot.send_message(message.from_user.id, 'Я тебя не понимаю.')
+    # bot.send_message(message.from_user.id, msg_const.MSG_NOT_UNDERSTAND)
 
 @bot.message_handler(func=lambda commands: True)
 def unknown_message(message: types.Message):
-    msg = ('Я не знаю, что с этим делать:\n'
-                        '<i>Я просто напомню,</i> что есть'
-                        '<code>команда</code> /help')
-    bot.reply(msg)
+    bot.reply(message.from_user.id, msg_const.MSG_NOT_UNDERSTAND)
 
 def server_started():
-    bot.send_message('829838425', 'Server <b>started</b>')
+    bot.send_message('829838425', msg_const.MSG_SERVER)
     cp.cprint('9Clickermann_bot запущен!')
 
 
