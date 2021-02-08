@@ -5,6 +5,7 @@ DATA_PARTITIONS = (
     dict(name='Введение',
         # id=1,
         # parent_id=,
+        description='Справка актуальна для версии 4.13.014',
         ),
     dict(name='Директивы препроцессора',
         # id=2,
