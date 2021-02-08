@@ -18,7 +18,8 @@ db = DB()
 
 @bot.message_handler(commands=['start'])
 def process_start_command(message: types.Message):
-    bot.send_message(message.from_user.id, msg_const.MSG_WELCOME)
+    menu_remove = types.ReplyKeyboardRemove()
+    bot.send_message(message.from_user.id, msg_const.MSG_WELCOME, reply_markup=menu_remove)
 
 @bot.message_handler(commands=['help'])
 def process_help_command(message: types.Message):
@@ -120,7 +121,8 @@ def unknown_message(message: types.Message):
     bot.reply(message.from_user.id, msg_const.MSG_NOT_UNDERSTAND)
 
 def server_started():
-    bot.send_message('829838425', msg_const.MSG_SERVER)
+    menu_remove = types.ReplyKeyboardRemove()
+    bot.send_message('829838425', msg_const.MSG_SERVER, reply_markup=menu_remove)
     cp.cprint('9Clickermann_bot запущен!')
 
 
