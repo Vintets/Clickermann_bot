@@ -7,6 +7,7 @@ from sqlalchemy.engine.url import URL
 from sqlalchemy import Table, Column, Integer, String, Text, DateTime, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql.functions import current_timestamp
+from sqlalchemy_utils import database_exists, create_database
 # from sqlalchemy.dialects.mysql import INTEGER, DATETIME
 # from sqlalchemy.dialects.mysql import MEDIUMTEXT
 # UnsignedInt = db.Integer()
@@ -82,9 +83,14 @@ class LogRequests(BaseModel):
     rtime = Column(DateTime, nullable=False, default=current_timestamp(), server_default='2000-01-01 00:00:00')
 
 
+def create_db(engine):
+    if not database_exists(engine.url):
+        create_database(engine.url)
+
 def create_db_tables(engine):
     '''создает таблиц в БД'''
 
+    create_db(engine)
     Base.metadata.create_all(engine)
 
 
