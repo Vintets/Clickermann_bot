@@ -36,7 +36,7 @@ class DB():
     def filling_db(self):
         for partition in DATA_PARTITIONS:
             new_partition = Partitions(**partition)
-            has_name = self.session.query(Partitions).filter(Partitions.name==partition['name'])
+            has_name = self.session.query(Partitions).filter(Partitions.name == partition['name'])
             if has_name.count() == 0:
                 self.session.add(new_partition)
                 cp.cprint(f"2Добавляем раздел '{partition['name']}'")
@@ -65,9 +65,18 @@ class DB():
         self.filling_db()
         cp.cprint('2Database created Ok')
 
-    def get_partitions(self, parent=0, visible=1):
+    def get_subpartitions(self, parent=0, visible=1):
+        self.create_session()
         return self.session.query(Partitions).filter(
-                            and_(Partitions.parent_id==parent, Partitions.visible==visible))
+                            and_(Partitions.parent_id == parent, Partitions.visible == visible))
+
+    def get_partition_by_name(self, name, visible=1):
+        self.create_session()
+        return self.session.query(Partitions).filter(
+                            and_(Partitions.name == name, Partitions.visible == visible))
+
+    def __del__(self):
+        self.session.close()
 
 
 if __name__ == '__main__':

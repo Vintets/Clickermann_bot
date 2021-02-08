@@ -54,7 +54,9 @@ def cm_help(message: types.Message):
     bot.send_message(message.from_user.id, msg_const.MSG_CM_HELP_MAIN1)
 
     keyboard_main = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True, row_width=1)
+    core_partitions = db.get_subpartitions(parent=0)
     for partition in core_partitions:
+        print(partition)
         key = types.KeyboardButton(partition.name)
         keyboard_main.add(key)
 
@@ -65,6 +67,36 @@ def cm_help(message: types.Message):
     # menu_remove = types.ReplyKeyboardRemove()
     # bot.send_message(message.from_user.id, text='...', reply_markup=menu_remove)
     pass
+
+def processing_text_types(message: types.Message):
+    text_ok = False
+    text = message.text.lower()
+    if is_partition_processing(message.from_user.id, text):
+        text_ok = True
+    
+    return text_ok
+
+def is_partition_processing(chat_id, text):
+    happily = False
+    find_partitions = db.get_partition_by_name(text.capitalize())
+    if find_partitions.count() == 1:
+        happily = True
+        find_partition = find_partitions[0]
+        print('find_partition', find_partition)
+        keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True, row_width=1)
+
+        # ищем все дочерние
+        print('find_partition.id', find_partition.id)
+        output_childrens = db.get_subpartitions(parent=find_partition.id)
+        for children in output_childrens:
+            key = types.KeyboardButton(children.name)
+            keyboard.add(key)
+
+        # отправляем имя и описание раздела
+        bot.send_message(chat_id, f'<b>{find_partition.name}</b>\n{find_partition.description}',
+                        reply_markup=keyboard)
+    # print('Не найден текст:', text)
+    return happily
 
 
 # Обработчик нажатий на кнопки
@@ -97,7 +129,7 @@ if __name__ == '__main__':
     _hight = 50
     if sys.platform == 'win32':
         os.system('color 71')
-        os.system('mode con cols=%d lines=%d' % (_width, _hight))
+        # os.system('mode con cols=%d lines=%d' % (_width, _hight))
     cur_script = __file__
     PATH_SCRIPT = os.path.abspath(os.path.dirname(cur_script))
     os.chdir(PATH_SCRIPT)
