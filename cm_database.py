@@ -30,6 +30,9 @@ class DB():
         session = Session()
         return session
 
+    def close_session(self):
+        self.session.close()
+
     def create_tables(self):
         create_db_tables(DB.engine)
 
@@ -66,12 +69,10 @@ class DB():
         cp.cprint('2Database created Ok')
 
     def get_subpartitions(self, parent=0, visible=1):
-        self.create_session()
         return self.session.query(Partitions).filter(
                             and_(Partitions.parent_id == parent, Partitions.visible == visible))
 
     def get_partition_by_name(self, name, visible=1):
-        self.create_session()
         return self.session.query(Partitions).filter(
                             and_(Partitions.name == name, Partitions.visible == visible))
 
@@ -92,12 +93,13 @@ if __name__ == '__main__':
 
     __author__ = 'master by Vint'
     __title__ = '--- Clickermann_bot database ---'
-    __version__ = '0.1.0'
+    __version__ = '0.1.1'
     __copyright__ = 'Copyright 2020 (c)  bitbucket.org/Vintets'
     auth_sh.authorship(__author__, __title__, __version__, __copyright__, width=_width)
 
     db = DB()
     db.create_and_filling()
+    db.close_session()
 
 
 # --------------------------------------------------------------------------------------------------
