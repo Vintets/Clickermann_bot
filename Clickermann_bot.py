@@ -39,7 +39,7 @@ def get_text_messages(message: types.Message):
         bot.send_message(message.from_user.id, msg_const.MSG_HELLO.format(username=str(message.from_user.first_name)))
     text_ok = processing_text_types(message)
     if not text_ok:
-        bot.reply(message.from_user.id, msg_const.MSG_NOT_UNDERSTAND)
+        bot.reply_to(message, msg_const.MSG_NOT_UNDERSTAND)
 
 def cm_help_inline(message: types.Message):
     # Готовим кнопки
@@ -118,7 +118,7 @@ def callback_worker(call):
 
 @bot.message_handler(func=lambda commands: True)
 def unknown_message(message: types.Message):
-    bot.reply(message.from_user.id, msg_const.MSG_NOT_UNDERSTAND)
+    bot.reply_to(message, msg_const.MSG_NOT_UNDERSTAND)
 
 def server_started():
     menu_remove = types.ReplyKeyboardRemove()
