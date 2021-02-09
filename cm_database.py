@@ -4,13 +4,13 @@
 import os
 import sys
 from datetime import datetime
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, and_
 from sqlalchemy.engine.url import URL
 from sqlalchemy.orm import sessionmaker
 from configs.config import DATABASE, ECHO_SQL
 from cm_db_models import Base, Partitions, Elements, Users, LogRequests, create_db_tables
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy import and_
+# from sqlalchemy_utils import database_exists
 from data_help.partitions import DATA_PARTITIONS
 from data_help.elements import DATA_ELEMENTS
 import accessory.colorprint as cp
@@ -19,7 +19,7 @@ import accessory.authorship as auth_sh
 
 
 class DB():
-    engine = create_engine(URL(**DATABASE), echo=ECHO_SQL)
+    engine = create_engine(URL(**DATABASE), connect_args={'check_same_thread':False}, echo=ECHO_SQL)
     def __init__(self):
         self.session = self.create_session()
 
@@ -93,7 +93,7 @@ if __name__ == '__main__':
 
     __author__ = 'master by Vint'
     __title__ = '--- Clickermann_bot database ---'
-    __version__ = '0.1.1'
+    __version__ = '0.1.2'
     __copyright__ = 'Copyright 2020 (c)  bitbucket.org/Vintets'
     auth_sh.authorship(__author__, __title__, __version__, __copyright__, width=_width)
 
