@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-CLICKERMANN_BOT_TOKEN = 'token'
+CLICKERMANN_HELP_BOT_TOKEN = 'token'
 DBNAME = 'cm_bot'
 
 ECHO_SQL = False

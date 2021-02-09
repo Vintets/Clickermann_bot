@@ -5,7 +5,7 @@ import os
 import sys
 import telebot
 from telebot import types
-from configs.config import CLICKERMANN_BOT_TOKEN
+from configs.config import CLICKERMANN_HELP_BOT_TOKEN
 from cm_database import DB
 import accessory.colorprint as cp
 import accessory.clear_consol as cc
@@ -13,7 +13,7 @@ import accessory.authorship as auth_sh
 import configs.msg_const as msg_const
 
 
-bot = telebot.TeleBot(CLICKERMANN_BOT_TOKEN, parse_mode='HTML')  # None, HTML or MARKDOWN
+bot = telebot.TeleBot(CLICKERMANN_HELP_BOT_TOKEN, parse_mode='HTML')  # None, HTML or MARKDOWN
 db = DB()
 
 @bot.message_handler(commands=['start'])
