@@ -76,6 +76,14 @@ class DB():
         return self.session.query(Partitions).filter(
                             and_(Partitions.name == name, Partitions.visible == visible))
 
+    def get_elements_by_parent(self, parent=0, visible=1):
+        return self.session.query(Elements).filter(
+                            and_(Elements.parent_id == parent, Elements.visible == visible))
+
+    def get_elements_by_name(self, name, visible=1):
+        return self.session.query(Elements).filter(
+                            and_(Elements.name == name, Elements.visible == visible))
+
     def __del__(self):
         self.session.close()
 

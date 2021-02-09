@@ -3,6 +3,7 @@
 
 import os
 import sys
+from itertools import chain
 import telebot
 from telebot import types
 from configs.config import CLICKERMANN_HELP_BOT_TOKEN
@@ -42,6 +43,8 @@ def get_text_messages(message: types.Message):
         bot.reply_to(message, msg_const.MSG_NOT_UNDERSTAND)
 
 def cm_help_inline(message: types.Message):
+    '''Вариант меню с кнопками Inline'''
+
     # Готовим кнопки
     keyboard_main = types.InlineKeyboardMarkup()
     key_numbers = types.InlineKeyboardButton(text='Работа с числами', callback_data='numbers')
@@ -50,6 +53,18 @@ def cm_help_inline(message: types.Message):
 
     bot.send_message(message.from_user.id, msg_const.MSG_CM_HELP_MAIN1)
     bot.send_message(message.from_user.id, text=msg_const.MSG_CM_HELP_MAIN2, reply_markup=keyboard_main)
+
+@bot.callback_query_handler(func=lambda call: True)
+def callback_worker(call):
+    '''Обработчик нажатий на кнопки'''
+
+    if call.data == 'numbers':
+        msg = 'В этом разделе описаны процедуры и функции работы с числами, переменными и массивами'
+        # Отправляем текст в Телеграм
+        bot.send_message(call.message.chat.id, msg)
+    elif call.data == 'strings':
+        msg = 'Работа со строками'
+        bot.send_message(call.message.chat.id, msg)
 
 def cm_help(message: types.Message):
     bot.send_message(message.from_user.id, msg_const.MSG_CM_HELP_MAIN1)
@@ -64,17 +79,14 @@ def cm_help(message: types.Message):
     # Показываем все кнопки сразу и пишем сообщение о выборе
     bot.send_message(message.from_user.id, text=msg_const.MSG_CM_HELP_MAIN2, reply_markup=keyboard_main)
 
-    # Убрать клавиатуру принудительно
-    # menu_remove = types.ReplyKeyboardRemove()
-    # bot.send_message(message.from_user.id, text='...', reply_markup=menu_remove)
-    pass
-
 def processing_text_types(message: types.Message):
     text_ok = False
     text = message.text.lower()
     if is_partition_processing(message.from_user.id, text):
         text_ok = True
-    
+    if not text_ok:
+        if is_element_processing(message.from_user.id, text):
+            text_ok = True
     return text_ok
 
 def is_partition_processing(chat_id, text):
@@ -83,34 +95,69 @@ def is_partition_processing(chat_id, text):
     if find_partitions.count() == 1:
         happily = True
         find_partition = find_partitions[0]
-        print('find_partition', find_partition)
+        cp.cprint(f'14find_partition {find_partition}')
         keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True, row_width=1)
 
-        # ищем все дочерние
-        print('find_partition.id', find_partition.id)
+        # ищем подразделы
         output_childrens = db.get_subpartitions(parent=find_partition.id)
-        for children in output_childrens:
+        # ищем все дочерние элементы
+        output_childrens_el = db.get_elements_by_parent(parent=find_partition.id)
+        for children in chain(output_childrens, output_childrens_el):
             key = types.KeyboardButton(children.name)
             keyboard.add(key)
 
         # отправляем имя и описание раздела
         bot.send_message(chat_id, f'<b>{find_partition.name}</b>\n{find_partition.description}',
                         reply_markup=keyboard)
-    # print('Не найден текст:', text)
     return happily
 
+def is_element_processing(chat_id, text):
+    happily = False
+    find_element = db.get_elements_by_name(text)
+    if find_element.count() == 1:
+        happily = True
+        output = template_engine_element(find_element[0])
+        print(output)
+        bot.send_message(chat_id, output)
+    return happily
 
-# Обработчик нажатий на кнопки
-@bot.callback_query_handler(func=lambda call: True)
-def callback_worker(call):
-    if call.data == 'numbers':
-        msg = 'В этом разделе описаны процедуры и функции работы с числами, переменными и массивами'
-        # Отправляем текст в Телеграм
-        bot.send_message(call.message.chat.id, msg)
-    elif call.data == 'strings':
-        msg = 'Работа со строками'
-        bot.send_message(call.message.chat.id, msg)
+def template_engine_element(el):
+    name = el.name
+    if el.name_isupper:
+        name = name.upper()
+    text = [f'<b>{name}</b>']
+    if el.description:
+        text.append(el.description)
+        text.append('')
+    if el.syntax:
+        text.append('<b>Синтаксис</b>')
+        text.append(f'<code>{el.syntax}</code>')
+        text.append('')
+    if el.parameters:
+        text.append('<b>Параметры </b>')
+        text.append(f'<code>{el.parameters}</code>')
+        text.append('')
+    if el.example:
+        text.append('<b>Пример</b>')
+        text.append(f'<code>{el.example}</code>')
+        text.append('')
+    if el.notes:
+        text.append('<b>Примечания </b>')
+        text.append(f'<i>{el.notes}</i>')
+        text.append('')
 
+    text.append(assembly_version(el))
+    return '\n'.join(text)
+
+def assembly_version(el):
+    version = '{major}.{minor}.{build:0>3}'.format(
+                        major=el.version_cm_major,
+                        minor=el.version_cm_minor,
+                        build=el.version_cm_build
+                        )
+    if el.version_cm_releaselevel:
+        version += f' {el.version_cm_releaselevel}'
+    return version
 
 # @bot.message_handler(func=lambda commands: True)
 # def unknown_command(message: types.Message):
@@ -139,7 +186,7 @@ if __name__ == '__main__':
 
     __author__ = 'master by Vint'
     __title__ = '--- Clickermann_bot ---'
-    __version__ = '0.1.0'
+    __version__ = '0.1.1'
     __copyright__ = 'Copyright 2020 (c)  bitbucket.org/Vintets'
     auth_sh.authorship(__author__, __title__, __version__, __copyright__, width=_width)
 
@@ -149,6 +196,13 @@ if __name__ == '__main__':
 
 
 
+# --------------------------------------------------------------------------------------------------
+
 # Send Markdown or HTML, if you want Telegram apps to show
 # bold, italic, fixed-width text or inline URLs in the media caption
+
+
+# Убрать клавиатуру принудительно
+# menu_remove = types.ReplyKeyboardRemove()
+# bot.send_message(message.from_user.id, text='...', reply_markup=menu_remove)
 
