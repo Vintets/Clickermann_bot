@@ -12,9 +12,10 @@ import accessory.colorprint as cp
 import accessory.clear_consol as cc
 import accessory.authorship as auth_sh
 import configs.msg_const as msg_const
+from configs.formatting import frm
 
 
-bot = telebot.TeleBot(CLICKERMANN_HELP_BOT_TOKEN, parse_mode='HTML')  # None, HTML or MARKDOWN
+bot = telebot.TeleBot(CLICKERMANN_HELP_BOT_TOKEN, parse_mode='MARKDOWN')  # None, HTML or MARKDOWN
 db = DB()
 
 @bot.message_handler(commands=['start'])
@@ -107,7 +108,7 @@ def is_partition_processing(chat_id, text):
             keyboard.add(key)
 
         # отправляем имя и описание раздела
-        bot.send_message(chat_id, f'<b>{find_partition.name}</b>\n{find_partition.description}',
+        bot.send_message(user_id, f'{frm.b}{find_partition.name}{frm.b}\n{find_partition.description}',
                         reply_markup=keyboard)
     return happily
 
@@ -125,25 +126,25 @@ def template_engine_element(el):
     name = el.name
     if el.name_isupper:
         name = name.upper()
-    text = [f'<b>{name}</b>']
+    text = [f'{frm.b}{name}{frm.b}']
     if el.description:
         text.append(el.description)
         text.append('')
     if el.syntax:
-        text.append('<b>Синтаксис</b>')
-        text.append(f'<code>{el.syntax}</code>')
+        text.append(f'{frm.b}Синтаксис{frm.b}')
+        text.append(f'{frm.c}{el.syntax}{frm.c}')
         text.append('')
     if el.parameters:
-        text.append('<b>Параметры </b>')
-        text.append(f'<code>{el.parameters}</code>')
+        text.append(f'{frm.b}Параметры{frm.b}')
+        text.append(f'{frm.c}{el.parameters}{frm.c}')
         text.append('')
     if el.example:
-        text.append('<b>Пример</b>')
-        text.append(f'<code>{el.example}</code>')
+        text.append(f'{frm.b}Пример{frm.b}')
+        text.append(f'{frm.c}{el.example}{frm.c}')
         text.append('')
     if el.notes:
-        text.append('<b>Примечания </b>')
-        text.append(f'<i>{el.notes}</i>')
+        text.append(f'{frm.b}Примечания{frm.b}')
+        text.append(f'{frm.i}{el.notes}{frm.i}')
         text.append('')
 
     text.append(assembly_version(el))
@@ -186,7 +187,7 @@ if __name__ == '__main__':
 
     __author__ = 'master by Vint'
     __title__ = '--- Clickermann_bot ---'
-    __version__ = '0.1.1'
+    __version__ = '0.1.2'
     __copyright__ = 'Copyright 2020 (c)  bitbucket.org/Vintets'
     auth_sh.authorship(__author__, __title__, __version__, __copyright__, width=_width)
 

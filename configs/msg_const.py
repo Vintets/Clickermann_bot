@@ -1,18 +1,19 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from configs.formatting import frm
 
-MSG_SERVER = 'Server <b>started</b>'
+
+MSG_SERVER = f'Server {frm.b}started{frm.b}'
 
 MSG_WELCOME = ('Привет, сейчас я расскажу тебе про Clickermann.\n'
-            'Для вывода меню разделов используй\n'
-            '/cm_help')
+            f'Для вывода меню разделов используй {frm.b}/cm_help{frm.b}')
 
 MSG_HELP = ('Я могу ответить на следующие команды:\n'
-            '<b>/cm_help</b> - cправочник по процедурам и функциям')
+            f'{frm.b}/cm_help{frm.b} - cправочник по процедурам и функциям Clickermann')
 
 MSG_NOT_UNDERSTAND = ('Я тебя не понимаю\n'
-                '<i>Я просто напомню,</i> что есть <code>команда</code> /help\n'
+                f'{frm.i}Я просто напомню,{frm.i} что есть <code>команда</code> /help\n'
                 'для вывода списка доступных команд!')
 
 MSG_HELLO = 'Привет {username}, я могу показать краткую справку по Clickermann'
