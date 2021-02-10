@@ -46,7 +46,7 @@ def get_text_messages(message: types.Message):
         bot.send_message(message.chat.id, msg_const.MSG_HELLO.format(username=str(message.from_user.first_name)))
     text_ok = processing_text_types(message)
     if not text_ok:
-        bot.reply_to(message, msg_const.MSG_NOT_UNDERSTAND)
+        bot.reply_to(message, f'{message.text}:{msg_const.MSG_NOT_UNDERSTAND}')
 
 def cm_help_inline(message: types.Message):
     '''Вариант меню с кнопками Inline'''
@@ -61,10 +61,10 @@ def cm_help_inline(message: types.Message):
     bot.send_message(message.chat.id, text=msg, reply_markup=keyboard_main)
 
 def cm_help(message: types.Message):
-    keyboard_main = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True, row_width=1)
+    keyboard_main = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True, row_width=2)
     core_partitions = db.get_subpartitions(parent=0)
     for partition in core_partitions:
-        print(partition)
+        # print(partition)
         key = types.KeyboardButton(partition.name)
         keyboard_main.add(key)
 
@@ -75,8 +75,15 @@ def cm_help(message: types.Message):
 def processing_text_types(message: types.Message):
     text_ok = False
     text = message.text.lower()
+    if text == '<-- вернуться в корень меню':
+        cm_help(message)    # в ручную имитируем команду /cm_help и
+        return True         # принудительно завершаем эту ветку
+    if text[:16] == '<-- вернуться в ':
+        text = text[16:]
+    # ищем подразделы и подэлементы, выводим как список
     if is_partition_processing(message.chat.id, text):
         text_ok = True
+    # если дочерних нет, то выводим как элемент
     if not text_ok:
         if is_element_processing(message.chat.id, text):
             text_ok = True
@@ -96,8 +103,18 @@ def is_partition_processing(user_id, text):
         # ищем все дочерние элементы
         output_childrens_el = db.get_elements_by_parent(parent=find_partition.id)
         for children in chain(output_childrens, output_childrens_el):
+            # print(children)
             key = types.KeyboardButton(children.name)
             keyboard.add(key)
+
+        # если не корневой раздел добавляем пункт/кнопку назад
+        if find_partition.id != 0:
+            if find_partition.parent_id == 0:
+                parent_name = f'корень меню'
+            else:
+                parent_name = db.get_partition_by_id(id=find_partition.parent_id).name
+            # print(f'parent:  id={find_partition.parent_id},  name={parent_name}')
+            keyboard.add(f'<-- Вернуться в {parent_name}')
 
         # отправляем имя и описание раздела
         bot.send_message(user_id, f'{frm.b}{find_partition.name}{frm.b}\n{find_partition.description}',
@@ -111,7 +128,7 @@ def is_element_processing(user_id, text):
         happily = True
         current_element = find_element[0]
         output = template_engine_element(current_element)
-        print(output)
+        # print(output)
         keyboard = types.InlineKeyboardMarkup()
         key_return = types.InlineKeyboardButton(
                                         text='Вернуться назад',
@@ -126,9 +143,8 @@ def callback_worker(call):
 
     if call.data.startswith('return_partition'):
         parent_id = int(call.data[17:])
-        print('parent_id', parent_id)
         parent_name = db.get_partition_by_id(id=parent_id).name
-        print('parent_name', parent_name)
+        print(f'parent:  id = {parent_id},  name={parent_name}')
         is_partition_processing(call.message.chat.id, parent_name)
 
 def template_engine_element(el):
@@ -196,7 +212,7 @@ if __name__ == '__main__':
 
     __author__ = 'master by Vint'
     __title__ = '--- Clickermann_bot ---'
-    __version__ = '0.1.2'
+    __version__ = '0.1.4'
     __copyright__ = 'Copyright 2020 (c)  bitbucket.org/Vintets'
     auth_sh.authorship(__author__, __title__, __version__, __copyright__, width=_width)
 
@@ -207,9 +223,6 @@ if __name__ == '__main__':
 
 
 # --------------------------------------------------------------------------------------------------
-
-# Send Markdown or HTML, if you want Telegram apps to show
-# bold, italic, fixed-width text or inline URLs in the media caption
 
 
 # Убрать клавиатуру принудительно
