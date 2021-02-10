@@ -150,7 +150,7 @@ def template_engine_element(el):
     return '\n'.join(text)
 
 def assembly_version(el):
-    version = '{major}.{minor}.{build:0>3}'.format(
+    version = 'с версии Clickermann {major}.{minor}.{build:0>3}'.format(
                         major=el.version_cm_major,
                         minor=el.version_cm_minor,
                         build=el.version_cm_build
