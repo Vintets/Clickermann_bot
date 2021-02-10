@@ -13,7 +13,7 @@ MSG_HELP = ('Я могу ответить на следующие команды
             f'{frm.b}/cm_help{frm.b} - cправочник по процедурам и функциям Clickermann')
 
 MSG_NOT_UNDERSTAND = ('Я тебя не понимаю\n'
-                f'{frm.i}Я просто напомню,{frm.i} что есть <code>команда</code> /help\n'
+                f'{frm.i}Я просто напомню,{frm.i} что есть {frm.c}команда{frm.c} /help\n'
                 'для вывода списка доступных команд!')
 
 MSG_HELLO = 'Привет {username}, я могу показать краткую справку по Clickermann'
