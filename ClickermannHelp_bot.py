@@ -21,7 +21,7 @@ db = DB()
 @bot.message_handler(commands=['start'])
 def process_start_command(message: types.Message):
     menu_remove = types.ReplyKeyboardRemove()
-    bot.send_message(message.from_user.id, msg_const.MSG_WELCOME, reply_markup=menu_remove)
+    bot.send_message(message.chat.id, msg_const.MSG_WELCOME, reply_markup=menu_remove)
 
 @bot.message_handler(commands=['help'])
 def process_help_command(message: types.Message):
@@ -38,7 +38,7 @@ def process_cm_help_command(message: types.Message):
 @bot.message_handler(content_types=['text'])
 def get_text_messages(message: types.Message):
     if message.text.lower() == 'привет':
-        bot.send_message(message.from_user.id, msg_const.MSG_HELLO.format(username=str(message.from_user.first_name)))
+        bot.send_message(message.chat.id, msg_const.MSG_HELLO.format(username=str(message.from_user.first_name)))
     text_ok = processing_text_types(message)
     if not text_ok:
         bot.reply_to(message, msg_const.MSG_NOT_UNDERSTAND)
@@ -68,8 +68,6 @@ def callback_worker(call):
         bot.send_message(call.message.chat.id, msg)
 
 def cm_help(message: types.Message):
-    bot.send_message(message.from_user.id, msg_const.MSG_CM_HELP_MAIN1)
-
     keyboard_main = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True, row_width=1)
     core_partitions = db.get_subpartitions(parent=0)
     for partition in core_partitions:
@@ -78,19 +76,20 @@ def cm_help(message: types.Message):
         keyboard_main.add(key)
 
     # Показываем все кнопки сразу и пишем сообщение о выборе
-    bot.send_message(message.from_user.id, text=msg_const.MSG_CM_HELP_MAIN2, reply_markup=keyboard_main)
+    msg = f'{msg_const.MSG_CM_HELP_MAIN1}\n{msg_const.MSG_CM_HELP_MAIN2}'
+    bot.send_message(message.chat.id, text=msg, reply_markup=keyboard_main)
 
 def processing_text_types(message: types.Message):
     text_ok = False
     text = message.text.lower()
-    if is_partition_processing(message.from_user.id, text):
+    if is_partition_processing(message.chat.id, text):
         text_ok = True
     if not text_ok:
-        if is_element_processing(message.from_user.id, text):
+        if is_element_processing(message.chat.id, text):
             text_ok = True
     return text_ok
 
-def is_partition_processing(chat_id, text):
+def is_partition_processing(user_id, text):
     happily = False
     find_partitions = db.get_partition_by_name(text.capitalize())
     if find_partitions.count() == 1:
@@ -112,7 +111,7 @@ def is_partition_processing(chat_id, text):
                         reply_markup=keyboard)
     return happily
 
-def is_element_processing(chat_id, text):
+def is_element_processing(user_id, text):
     happily = False
     find_element = db.get_elements_by_name(text)
     if find_element.count() == 1:
@@ -162,7 +161,7 @@ def assembly_version(el):
 
 # @bot.message_handler(func=lambda commands: True)
 # def unknown_command(message: types.Message):
-    # bot.send_message(message.from_user.id, msg_const.MSG_NOT_UNDERSTAND)
+    # bot.send_message(message.chat.id, msg_const.MSG_NOT_UNDERSTAND)
 
 @bot.message_handler(func=lambda commands: True)
 def unknown_message(message: types.Message):
@@ -205,5 +204,9 @@ if __name__ == '__main__':
 
 # Убрать клавиатуру принудительно
 # menu_remove = types.ReplyKeyboardRemove()
-# bot.send_message(message.from_user.id, text='...', reply_markup=menu_remove)
+# bot.send_message(message.chat.id, text='...', reply_markup=menu_remove)
+
+# Скрыть клавиатуру
+# menu_hide = types.ReplyKeyboardHide()
+# bot.send_message(message.chat.id, text='...', reply_markup=menu_hide)
 
