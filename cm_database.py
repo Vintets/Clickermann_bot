@@ -84,6 +84,10 @@ class DB():
         return self.session.query(Elements).filter(
                             and_(Elements.name == name, Elements.visible == visible))
 
+    def get_partition_by_id(self, id=0, visible=1):
+        return (self.session.query(Partitions).filter(
+                            and_(Partitions.id == id, Partitions.visible == visible)))[0]
+
     def __del__(self):
         self.session.close()
 

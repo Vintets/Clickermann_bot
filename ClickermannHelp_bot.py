@@ -25,7 +25,12 @@ def process_start_command(message: types.Message):
 
 @bot.message_handler(commands=['help'])
 def process_help_command(message: types.Message):
-    bot.send_message(message.from_user.id, msg_const.MSG_HELP)
+    bot.send_message(message.chat.id, msg_const.MSG_HELP)
+
+@bot.message_handler(commands=['?', 'f'])
+def get_sticker_id(message: types.Message):
+    print(message.text[3:])
+    bot.send_message(message.chat.id, message.text[3:])
 
 @bot.message_handler(content_types=['sticker'])
 def get_sticker_id(message: types.Message):
@@ -52,20 +57,8 @@ def cm_help_inline(message: types.Message):
     key_strings = types.InlineKeyboardButton(text='Строки и файлы', callback_data='strings')
     keyboard_main.add(key_numbers, key_strings)
 
-    bot.send_message(message.from_user.id, msg_const.MSG_CM_HELP_MAIN1)
-    bot.send_message(message.from_user.id, text=msg_const.MSG_CM_HELP_MAIN2, reply_markup=keyboard_main)
-
-@bot.callback_query_handler(func=lambda call: True)
-def callback_worker(call):
-    '''Обработчик нажатий на кнопки'''
-
-    if call.data == 'numbers':
-        msg = 'В этом разделе описаны процедуры и функции работы с числами, переменными и массивами'
-        # Отправляем текст в Телеграм
-        bot.send_message(call.message.chat.id, msg)
-    elif call.data == 'strings':
-        msg = 'Работа со строками'
-        bot.send_message(call.message.chat.id, msg)
+    msg = f'{msg_const.MSG_CM_HELP_MAIN1}\n{msg_const.MSG_CM_HELP_MAIN2}'
+    bot.send_message(message.chat.id, text=msg, reply_markup=keyboard_main)
 
 def cm_help(message: types.Message):
     keyboard_main = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True, row_width=1)
@@ -116,10 +109,27 @@ def is_element_processing(user_id, text):
     find_element = db.get_elements_by_name(text)
     if find_element.count() == 1:
         happily = True
-        output = template_engine_element(find_element[0])
+        current_element = find_element[0]
+        output = template_engine_element(current_element)
         print(output)
-        bot.send_message(chat_id, output)
+        keyboard = types.InlineKeyboardMarkup()
+        key_return = types.InlineKeyboardButton(
+                                        text='Вернуться назад',
+                                        callback_data=f'return_partition:{current_element.parent_id}')
+        keyboard.add(key_return)
+        bot.send_message(user_id, output, reply_markup=keyboard)
     return happily
+
+@bot.callback_query_handler(func=lambda call: True)
+def callback_worker(call):
+    '''Обработчик нажатий на кнопки'''
+
+    if call.data.startswith('return_partition'):
+        parent_id = int(call.data[17:])
+        print('parent_id', parent_id)
+        parent_name = db.get_partition_by_id(id=parent_id).name
+        print('parent_name', parent_name)
+        is_partition_processing(call.message.chat.id, parent_name)
 
 def template_engine_element(el):
     name = el.name
