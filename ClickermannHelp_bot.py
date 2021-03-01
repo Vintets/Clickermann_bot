@@ -90,7 +90,7 @@ def processing_text_types(message: types.Message):
             text_ok = True
     return text_ok
 
-def is_partition_processing(user_id, text):
+def is_partition_processing(chat_id, text):
     happily = False
     find_partitions = db.get_partition_by_name(text.capitalize())
     if find_partitions.count() == 1:
@@ -118,11 +118,11 @@ def is_partition_processing(user_id, text):
             keyboard.add(f'<-- Вернуться в {parent_name}')
 
         # отправляем имя и описание раздела
-        bot.send_message(user_id, f'{frm.b}{find_partition.name}{frm.b}\n{find_partition.description}',
+        bot.send_message(chat_id, f'{frm.b}{find_partition.name}{frm.b}\n{find_partition.description}',
                         reply_markup=keyboard)
     return happily
 
-def is_element_processing(user_id, text):
+def is_element_processing(chat_id, text):
     happily = False
     find_element = db.get_elements_by_name(text)
     if find_element.count() == 1:
@@ -135,7 +135,7 @@ def is_element_processing(user_id, text):
                                         text='Вернуться назад',
                                         callback_data=f'return_partition:{current_element.parent_id}')
         keyboard.add(key_return)
-        bot.send_message(user_id, output, reply_markup=keyboard)
+        bot.send_message(chat_id, output, reply_markup=keyboard)
     return happily
 
 @bot.callback_query_handler(func=lambda call: True)
@@ -218,7 +218,7 @@ if __name__ == '__main__':
     auth_sh.authorship(__author__, __title__, __version__, __copyright__, width=_width)
 
     server_started()
-    
+
     bot.polling(none_stop=True, interval=1)
 
 
