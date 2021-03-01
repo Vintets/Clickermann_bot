@@ -75,11 +75,13 @@ class Users(BaseModel):
     created = Column(DateTime, nullable=False, default=current_timestamp(), server_default='2000-01-01 00:00:00')
     last_update = Column(DateTime, nullable=False, default=datetime(2000, 1, 1, 0, 0, 0), server_default='2000-01-01 00:00:00')
 
+    def __repr__(self):
+        return '<{0.__class__.__name__}(id={0.id!r} username={0.username} firstname={0.first_name})>'.format(self)
 
 class LogRequests(BaseModel):
     __tablename__ = 'log_requests'
     user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
-    request = Column(String(64), nullable=False)
+    request = Column(String(128), nullable=False)
     rtime = Column(DateTime, nullable=False, default=current_timestamp(), server_default='2000-01-01 00:00:00')
 
 
