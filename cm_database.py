@@ -88,6 +88,21 @@ class DB():
         return (self.session.query(Partitions).filter(
                             and_(Partitions.id == id, Partitions.visible == visible)))[0]
 
+    def get_user_by_user_id(self, user_id):
+        return self.session.query(Users).filter(Users.tm_user_id == user_id).first()
+
+    def add_user(self, us):
+        self.session.add(Users(**us))
+        self.session.commit()
+
+    def update_user(self, us):
+        self.session.query(Users).filter(Users.tm_user_id == us['user_id']).update(us, synchronize_session = False)
+        self.session.commit()
+
+    def request2log(self, request_):
+        self.session.add(LogRequests(**request_))
+        self.session.commit()
+
     def __del__(self):
         self.session.close()
 

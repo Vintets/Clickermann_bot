@@ -199,6 +199,47 @@ def server_started():
     bot.send_message('829838425', msg_const.MSG_SERVER, reply_markup=menu_remove)
     cp.cprint('9Clickermann_bot запущен!')
 
+def logger_user(message: types.Message):
+    is_user_in_db(message)
+    user = db.get_user_by_user_id(message.from_user.id)
+    username = str(message.from_user.first_name)
+    request_ = dict(
+                    user_id=user.id,
+                    request=message.text,
+                    )
+    db.request2log(request_)
+
+def is_user_in_db(message: types.Message):
+    user = db.get_user_by_user_id(message.from_user.id)
+    us = dict(
+        tm_user_id=message.from_user.id,
+        username=message.from_user.username,
+        first_name=message.from_user.first_name,
+        last_name=message.from_user.last_name,
+        )
+    if user is None:
+        db.add_user(us)
+        print(f"Add user: id={us['tm_user_id']}, username={us['username']}, first_name={us['first_name']}")
+    elif (
+            user.username != us['username'] or
+            user.first_name != us['first_name'] or
+            user.last_name != us['last_name']
+            ):
+        db.update_user(us)
+        print('Update user:', user)
+        # запишем в лог что данные пользователя изменились
+        msg = (
+                f"Пользователь N сменил данные на "
+                f"username={us['username']}, "
+                f"first_name={us['first_name']}, "
+                f"last_name={us['last_name']}"
+                )
+        request_ = dict(
+                        user_id=user.id,
+                        request=msg,
+                        )
+        db.request2log(request_)
+
 
 if __name__ == '__main__':
     _width = 100
@@ -213,7 +254,7 @@ if __name__ == '__main__':
 
     __author__ = 'master by Vint'
     __title__ = '--- Clickermann_bot ---'
-    __version__ = '0.1.4'
+    __version__ = '0.1.5'
     __copyright__ = 'Copyright 2020 (c)  bitbucket.org/Vintets'
     auth_sh.authorship(__author__, __title__, __version__, __copyright__, width=_width)
 

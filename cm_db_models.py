@@ -67,7 +67,7 @@ class Elements(BaseModel):
 
 class Users(BaseModel):
     __tablename__ = 'users'
-    chat_id = Column(String(32), nullable=False, unique=True)
+    tm_user_id = Column(String(32), nullable=False, unique=True)
     username = Column(String(64))
     first_name = Column(String(64))
     last_name = Column(String(64))
