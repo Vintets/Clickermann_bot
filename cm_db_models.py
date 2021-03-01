@@ -4,8 +4,9 @@
 from datetime import datetime
 from sqlalchemy import create_engine  #, MetaData
 from sqlalchemy.engine.url import URL
-from sqlalchemy import Table, Column, Integer, String, Text, DateTime, ForeignKey
+from sqlalchemy import Table, Column, Integer, String, Text, DateTime, TIMESTAMP, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.sql import text
 from sqlalchemy.sql.functions import current_timestamp
 from sqlalchemy_utils import database_exists, create_database
 # from sqlalchemy.dialects.mysql import INTEGER, DATETIME
@@ -71,18 +72,26 @@ class Users(BaseModel):
     username = Column(String(64))
     first_name = Column(String(64))
     last_name = Column(String(64))
-    # created = Column(TIMESTAMP, nullable=False)
-    created = Column(DateTime, nullable=False, default=current_timestamp(), server_default='2000-01-01 00:00:00')
-    last_update = Column(DateTime, nullable=False, default=datetime(2000, 1, 1, 0, 0, 0), server_default='2000-01-01 00:00:00')
+    # created = Column(TIMESTAMP, nullable=False, default=current_timestamp())
+    created = Column(DateTime, nullable=False, server_default=text('CURRENT_TIMESTAMP'))
+    last_modified = Column(DateTime, nullable=False,
+                            server_default=text('CURRENT_TIMESTAMP'),
+                            onupdate=current_timestamp()
+                            )
+
+    # for MySQL
+    # datemodified = Column(DateTime, server_default=text('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'))
+    # datemodified = Column(DateTime(timezone=True), nullable=False, server_onupdate=text('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'))
 
     def __repr__(self):
         return '<{0.__class__.__name__}(id={0.id!r} username={0.username} firstname={0.first_name})>'.format(self)
+
 
 class LogRequests(BaseModel):
     __tablename__ = 'log_requests'
     user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
     request = Column(String(128), nullable=False)
-    rtime = Column(DateTime, nullable=False, default=current_timestamp(), server_default='2000-01-01 00:00:00')
+    rtime = Column(DateTime, nullable=False, server_default=text('CURRENT_TIMESTAMP'))  # или default=current_timestamp()
 
 
 def create_db(engine):
