@@ -55,7 +55,7 @@ class Elements(BaseModel):
     keywords = Column(String(255), index=True)
     version_cm_major = Column(Integer, nullable=False, default='4', server_default='4')
     version_cm_minor = Column(Integer, nullable=False, default='13', server_default='13')
-    version_cm_build = Column(Integer, nullable=False, default='0', server_default='0')
+    version_cm_build = Column(Integer, nullable=False, default='14', server_default='14')
     version_cm_releaselevel = Column(String(16), nullable=True, default=None, server_default=None)
 
     def __unicode__(self):
