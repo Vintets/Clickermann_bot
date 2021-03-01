@@ -18,17 +18,44 @@ from configs.formatting import frm
 bot = telebot.TeleBot(CLICKERMANN_HELP_BOT_TOKEN, parse_mode='MARKDOWN')  # None, HTML or MARKDOWN
 db = DB()
 
+
+def logger_user_single(message: types.Message, text: str):
+    is_user_in_db(message)
+    user = db.get_user_by_user_id(message.chat.id) # так надо (chat.id) чтобы логирование по кнопке назад приписывалось юзеру, а не боту
+    username = str(message.from_user.first_name)
+    request_ = dict(
+                    user_id=user.id,
+                    request=text,
+                    )
+    db.request2log(request_)
+
+def logger_user(handler):
+    def wrapper_logger_user(message: types.Message):
+        is_user_in_db(message)
+        user = db.get_user_by_user_id(message.from_user.id)
+        username = str(message.from_user.first_name)
+        request_ = dict(
+                        user_id=user.id,
+                        request=message.text,
+                        )
+        db.request2log(request_)
+        handler(message)
+    return wrapper_logger_user
+
 @bot.message_handler(commands=['start', 'Start', 'START'])
+@logger_user
 def process_start_command(message: types.Message):
-    logger_user(message)
+    # logger_user(message)
     menu_remove = types.ReplyKeyboardRemove()
     bot.send_message(message.chat.id, msg_const.MSG_WELCOME, reply_markup=menu_remove)
 
 @bot.message_handler(commands=['help', 'Help', 'HELP'])
+@logger_user
 def process_help_command(message: types.Message):
     bot.send_message(message.chat.id, msg_const.MSG_HELP)
 
 @bot.message_handler(commands=['?', 'f'])
+@logger_user
 def get_sticker_id(message: types.Message):
     print(message.text[3:])
     bot.send_message(message.chat.id, message.text[3:])
@@ -38,10 +65,12 @@ def get_sticker_id(message: types.Message):
     print(message)
 
 @bot.message_handler(commands=['cm_help'])
+@logger_user
 def process_cm_help_command(message: types.Message):
     cm_help(message)
 
 @bot.message_handler(content_types=['text'])
+@logger_user
 def get_text_messages(message: types.Message):
     if message.text.lower() == 'привет':
         bot.send_message(message.chat.id, msg_const.MSG_HELLO.format(username=str(message.from_user.first_name)))
@@ -145,7 +174,8 @@ def callback_worker(call):
     if call.data.startswith('return_partition'):
         parent_id = int(call.data[17:])
         parent_name = db.get_partition_by_id(id=parent_id).name
-        print(f'parent:  id = {parent_id},  name={parent_name}')
+        # print(f'parent:  id = {parent_id},  name={parent_name}')
+        logger_user_single(call.message, parent_name)
         is_partition_processing(call.message.chat.id, parent_name)
 
 def template_engine_element(el):
@@ -198,16 +228,6 @@ def server_started():
     menu_remove = types.ReplyKeyboardRemove()
     bot.send_message('829838425', msg_const.MSG_SERVER, reply_markup=menu_remove)
     cp.cprint('9Clickermann_bot запущен!')
-
-def logger_user(message: types.Message):
-    is_user_in_db(message)
-    user = db.get_user_by_user_id(message.from_user.id)
-    username = str(message.from_user.first_name)
-    request_ = dict(
-                    user_id=user.id,
-                    request=message.text,
-                    )
-    db.request2log(request_)
 
 def is_user_in_db(message: types.Message):
     user = db.get_user_by_user_id(message.from_user.id)
