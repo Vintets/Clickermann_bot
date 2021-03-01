@@ -18,12 +18,13 @@ from configs.formatting import frm
 bot = telebot.TeleBot(CLICKERMANN_HELP_BOT_TOKEN, parse_mode='MARKDOWN')  # None, HTML or MARKDOWN
 db = DB()
 
-@bot.message_handler(commands=['start'])
+@bot.message_handler(commands=['start', 'Start', 'START'])
 def process_start_command(message: types.Message):
+    logger_user(message)
     menu_remove = types.ReplyKeyboardRemove()
     bot.send_message(message.chat.id, msg_const.MSG_WELCOME, reply_markup=menu_remove)
 
-@bot.message_handler(commands=['help'])
+@bot.message_handler(commands=['help', 'Help', 'HELP'])
 def process_help_command(message: types.Message):
     bot.send_message(message.chat.id, msg_const.MSG_HELP)
 
