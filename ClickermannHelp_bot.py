@@ -134,7 +134,14 @@ def is_partition_processing(chat_id, text):
         output_childrens_el = db.get_elements_by_parent(parent=find_partition.id)
         for children in chain(output_childrens, output_childrens_el):
             # print(children)
-            key = types.KeyboardButton(children.name)
+            child_name = children.name
+            try:
+                isupper = getattr(children, 'name_isupper')
+            except AttributeError:
+                isupper = 0
+            if isupper:
+                child_name = child_name.upper()
+            key = types.KeyboardButton(child_name)
             keyboard.add(key)
 
         # если не корневой раздел добавляем пункт/кнопку назад
