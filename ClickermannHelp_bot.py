@@ -42,6 +42,13 @@ def logger_user(handler):
         handler(message)
     return wrapper_logger_user
 
+def safe_underscore(item):
+    if item.find('_') != -1:
+        item = item.replace('_', '\_')
+    if item.find('#') != -1:
+        item = item.replace('#', '\#')
+    return item
+
 @bot.message_handler(commands=['start', 'Start', 'START'])
 @logger_user
 def process_start_command(message: types.Message):
@@ -189,9 +196,11 @@ def template_engine_element(el):
     name = el.name
     if el.name_isupper:
         name = name.upper()
+        name = safe_underscore(name)
     text = [f'{frm.b}{name}{frm.b}']
     if el.description:
-        text.append(el.description)
+        text.append(safe_underscore(el.description))
+        # print(safe_underscore(el.description))
         text.append('')
     if el.syntax:
         text.append(f'{frm.b}Синтаксис{frm.b}')
@@ -207,7 +216,7 @@ def template_engine_element(el):
         text.append('')
     if el.notes:
         text.append(f'{frm.b}Примечания{frm.b}')
-        text.append(f'{frm.i}{el.notes}{frm.i}')
+        text.append(f'{frm.i}{safe_underscore(el.notes)}{frm.i}')
         text.append('')
 
     text.append(assembly_version(el))
