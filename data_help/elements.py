@@ -679,8 +679,8 @@ DATA_ELEMENTS = (
                 ),
         # notes='',
         keywords='strlen, стрлен, длина строки в символах, количество символов в строке',
-        version_cm_major=3,
-        version_cm_minor=2,
+        version_cm_major=4,
+        version_cm_minor=4,
         version_cm_build=0,
         version_cm_releaselevel='',
         ),
@@ -700,8 +700,8 @@ DATA_ELEMENTS = (
                 ),
         # notes='',
         keywords='strcut, стркат, вырезать подстроку в строке, вернуть подстроку в строке, вырезать подстроку из строки, вернуть подстроку из строки',
-        version_cm_major=3,
-        version_cm_minor=2,
+        version_cm_major=4,
+        version_cm_minor=4,
         version_cm_build=0,
         version_cm_releaselevel='',
         ),
@@ -721,8 +721,8 @@ DATA_ELEMENTS = (
                 ),
         # notes='',
         keywords='strcut2, стркат2, вырезать подстроку в строке, вернуть подстроку в строке, вырезать подстроку из строки, вернуть подстроку из строки',
-        version_cm_major=3,
-        version_cm_minor=2,
+        version_cm_major=4,
+        version_cm_minor=6,
         version_cm_build=0,
         version_cm_releaselevel='',
         ),
@@ -747,8 +747,8 @@ DATA_ELEMENTS = (
                 ),
         # notes='',
         keywords='strfilter, стрфильтр, стрфилтер, фильтр строки, фильтр символов в строке, удалить символы из строки',
-        version_cm_major=3,
-        version_cm_minor=2,
+        version_cm_major=4,
+        version_cm_minor=4,
         version_cm_build=0,
         version_cm_releaselevel='',
         ),
@@ -773,8 +773,8 @@ DATA_ELEMENTS = (
                 ),
         notes='По умолчанию offset равен 1. Этот параметр не может быть меньше, чем 1.',
         keywords='strpos, стрпос, найти подстроку в строке, поиск подстроки в строке, поиск символов в строке, найти строку, поиск строки',
-        version_cm_major=3,
-        version_cm_minor=2,
+        version_cm_major=4,
+        version_cm_minor=4,
         version_cm_build=0,
         version_cm_releaselevel='',
         ),
@@ -787,8 +787,8 @@ DATA_ELEMENTS = (
         example=('PRINT(STRCONCAT("hello", "2000", "!!!"))  // результат "hello2000!!!"'),
         # notes='',
         keywords='strconcat, стрконкат, контактация строки, объединить строки, объединение строк',
-        version_cm_major=3,
-        version_cm_minor=2,
+        version_cm_major=4,
+        version_cm_minor=4,
         version_cm_build=0,
         version_cm_releaselevel='',
         ),
@@ -808,8 +808,8 @@ DATA_ELEMENTS = (
                 ),
         # notes='',
         keywords='strreplace, стрреплэйс, заменить подстроку в строке, заменить подстроку на другую подстроку, заменить часть строки, поменять часть строки',
-        version_cm_major=3,
-        version_cm_minor=2,
+        version_cm_major=4,
+        version_cm_minor=4,
         version_cm_build=0,
         version_cm_releaselevel='',
         ),
@@ -822,8 +822,8 @@ DATA_ELEMENTS = (
         example=('PRINT(STRMD5("123"))  // 202CB962AC59075B964B07152D234B70'),
         # notes='',
         keywords='strmd5, md5 хэш строки, md5 хеш строки',
-        version_cm_major=3,
-        version_cm_minor=2,
+        version_cm_major=4,
+        version_cm_minor=6,
         version_cm_build=0,
         version_cm_releaselevel='',
         ),
@@ -844,8 +844,8 @@ DATA_ELEMENTS = (
                 ),
         # notes='',
         keywords='strseparate, разбить строку по разделителю, разделить строку по разделителю, разбить строку в массив, разделить строку в массив',
-        version_cm_major=3,
-        version_cm_minor=2,
+        version_cm_major=4,
+        version_cm_minor=11,
         version_cm_build=0,
         version_cm_releaselevel='',
         ),
@@ -855,70 +855,245 @@ DATA_ELEMENTS = (
         description=('Функция. Возвращает символ по его коду.'),
         syntax='CHAR(code)',
         parameters=('code - числовой код символа '),
-        example=(''),
+        example=(
+                '// генерация строки из случайных\n'
+                '// символов a..z длинной 10\n'
+                '$str = ""\n'
+                'FOR($i=0, $i < 10)\n'
+                '   $chr = CHAR(RND(97, 122))\n'
+                '   $str = STRCONCAT($str, $chr)\n'
+                'END_CYC\n'
+                '\n'
+                'PRINT($str)'
+                ),
         notes='Обратите внимание, что используются коды из таблицы юникода. Не путать с ASCII. Таблица кодов доступна в интернете. Например, [здесь](http://unicode-table.com/ru/).',
+        keywords='char, чар, вернуть символ по коду, узнать символ по коду, есть код нужен символ',
+        version_cm_major=4,
+        version_cm_minor=13,
+        version_cm_build=14,
+        version_cm_releaselevel='',
+        ),
+    dict(name='iniread',
+        name_isupper=1,
+        parent_id=6,
+        description=('Функция. Считывает параметр из файла конфгурации (*.ini).'),
+        syntax='INIREAD(filename, parname, [section])',
+        parameters=(
+                    'filename - строка; имя ini файла\n'
+                    'parname - строка; имя параметра в ini файле\n'
+                    'section - строка, необязательный параметр; название секции в ini файле'
+                    ),
+        example=(
+                '$str = INIREAD("config.ini", "var")\n'
+                'PRINT($str)\n'
+                ),
+        notes='По умолчанию section имеет значение "default"',
+        keywords='iniread, иниреад, чтение из ини файла конфгурации, чтение из ini файла конфгурации, чтение параметра из ини файла конфгурации, чтение параметра из ini файла конфгурации, чтение файла конфигурации ini, чтение из файла конфигурации ini',
+        version_cm_major=4,
+        version_cm_minor=7,
+        version_cm_build=0,
+        version_cm_releaselevel='',
+        ),
+    dict(name='iniwrite',
+        name_isupper=1,
+        parent_id=6,
+        description=('Записывает параметр из файла конфгурации (*.ini).'),
+        syntax='INIWRITE(filename, parname, value, [section])',
+        parameters=(
+                    'filename - строка; имя ini файла\n'
+                    'parname - строка; имя параметра в ini файле\n'
+                    'value - строка; записываемое значение\n'
+                    'section - строка, необязательный параметр; название секции в ini файле'
+                    ),
+        example=('INIWRITE("config.ini", "var", "23")'),
+        notes='По умолчанию section имеет значение "default"',
+        keywords='iniwrite, иниврайт, запись в ини файл конфгурации, запись в ini файл конфгурации, запись параметра в ини файл конфгурации, запись параметра в ini файл конфгурации, запись файла конфигурации ini, запись в файл конфигурации ini',
+        version_cm_major=4,
+        version_cm_minor=7,
+        version_cm_build=0,
+        version_cm_releaselevel='',
+        ),
+    dict(name='tfread',
+        name_isupper=1,
+        parent_id=6,
+        description=('Функция. Считывает произвольную строку из текстового файла.'),
+        syntax='TFREAD(file, str_n)',
+        parameters=(
+                    'file - имя файла\n'
+                    'str_n - номер строки в файле'
+                    ),
+        example=('PRINT(TFREAD("input.txt", 5))'),
+        # notes='',
+        keywords='tfread, тфреад, чтение из файла, читать из файла, чтение строки из файла, читать строку из файла, чтение текстового файла, чтение строки из текстового файла, читать из текстового файла',
+        version_cm_major=4,
+        version_cm_minor=4,
+        version_cm_build=0,
+        version_cm_releaselevel='SE',
+        ),
+    dict(name='tfwrite',
+        name_isupper=1,
+        parent_id=6,
+        description=('Записывает строку в текстовый файл. Возможна произвольная вставка.'),
+        syntax='TFWRITE(file, str, [str_n])',
+        parameters=(
+                    'file - имя файла\n'
+                    'str - строка\n'
+                    'str_n - необязательный параметр; номер строки в файле '
+                    ),
+        example=('TFWRITE("input.txt", "Hello")'),
+        notes='Новая строка записывается в файл на позицию str_n. При этом все строки (включая ту, которая была ранее на этой позиции) сдвигаются вниз. Если параметр str_n не задан, то новая строка добавляется в конец файла.',
+        keywords='tfwrite, тфврайт, запись в файл, писать в файл, запись строки в файл, писать строку в файл, запись текстового файла, запись строки в текстовый файл, писать в текстовый файл',
+        version_cm_major=4,
+        version_cm_minor=4,
+        version_cm_build=0,
+        version_cm_releaselevel='SE',
+        ),
+    dict(name='tfreadarr',
+        name_isupper=1,
+        parent_id=6,
+        description=('Считывает текстовый файл в массив, помещая каждую строку в отдельный элемент массива.'),
+        syntax='TFREADARR(file, $arr)',
+        parameters=(
+                    'file - имя файла\n'
+                    '$arr - массив'
+                    ),
+        example=(
+                'TFREADARR("C:\out.txt", $arr)\n'
+                'PRINT($arr[0])\n'
+                'PRINT($arr[1])'
+                ),
+        # notes='',
+        keywords='tfreadarr, тфреадарр, чтение из файла в массив, читать из файла в массив, чтение текстового файла в массив, читать из текстового файла в массив, загрузить из файла в массив, загрузить строки из файла в массив',
+        version_cm_major=4,
+        version_cm_minor=11,
+        version_cm_build=0,
+        version_cm_releaselevel='',
+        ),
+    dict(name='tfwritearr',
+        name_isupper=1,
+        parent_id=6,
+        description=('Записывает массив в файл путем помещения каждого элемента массива в отдельную строку.'),
+        syntax='TFWRITEARR(file, $arr)',
+        parameters=(
+                    'file - имя файла\n'
+                    '$arr - массив'
+                    ),
+        example=(
+                '$arr[0] = "one"\n'
+                '$arr[1] = "two\n'
+                'TFWRITEARR("out.txt", $arr)'
+                ),
+        notes='',
+        keywords='tfwritearr, тфврайтарр, запись из массива в файл, писать из массива в файл, запись массива в текстовый файл, писать массив в текстовый файл, загрузить из массива в файл, загрузить строки из массива в файл, загрузить элементы из массива в файл',
+        version_cm_major=4,
+        version_cm_minor=11,
+        version_cm_build=0,
+        version_cm_releaselevel='',
+        ),
+    dict(name='tfdelete',
+        name_isupper=1,
+        parent_id=6,
+        description=('Удаляет строку из текстового файла.'),
+        syntax='TFDELETE(file, str_n)',
+        parameters=(
+                    'file - имя файла\n'
+                    'str_n - номер строки в файле'
+                    ),
+        example=('TFDELETE("input.txt", 2)'),
+        notes='При удалении все строки ниже удаляемой сдвигаются вверх.',
+        keywords='tfdelete, тфделете, тфделит, удаляет строку из текстового файла, удаляет строку из файла, удалить строку из текстового файла, удалить строку из файла, в файле удалить строку по номеру',
+        version_cm_major=4,
+        version_cm_minor=4,
+        version_cm_build=0,
+        version_cm_releaselevel='SE',
+        ),
+    dict(name='tfclear',
+        name_isupper=1,
+        parent_id=6,
+        description=('Очищает содержимое текстового файла.'),
+        syntax='TFCLEAR(file, [delete])',
+        parameters=(
+                    'file - имя файла\n'
+                    'delete - необязательный параметр; флаг удаления файла '
+                    ),
+        example=('TFCLEAR("input.txt")'),
+        notes='Если параметр flag = 1, то файл удаляется с жесткого диска, если 0, то просто очищается. По умолчанию 0',
+        keywords='tfclear, тфклеар, тфклир, очищает содержимое текстового файла, очищает содержимое файла, очистить содержимое текстового файла, очистить содержимое файла, очистить текстовый файл, очистить файл',
+        version_cm_major=4,
+        version_cm_minor=4,
+        version_cm_build=0,
+        version_cm_releaselevel='SE',
+        ),
+    dict(name='tfcount',
+        name_isupper=1,
+        parent_id=6,
+        description=('Функция. Возвращает количество строк в текстовом файле.'),
+        syntax='TFCOUNT(file)',
+        parameters=('file - имя файла'),
+        example=('PRINT(TFCOUNT("input.txt"))'),
+        # notes='',
+        keywords='tfcount, тфкоунт, возвращает количество строк в текстовом файле, возвращает количество строк в файле, вернуть количествово строк в текстовом файле, вернуть количество строк в файле, узнать количествово строк в текстовом файле, узнать количествово строк в файле, сколько строк в текстовом файле, сколько строк в файле',
+        version_cm_major=4,
+        version_cm_minor=4,
+        version_cm_build=0,
+        version_cm_releaselevel='SE',
+        ),
+    dict(name='strreadln',
+        name_isupper=1,
+        parent_id=6,
+        description=('Функция. Считывает произвольную строку из текстового файла.'),
+        syntax='STRREADLN(file, str_n)',
+        parameters=(
+                    'file - имя файла\n'
+                    'str_n - номер строки в файле'
+                    ),
+        example=('PRINT(STRREADLN("input.txt", 5)) // результат (пятая строка из этого файла)'),
+        notes='Схожего поведения можно добиться используя более современную функцию TFREAD',
+        keywords='strreadln, стрреадлн, чтение из файла, читать из файла, чтение строки из файла, читать строку из файла, чтение текстового файла, чтение строки из текстового файла, читать из текстового файла',
+        version_cm_major=4,
+        version_cm_minor=4,
+        version_cm_build=0,
+        version_cm_releaselevel='',
+        ),
+    dict(name='strwriteln',
+        name_isupper=1,
+        parent_id=6,
+        description=('Функция. Записывает строку в конец файла.'),
+        syntax='STRWRITELN(file, str, [rewrite])',
+        parameters=(
+                    'file - имя файла\n'
+                    'str - строка\n'
+                    'rewrite - необязательный параметр; флаг перезаписи'
+                    ),
+        example=(
+                '// Этот код записывает в файл "out.txt" строки вида "Random:N",\n'
+                '// где N - случайное число от 1 до 9\n'
+                'STRWRITELN("out.txt", STRCONCAT("Random:", RND(1,9)))'
+                ),
+        notes='Если файла с таким именем еще не существует, он будет создан. Если rewrite = 1, то перед записью строки все содержимое файла будет удалено.\nСхожего поведения можно добиться используя более современные TFREAD и TFCLEAR.',
+        keywords='strwriteln, стрврайтлн, запись в файл, писать в файл, запись строки в файл, писать строку в файл, запись текстового файла, запись строки в текстовый файл, писать в текстовый файл',
+        version_cm_major=4,
+        version_cm_minor=4,
+        version_cm_build=0,
+        version_cm_releaselevel='',
+        ),
+    dict(name='',
+        name_isupper=1,
+        parent_id=6,
+        description=(''),
+        syntax='',
+        parameters=(''),
+        example=(''),
+        notes='',
         keywords='',
         version_cm_major=3,
         version_cm_minor=2,
         version_cm_build=0,
         version_cm_releaselevel='',
         ),
-    # dict(name='',
-        # name_isupper=1,
-        # parent_id=5,
-        # description=(''),
-        # syntax='',
-        # parameters=(''),
-        # example=(''),
-        # notes='',
-        # keywords='',
-        # version_cm_major=3,
-        # version_cm_minor=2,
-        # version_cm_build=0,
-        # version_cm_releaselevel='',
-        # ),
-    # dict(name='',
-        # name_isupper=1,
-        # parent_id=5,
-        # description=(''),
-        # syntax='',
-        # parameters=(''),
-        # example=(''),
-        # notes='',
-        # keywords='',
-        # version_cm_major=3,
-        # version_cm_minor=2,
-        # version_cm_build=0,
-        # version_cm_releaselevel='',
-        # ),
-    # dict(name='',
-        # name_isupper=1,
-        # parent_id=5,
-        # description=(''),
-        # syntax='',
-        # parameters=(''),
-        # example=(''),
-        # notes='',
-        # keywords='',
-        # version_cm_major=3,
-        # version_cm_minor=2,
-        # version_cm_build=0,
-        # version_cm_releaselevel='',
-        # ),
 )
 
 
-# iniread
-# iniwrite
-# tfread
-# tfwrite
-# tfreadarr
-# tfwritearr
-# tfdelete
-# tfclear
-# tfcount
-# strreadln
-# strwriteln
 
 # fromclip
 # toclip
