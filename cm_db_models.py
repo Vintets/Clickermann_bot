@@ -53,7 +53,7 @@ class Elements(BaseModel):
     parameters = Column(Text)
     example = Column(Text)
     notes = Column(Text)
-    keywords = Column(String(255), index=True)
+    keywords = Column(String(1024), index=True)
     version_cm_major = Column(Integer, nullable=False, default='4', server_default='4')
     version_cm_minor = Column(Integer, nullable=False, default='13', server_default='13')
     version_cm_build = Column(Integer, nullable=False, default='14', server_default='14')
