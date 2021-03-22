@@ -93,7 +93,7 @@ DATA_ELEMENTS = [
         # parameters=,
         example='#logfile "debug.txt"',
         # notes=,
-        keywords='#logfile, logfile, лог, вывод лога в файл, лог в файл, logwrite в файл, printв файл',
+        keywords='#logfile, logfile, лог, вывод лога в файл, лог в файл, logwrite в файл, print в файл',
         version_cm_major=4,
         version_cm_minor=8,
         version_cm_build=0,
@@ -159,6 +159,20 @@ DATA_ELEMENTS = [
         version_cm_build=0,
         version_cm_releaselevel='alpha',
         ),
+    dict(name='#preprocessor',
+        # name_isupper=1,
+        parent_id=2,
+        description=('Вызывает внешний препроцессор'),
+        syntax='#preprocessor "debug.dll"',
+        parameters='имя в кавычках - библиотека с препроцессором',
+        # example='',
+        # notes=,
+        keywords='#preprocessor, препроцессор, препроцесор, действия до запуска скрипта, действия до запуска кода скрипта, действия перед запуском кода скрипта, действия перед запуском скрипта',
+        version_cm_major=4,
+        version_cm_minor=14,
+        version_cm_build=3,
+        version_cm_releaselevel='alpha',
+        ),
     dict(name='шестнадцатиричная запись',
         # name_isupper=1,
         parent_id=1,
@@ -190,7 +204,7 @@ DATA_ELEMENTS = [
                     ),
         # syntax='',
         # parameters='',
-        example='LCLICK($_xmouse, $_ymouse) - клик в текущих координатах\nPRINT($_cursor) - номер текущего вида курсора',
+        example='LCLICK($_xmouse, $_ymouse) - клик в текущих координатах\nLOGWRITE($_cursor) - номер текущего вида курсора',
         # notes='',
         keywords='служебные переменные, системные переменные, служебные координаты, $_xmouse, $_ymouse, $_xmax, $_ymax, $_xmin, $_ymin, $_return1, $_return2, $_cursor',
         version_cm_major=4,
@@ -216,7 +230,7 @@ DATA_ELEMENTS = [
                 ),
         # syntax='',
         # parameters='',
-        example='PRINT($_date_str, " ", $_time_str) - выводит в лог текущую дату и время',
+        example='LOGWRITE($_date_str, " ", $_time_str) - выводит в лог текущую дату и время',
         # notes='',
         keywords='служебные переменные, системные переменные, служебные время и дата, час, минута, секунда, месяц, год, $_ms, $_time_t, $_time_h, $_time_m, $_time_s, $_date_y, $_date_m, $_date_d, $_time_str, $_date_str',
         version_cm_major=4,
@@ -239,7 +253,7 @@ DATA_ELEMENTS = [
                 ),
         # syntax='',
         # parameters='',
-        example='PRINT($_ver_self) - вывести в лог версию программы',
+        example='LOGWRITE($_ver_self) - вывести в лог версию программы',
         # notes='',
         keywords='служебные переменные, системные переменные, hwnd привязки, hwnd кликера, текущая рабочая директория, текущая директория, версия программы, версия системы, разрядность системы, параметры программы, $_hwnd, $_hwnd_self, $_pdir, $_ver_self, $_ver_sys, $_arch_sys, $_param_str',
         version_cm_major=4,
@@ -331,7 +345,7 @@ DATA_ELEMENTS.extend([
         parameters=('a, b, ... - набор элементов; число параметров функции неограниченно;'),
         example=(
                 '$var = RNDFROM(1, "apple", 5)\n'
-                'PRINT($var)'
+                'LOGWRITE($var)'
                 ),
         # notes='',
         keywords='rndfrom, рндфром, случайный элемент из набора, случайный элемент из последовательности, случайный элемент из нескольких, случайный из, рандомный из',
@@ -348,7 +362,7 @@ DATA_ELEMENTS.extend([
         parameters=('num - число'),
         example=(
                 '$var = INT(25.73)\n'
-                'PRINT($var)   // 25'
+                'LOGWRITE($var)   // 25'
                 ),
         notes='Функция может использоваться для приведения типов данных. Позволяет представить строку как число.\nЕсли вам нужно округлить число до заданной точности, см. функцию ROUND',
         keywords='int, integer, инт, интегер, целое число, сделать целым типом, привести к целому типу, целый тип',
@@ -417,9 +431,9 @@ DATA_ELEMENTS.extend([
         parameters=('arg - аргумент функции'),
         example=(
                 '$var = SIN(30)  // sin(30) = 0.5\n'
-                'PRINT($var)\n'
+                'LOGWRITE($var)\n'
                 '$var = ARCSIN($var) // arcsin(0.5) = 30\n'
-                'PRINT($var)'
+                'LOGWRITE($var)'
                 ),
         notes='В тригонометрическом смысле, является обратной синусу функцией. Позволяет по известному значению функции синуса получить ее исходный аргумент.',
         keywords='arcsin, arcsinus, арксинус, обратный синусу',
@@ -523,9 +537,9 @@ DATA_ELEMENTS.extend([
                 'ARRPUSH($arr, 435)\n'
                 'ARRPUSH($arr, 532)\n'
                 'ARRPUSH($arr, 943)\n'
-                'PRINT($arr[0])\n'
-                'PRINT($arr[1])\n'
-                'PRINT($arr[2])'
+                'LOGWRITE($arr[0])\n'
+                'LOGWRITE($arr[1])\n'
+                'LOGWRITE($arr[2])'
                 ),
         # notes='',
         keywords='arrpush, аррпуш, добавить в массив, добавить к массиву, занести в массив, масив, пополнить массив',
@@ -544,9 +558,9 @@ DATA_ELEMENTS.extend([
                 'ARRPUSH($arr, 435)\n'
                 'ARRPUSH($arr, 532)\n'
                 'ARRPUSH($arr, 943)\n'
-                'PRINT(ARRPOP($arr))\n'
-                'PRINT(ARRPOP($arr))\n'
-                'PRINT(ARRPOP($arr))'
+                'LOGWRITE(ARRPOP($arr))\n'
+                'LOGWRITE(ARRPOP($arr))\n'
+                'LOGWRITE(ARRPOP($arr))'
                 ),
         notes='Извлечение подразумевает возвращение значения и удаление элемента из массива. Если результат не нужен и хотим просто удалить последний элемент, всё равно обязательно присвоить результат переменной\n$temp = ARRPOP($arr)',
         keywords='arrpop, аррпоп, извлечь из массива, извлечь элемент из массива, получить элемент из массива, получить значение из массива, получить последний элемент массива, масив',
@@ -565,9 +579,9 @@ DATA_ELEMENTS.extend([
                 'ARRPUSH($arr, 435)\n'
                 'ARRPUSH($arr, 532)\n'
                 'ARRPUSH($arr, 943)\n'
-                'PRINT(ARRSIZE($arr))\n'
-                'PRINT(ARRPOP($arr))\n'
-                'PRINT(ARRSIZE($arr))'
+                'LOGWRITE(ARRSIZE($arr))\n'
+                'LOGWRITE(ARRPOP($arr))\n'
+                'LOGWRITE(ARRSIZE($arr))'
                 ),
         notes='Не стоит забывать, что индексация массива идет от нуля, поэтому максимально доступный индекс всегда будет ARRSIZE()-1',
         keywords='arrsize, аррсизе, аррсайз, количество элементов в массиве, длина массива, размер массива',
@@ -586,16 +600,16 @@ DATA_ELEMENTS.extend([
                 '// генерация массива\n'
                 'FOR($a=0, $a < 10)\n'
                 '   $arr[$a] = RND(0, 9)\n'
-                '   PRINT($arr[$a])\n'
+                '   LOGWRITE($arr[$a])\n'
                 'END_CYC\n'
                 '\n'
                 '// сортировка\n'
                 'ARRSORT($arr)\n'
                 '\n'
                 '// вывод результата\n'
-                'PRINT("sort:")\n'
+                'LOGWRITE("sort:")\n'
                 'FOR($a=0, $a < 10)\n'
-                '   PRINT($arr[$a])\n'
+                '   LOGWRITE($arr[$a])\n'
                 'END_CYC\n'
                 '\n'
                 'HALT'
@@ -606,6 +620,42 @@ DATA_ELEMENTS.extend([
         version_cm_minor=13,
         version_cm_build=14,
         version_cm_releaselevel='',
+        ),
+    dict(name='arrconcat',
+        name_isupper=1,
+        parent_id=4,
+        description=('Объединяет несколько массивов, последовательно добавляя элементы в конец.'),
+        syntax='ARRCONCAT($arr_in, $arr1, $arr2, ... )',
+        parameters=(
+                    '$arr_in - принимающий массив\n'
+                    '$arr1, $arr2, ... - массивы для добавления'
+                    ),
+        example=(
+                '// генерация двух массивов\n'
+                'FOR($a=0, $a < 3)\n'
+                '   $var1[$a] = RND(0, 9)\n'
+                '   LOGWRITE($var1[$a])\n'
+                '\n'
+                '   $var2[$a] = RND(0, 9)\n'
+                '   LOGWRITE($var2[$a])\n'
+                'END_CYC\n'
+                '\n'
+                'LOGWRITE("")\n'
+                'ARRCONCAT($var_in, $var1, $var2)\n'
+                '\n'
+                '// вывод объединенного массива\n'
+                'FOR($a=0, $a < 6)\n'
+                '   LOGWRITE($var_in[$a])\n'
+                'END_CYC\n'
+                '\n'
+                'HALT'
+                ),
+        notes='Данная инструкция не очищает массив $arr_in.',
+        keywords='arrconcat, аррконкат, аррконкэт, добавление массива к массиву, добавление к массиву массива, добавить элементы из массива в другой массив, объединить массивы, объединение массивов, слить массивы, слияние массивов',
+        version_cm_major=4,
+        version_cm_minor=14,
+        version_cm_build=3,
+        version_cm_releaselevel='b',
         ),
     dict(name='setvar',
         name_isupper=1,
@@ -631,7 +681,7 @@ DATA_ELEMENTS.extend([
                 'triple("$var")\n'
                 '\n'
                 '// вывод обновленной переменной\n'
-                'PRINT($var)\n'
+                'LOGWRITE($var)\n'
                 'HALT\n'
                 ),
         notes='К моменту вызова переменная с указанным именем должна существовать',
@@ -662,7 +712,7 @@ DATA_ELEMENTS.extend([
                 'triple("$var")\n'
                 '\n'
                 '// вывод обновленной переменной\n'
-                'PRINT($var)\n'
+                'LOGWRITE($var)\n'
                 'HALT\n'
                 ),
         notes='К моменту вызова переменная с указанным именем должна существовать',
@@ -683,7 +733,7 @@ DATA_ELEMENTS.extend([
         syntax='STRLEN(str)',
         parameters=('str - строка; входная строка'),
         example=(
-                'PRINT(STRLEN("lol") )\n'
+                'LOGWRITE(STRLEN("lol") )\n'
                 '// результат "3"'
                 ),
         # notes='',
@@ -704,7 +754,7 @@ DATA_ELEMENTS.extend([
                     'size - количество копируемых символов'
                     ),
         example=(
-                'PRINT(STRCUT("hello2000", 6, 2 ))\n'
+                'LOGWRITE(STRCUT("hello2000", 6, 2 ))\n'
                 '// результат "20"'
                 ),
         # notes='',
@@ -725,7 +775,7 @@ DATA_ELEMENTS.extend([
                     'end - позиция конца копирования'
                     ),
         example=(
-                'PRINT(STRCUT2("hello2000", 2, 5 ))\n'
+                'LOGWRITE(STRCUT2("hello2000", 2, 5 ))\n'
                 '// результат "ello"'
                 ),
         # notes='',
@@ -749,9 +799,9 @@ DATA_ELEMENTS.extend([
                     'Если режим будет задан как 1, \nто из входной строки будут вырезаны все символы, кроме указанных в маске'
                     ),
         example=(
-                'PRINT(STRFILTER("hello2000", "20", 0 ))\n'
+                'LOGWRITE(STRFILTER("hello2000", "20", 0 ))\n'
                 '// результат "hello"\n'
-                'PRINT(STRFILTER("hello2000", "20", 1 ))\n'
+                'LOGWRITE(STRFILTER("hello2000", "20", 1 ))\n'
                 '// результат "2000"\n'
                 ),
         # notes='',
@@ -774,11 +824,11 @@ DATA_ELEMENTS.extend([
         example=(
                 '$search = "mind"\n'
                 '$r = STRPOS("where is my mind", $search)\n'
-                'PRINT($r)  // результат 13 (с 13 символа начинается подстрока)\n'
+                'LOGWRITE($r)  // результат 13 (с 13 символа начинается подстрока)\n'
                 '\n'
                 '$var = "abcabc"\n'
                 '$r = STRPOS($var, "a", 3)\n'
-                'PRINT($r)  // результат 4, так как смещение на 3 пропускает первый символ "a"'
+                'LOGWRITE($r)  // результат 4, так как смещение на 3 пропускает первый символ "a"'
                 ),
         notes='По умолчанию offset равен 1. Этот параметр не может быть меньше, чем 1.',
         keywords='strpos, стрпос, найти подстроку в строке, поиск подстроки в строке, поиск символов в строке, найти строку, поиск строки',
@@ -793,7 +843,7 @@ DATA_ELEMENTS.extend([
         description=('Функция. Возвращает объединенную строку, состоящую из других строк.'),
         syntax='STRCONCAT(str1, str2, ...)',
         parameters=('str1, str2, ... - входные строки'),
-        example=('PRINT(STRCONCAT("hello", "2000", "!!!"))  // результат "hello2000!!!"'),
+        example=('LOGWRITE(STRCONCAT("hello", "2000", "!!!"))  // результат "hello2000!!!"'),
         # notes='',
         keywords='strconcat, стрконкат, контактация строки, объединить строки, объединение строк',
         version_cm_major=4,
@@ -813,7 +863,7 @@ DATA_ELEMENTS.extend([
                     ),
         example=(
                 '$s = STRREPLACE("Hello, %username%!!!", "%username%", "John")\n'
-                'PRINT($s)  // результат "Hello, John!!!"'
+                'LOGWRITE($s)  // результат "Hello, John!!!"'
                 ),
         # notes='',
         keywords='strreplace, стрреплэйс, заменить подстроку в строке, заменить подстроку на другую подстроку, заменить часть строки, поменять часть строки',
@@ -827,8 +877,8 @@ DATA_ELEMENTS.extend([
         parent_id=5,
         description=('Функция. Возвращает md5 хеш для входной строки.'),
         syntax='STRMD5(str)',
-        parameters=('str - строка '),
-        example=('PRINT(STRMD5("123"))  // 202CB962AC59075B964B07152D234B70'),
+        parameters=('str - строка'),
+        example=('LOGWRITE(STRMD5("123"))  // 202CB962AC59075B964B07152D234B70'),
         # notes='',
         keywords='strmd5, md5 хэш строки, md5 хеш строки',
         version_cm_major=4,
@@ -849,7 +899,7 @@ DATA_ELEMENTS.extend([
         example=(
                 '$str = "one,two,three"\n'
                 'STRSEPARATE($str, ",", $arr)\n'
-                'PRINT($arr[1])  // "two"'
+                'LOGWRITE($arr[1])  // "two"'
                 ),
         # notes='',
         keywords='strseparate, разбить строку по разделителю, разделить строку по разделителю, разбить строку в массив, разделить строку в массив',
@@ -863,7 +913,7 @@ DATA_ELEMENTS.extend([
         parent_id=5,
         description=('Функция. Возвращает символ по его коду.'),
         syntax='CHAR(code)',
-        parameters=('code - числовой код символа '),
+        parameters=('code - числовой код символа'),
         example=(
                 '// генерация строки из случайных\n'
                 '// символов a..z длинной 10\n'
@@ -873,7 +923,7 @@ DATA_ELEMENTS.extend([
                 '   $str = STRCONCAT($str, $chr)\n'
                 'END_CYC\n'
                 '\n'
-                'PRINT($str)'
+                'LOGWRITE($str)'
                 ),
         notes='Обратите внимание, что используются коды из таблицы юникода. Не путать с ASCII. Таблица кодов доступна в интернете. Например, [здесь](http://unicode-table.com/ru/).',
         keywords='char, чар, вернуть символ по коду, узнать символ по коду, есть код нужен символ',
@@ -881,6 +931,24 @@ DATA_ELEMENTS.extend([
         version_cm_minor=13,
         version_cm_build=14,
         version_cm_releaselevel='',
+        ),
+    dict(name='code',
+        name_isupper=1,
+        parent_id=5,
+        description=('Функция. Возвращает код, соответствующий символу.'),
+        syntax='CODE(char)',
+        parameters=('char - символ'),
+        example=(
+                '// Латинский символ A\n'
+                '$chr = "A"\n'
+                'LOGWRITE(CODE($chr))'
+                ),
+        notes='Символы Юникода поддерживаются.',
+        keywords='code, коде, вернуть код по символу, узнать код по символу, есть символ нужен код',
+        version_cm_major=4,
+        version_cm_minor=14,
+        version_cm_build=3,
+        version_cm_releaselevel='b',
         ),
 ])
 
@@ -898,7 +966,7 @@ DATA_ELEMENTS.extend([
                     ),
         example=(
                 '$str = INIREAD("config.ini", "var")\n'
-                'PRINT($str)\n'
+                'LOGWRITE($str)'
                 ),
         notes='По умолчанию section имеет значение "default"',
         keywords='iniread, иниреад, чтение из ини файла конфгурации, чтение из ini файла конфгурации, чтение параметра из ини файла конфгурации, чтение параметра из ini файла конфгурации, чтение файла конфигурации ini, чтение из файла конфигурации ini',
@@ -935,7 +1003,7 @@ DATA_ELEMENTS.extend([
                     'file - имя файла\n'
                     'str_n - номер строки в файле'
                     ),
-        example=('PRINT(TFREAD("input.txt", 5))'),
+        example=('LOGWRITE(TFREAD("input.txt", 5))'),
         # notes='',
         keywords='tfread, тфреад, чтение из файла, читать из файла, чтение строки из файла, читать строку из файла, чтение текстового файла, чтение строки из текстового файла, читать из текстового файла',
         version_cm_major=4,
@@ -951,7 +1019,7 @@ DATA_ELEMENTS.extend([
         parameters=(
                     'file - имя файла\n'
                     'str - строка\n'
-                    'str_n - необязательный параметр; номер строки в файле '
+                    'str_n - необязательный параметр; номер строки в файле'
                     ),
         example=('TFWRITE("input.txt", "Hello")'),
         notes='Новая строка записывается в файл на позицию str_n. При этом все строки (включая ту, которая была ранее на этой позиции) сдвигаются вниз. Если параметр str_n не задан, то новая строка добавляется в конец файла.',
@@ -972,8 +1040,8 @@ DATA_ELEMENTS.extend([
                     ),
         example=(
                 'TFREADARR("C:\out.txt", $arr)\n'
-                'PRINT($arr[0])\n'
-                'PRINT($arr[1])'
+                'LOGWRITE($arr[0])\n'
+                'LOGWRITE($arr[1])'
                 ),
         # notes='',
         keywords='tfreadarr, тфреадарр, чтение из файла в массив, читать из файла в массив, чтение текстового файла в массив, читать из текстового файла в массив, загрузить из файла в массив, загрузить строки из файла в массив',
@@ -1027,7 +1095,7 @@ DATA_ELEMENTS.extend([
         syntax='TFCLEAR(file, [delete])',
         parameters=(
                     'file - имя файла\n'
-                    'delete - необязательный параметр; флаг удаления файла '
+                    'delete - необязательный параметр; флаг удаления файла'
                     ),
         example=('TFCLEAR("input.txt")'),
         notes='Если параметр flag = 1, то файл удаляется с жесткого диска, если 0, то просто очищается. По умолчанию 0',
@@ -1043,7 +1111,7 @@ DATA_ELEMENTS.extend([
         description=('Функция. Возвращает количество строк в текстовом файле.'),
         syntax='TFCOUNT(file)',
         parameters=('file - имя файла'),
-        example=('PRINT(TFCOUNT("input.txt"))'),
+        example=('LOGWRITE(TFCOUNT("input.txt"))'),
         # notes='',
         keywords='tfcount, тфкоунт, возвращает количество строк в текстовом файле, возвращает количество строк в файле, вернуть количествово строк в текстовом файле, вернуть количество строк в файле, узнать количествово строк в текстовом файле, узнать количествово строк в файле, сколько строк в текстовом файле, сколько строк в файле',
         version_cm_major=4,
@@ -1060,7 +1128,7 @@ DATA_ELEMENTS.extend([
                     'file - имя файла\n'
                     'str_n - номер строки в файле'
                     ),
-        example=('PRINT(STRREADLN("input.txt", 5)) // результат (пятая строка из этого файла)'),
+        example=('LOGWRITE(STRREADLN("input.txt", 5)) // результат (пятая строка из этого файла)'),
         notes='Схожего поведения можно добиться используя более современную функцию TFREAD',
         keywords='strreadln, стрреадлн, чтение из файла, читать из файла, чтение строки из файла, читать строку из файла, чтение текстового файла, чтение строки из текстового файла, читать из текстового файла',
         version_cm_major=4,
@@ -1440,7 +1508,7 @@ DATA_ELEMENTS.extend([
         parent_id=8,
         description=('Функция. Проверяет зажата ли указанная клавиша клавиатуры'),
         syntax='ISKEYDOWN(keycode)',
-        parameters=('keycode - код клавиши'),
+        parameters=('keycode - код клавиши либо 0'),
         example=(
                 '// проверка нажатия пробела\n'
                 'IF(ISKEYDOWN(#space)=1)\n'
@@ -1452,7 +1520,7 @@ DATA_ELEMENTS.extend([
                 '   LOGWRITE("space and a!")\n'
                 'END_IF'
                 ),
-        notes='Возвращает 1 если в момент вызова функции зажата указанная клавиша и 0 - если нет.',
+        notes='Возвращает 1 если в момент вызова функции зажата указанная клавиша и 0 - если нет.\nЕсли в качестве keycode указан 0, то функция вернет 1 если зажата любая клавиша либо кнопка мыши.',
         keywords='iskeydown, искейдовн, проверка нажатия клавиши клавиатуры, проверка нажатия клавиши на клавиатуре, проверка зажатия клавиши клавиатуры, проверка зажатия клавиши на клавиатуре, реакция на клавишу, реакция на клавиатуру, нажата ли кнопка клавиатуры, нажата ли кнопка клавиатуры, проверить нажатую клавишу, проверить нажатую кнопку',
         version_cm_major=4,
         version_cm_minor=5,
@@ -1491,7 +1559,7 @@ DATA_ELEMENTS.extend([
                 '$hwnd = WNDFIND("Блокнот")\n'
                 '\n'
                 '// выводим раскладку\n'
-                'PRINT(GETKBLAYOUT($hwnd))'
+                'LOGWRITE(GETKBLAYOUT($hwnd))'
                 ),
         notes='В современных операционных системах Windows каждое окно хранит свою собственную раскладку.\n1049 - русский, 1033 - английский',
         keywords='getkblayout, геткейбоардлайоут, получить раскладку клавиатуры, получить язык клавиатуры, узнать раскладку клавиатуры, узнать язык клавиатуры, получить раскладку в окне, получить язык в окне, получить язык окна, какой язык клавиатуры',
@@ -1717,7 +1785,7 @@ DATA_ELEMENTS.extend([
                 '// описание подпрограммы без параметров\n'
                 'SUB(mysub)\n'
                 '   FOR($i=0, $i<3)\n'
-                '      PRINT("flood ", $i)\n'
+                '      LOGWRITE("flood ", $i)\n'
                 '   END_CYC\n'
                 'END_SUB\n'
                 '\n'
@@ -1727,9 +1795,9 @@ DATA_ELEMENTS.extend([
                 '// ------------------------------------\n'
                 '// пример 2. подпрограмма умножения двух случайных числел\n'
                 'SUB(mult, $par1, $par2)\n'
-                '   PRINT("par1: ", $par1)\n'
-                '   PRINT("par2: ", $par2)\n'
-                '   PRINT("par1 * par2 = ", $par1 * $par2)\n'
+                '   LOGWRITE("par1: ", $par1)\n'
+                '   LOGWRITE("par2: ", $par2)\n'
+                '   LOGWRITE("par1 * par2 = ", $par1 * $par2)\n'
                 'END_SUB\n'
                 '\n'
                 '// вызов подпрограммы (три раза)\n'
@@ -1787,7 +1855,7 @@ DATA_ELEMENTS.extend([
                 '//-------------------------------\n'
                 '// Описание остановленного потока\n'
                 'THREAD(t1, 0)\n'
-                '   PRINT("thr #1 tic-tak")\n'
+                '   LOGWRITE("thr #1 tic-tak")\n'
                 '   WAIT(5)\n'
                 'END_THREAD\n'
                 '//-------------------------------\n'
@@ -2306,3 +2374,9 @@ DATA_ELEMENTS.extend([
   # + Добавлено озвучивание событий воспроизведения, записи и остановки
   # + Новая модная справка
 
+
+# 4.14.003
+# wndfindarr
+# contrast
+# logwritec(printc)
+# callarr
