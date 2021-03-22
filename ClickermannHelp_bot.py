@@ -4,8 +4,7 @@
 import os
 import sys
 from itertools import chain
-import telebot
-from telebot import types
+from telebot import TeleBot, types
 from configs.config import CLICKERMANN_HELP_BOT_TOKEN
 from cm_database import DB
 import accessory.colorprint as cp
