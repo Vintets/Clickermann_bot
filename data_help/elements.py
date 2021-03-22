@@ -952,7 +952,7 @@ DATA_ELEMENTS.extend([
         ),
 ])
 
-# Файлы
+# Текстовые файлы
 DATA_ELEMENTS.extend([
     dict(name='iniread',
         name_isupper=1,
@@ -1160,11 +1160,243 @@ DATA_ELEMENTS.extend([
         ),
 ])
 
+# Текстовые файлы
+DATA_ELEMENTS.extend([
+    dict(name='fcreate',
+        name_isupper=1,
+        parent_id=7,
+        description=('Создает пустой файл или каталог по указанному пути.'),
+        syntax='FCREATE(path, [isfile])',
+        parameters=(
+                    'path - путь для создаваемого объекта\n'
+                    'isfile - необязательный параметр; признак файла'
+                    ),
+        example=(
+                'FCREATE("C:\mypath")\n'
+                'FCREATE("C:\mypath\hello.txt", 1)'
+                ),
+        notes='Если параметр isfile не задан, то инструкция создаст каталог, в противном случае будет создан пустой файл.',
+        keywords='fcreate, фкриэйт, фкреатэ, создать каталог по указанному пути, создать папку по указанному пути, создать директорию по указанному пути, создать файл на диске по указанному пути, создать пустой файл на диске по указанному пути',
+        version_cm_major=4,
+        version_cm_minor=14,
+        version_cm_build=3,
+        version_cm_releaselevel='b',
+        ),
+    dict(name='fcopy',
+        name_isupper=1,
+        parent_id=7,
+        description=('Копировать файл или каталог по указанному пути.'),
+        syntax='FCOPY(path1, path2)',
+        parameters=(
+                    'path1 - объект для копирования\n'
+                    'path2 - новое размещение'
+                    ),
+        example=(
+                '// Копирование каталога\n'
+                'FCOPY("C:\mypath", "C:\mypath2")\n'
+                '\n'
+                '// Копирование файла\n'
+                'FCOPY("C:\mypath\hello.txt", "C:\mypath2\hello.txt")\n'
+                '\n'
+                '// Копирование файла с новым именем\n'
+                'FCOPY("C:\mypath\hello.txt", "C:\mypath2\goodbye.txt")'
+                ),
+        notes='Каталоги копируются со всем содержимым. В случае совпадения имен файлов, они будут перезаписаны. При копирования объекта ему можно задать другое имя.',
+        keywords='fcopy, фкопи, копировать каталог по указанному пути, копировать файл по указанному пути, копировать каталог на диске, копировать файл на диске',
+        version_cm_major=4,
+        version_cm_minor=14,
+        version_cm_build=3,
+        version_cm_releaselevel='b',
+        ),
+    dict(name='fdelete',
+        name_isupper=1,
+        parent_id=7,
+        description=('Удаляет файл или каталог по указанному пути.'),
+        syntax='FDELETE(path)',
+        parameters=('path - объект для удаления'),
+        example=(
+                '// Удаление каталога\n'
+                'FDELETE("C:\mypath2")'
+                ),
+        notes='Каталог будет удален вне зависимости от своего содержимого.',
+        keywords='fdelete, фделит, фделитэ, удалить каталог по указанному пути, удалить папку по указанному пути, удалить директорию по указанному пути, удалить файл на диске по указанному пути, удалить файл с диска по указанному пути',
+        version_cm_major=4,
+        version_cm_minor=14,
+        version_cm_build=3,
+        version_cm_releaselevel='b',
+        ),
+    dict(name='fexists',
+        name_isupper=1,
+        parent_id=7,
+        description=('Функция. Проверяет наличие файла или каталога по указанному пути.'),
+        syntax='FEXISTS(path)',
+        parameters=('path - путь к объекту'),
+        example=(
+                '// Проверка наличия каталога\n'
+                'IF(FExists("C:\mypath2"))\n'
+                '   LOGWRITE("exists")\n'
+                'ELSE\n'
+                '   LOGWRITE("nope")\n'
+                'END_IF'
+                ),
+        # notes='',
+        keywords='fexists, фэкзист, фэксист, проверить наличие файла по указанному пути, проверить наличие папки по указанному пути, проверить наличие каталога по указанному пути, проверить наличие директории по указанному пути',
+        version_cm_major=4,
+        version_cm_minor=14,
+        version_cm_build=3,
+        version_cm_releaselevel='b',
+        ),
+    dict(name='fsize',
+        name_isupper=1,
+        parent_id=7,
+        description=('Функция. Возвращает размер файла.'),
+        syntax='FSIZE(path)',
+        parameters=('path - путь к файлу'),
+        example=(
+                '// Получение списка файлов\n'
+                'GetFileList($arr, "C:\*.*")\n'
+                '\n'
+                '// Вывод файла и его размера\n'
+                'FOR($i=0, $i < arrsize($arr))\n'
+                '   $fullname = STRCONCAT("C:\", $arr[$i])\n'
+                '   LOGWRITE($arr[$i], " : ", FSIZE($fullname), " bytes")\n'
+                'END_CYC'
+                ),
+        notes='Если доступ к файлу невозможно получить, то функция вернет -1.',
+        keywords='fsize, фсайз, фсизэ, получить размер файла на диске, узнать размер файла на диске',
+        version_cm_major=4,
+        version_cm_minor=14,
+        version_cm_build=3,
+        version_cm_releaselevel='b',
+        ),
+    dict(name='freaddata',
+        name_isupper=1,
+        parent_id=7,
+        description=('Считывает блок информации из файла в байтовый массив'),
+        syntax='FREADDATA(path, $arr, [start], [count])',
+        parameters=(
+                    'path - путь к объекту\n'
+                    '$arr - получаемый массив\n'
+                    'start - необязательный параметр; позиция начала считывания\n'
+                    'count - необязательный параметр; количество считываемых байт'
+                    ),
+        example=(
+                '$str = ""\n'
+                '\n'
+                '// Считывание из exe файла 39 байт начиная с 79\n'
+                'FREADDATA("C:\Windows\notepad.exe", $var, 78, 39)\n'
+                '\n'
+                '// Перевод массива байт в строку символов\n'
+                'FOR($i=0, $i < 39)\n'
+                '   $str = STRCONCAT($str, CHAR($var[$i]))\n'
+                'END_CYC\n'
+                '\n'
+                '// "This program cannot be run in DOS mode."\n'
+                'LOGWRITE($str)'
+                ),
+        notes='Считывание начинается с позиции start. Если параметр start не задан, то он равен 0, то есть началу файла. Если параметр count не задан, то он равен 0, что считается размером целого файла. Итоговый размер полученного массива будет соответствовать количеству считанных байт.',
+        keywords='freaddata, aреаддата, читать байты из файла в массив, прочитать байты из файла в массив, читать информацию из файла в массив, прочитать информацию из файла в массив, считать информацию из файла в массив, читать из файла в массив, прочитать из файла в массив, считать из файла в массив',
+        version_cm_major=4,
+        version_cm_minor=14,
+        version_cm_build=3,
+        version_cm_releaselevel='b',
+        ),
+    dict(name='fwritedata',
+        name_isupper=1,
+        parent_id=7,
+        description=('Записывает блок информации в файл из байтового массива.'),
+        syntax='FWRITEDATA(path, $arr, [start], [count])',
+        parameters=(
+                    'path - путь к объекту\n'
+                    '$arr - входной массив\n'
+                    'start - необязательный параметр; позиция начала записи\n'
+                    'count - необязательный параметр; количество записываемых байт'
+                    ),
+        example=(
+                '// Замена в текстовом файле всех символов A на Z\n'
+                'FREADDATA("text.txt", $arr)\n'
+                '\n'
+                'FOR($i=0, $i < ARRSIZE($arr))\n'
+                '   IF(CHAR($arr[$i]) == "A")\n'
+                '      $arr[$i] = CODE("Z")\n'
+                '   END_IF\n'
+                'END_CYC\n'
+                '\n'
+                'FWRITEDATA("text.txt", $arr)'
+                ),
+        notes='Запись в файл начинается с позиции start. Если параметр не задан, то он равен 0, то есть началу файла. Если параметр count не задан, то он равен 0, что считается размером массива $arr. В ином случае, в указанную позицию файла побайтово осуществляется запись первых count элементов от начала массива. При этом изначальные байты файла заменяются соответствующими байтами из массива. В случае, если размер перезаписываемого файла меньше размера массива, либо из-за смещения блок данных выходит за границы файла, то файл будет увеличен на соответствующее количество байт.',
+        keywords='fwritedata, фврайтдата, записать байтов из массива в файл, запись байты из массива в файл, записать информацию из массива в файл, запись информации из массива в файл, записать из массива в файл, запись из массива в файл',
+        version_cm_major=4,
+        version_cm_minor=14,
+        version_cm_build=3,
+        version_cm_releaselevel='b',
+        ),
+    dict(name='getfilelist',
+        name_isupper=1,
+        parent_id=7,
+        description=('Помещает в массив список файлов, найденных согласно маске.'),
+        syntax='GETFILELIST($arr, [dir])',
+        parameters=(
+                    '$arr - принимающий массив\n'
+                    'dir - адрес, содержащий маску выборки'
+                    ),
+        example=(
+                '// пример1 вывод всех файлов из C:\n'
+                'GETFILELIST($arr, "C:\*.*")\n'
+                'FOR($i=0, $i < ARRSIZE($arr))\n'
+                '   LOGWRITE($arr[$i])\n'
+                'END_CYC\n'
+                '\n'
+                'HALT\n'
+                '\n'
+                '// пример2 вывод файлов sys из C:\n'
+                'GETFILELIST($arr, "C:\*.sys")\n'
+                'FOR($i=0, $i < ARRSIZE($arr))\n'
+                '   LOGWRITE($arr[$i])\n'
+                'END_CYC\n'
+                '\n'
+                'HALT'
+                ),
+        notes='Путь должен обязательно содержать маску. По умолчанию путь равен "*".',
+        keywords='getfilelist, гетфилелист, получить список файлов в массив, считать список файлов в массив, получить список файлов из папки в массив, считать список файлов из каталога в массив, получить список файлов в папке, получить список файлов в каталоге, получить список файлов в директории',
+        version_cm_major=4,
+        version_cm_minor=14,
+        version_cm_build=3,
+        version_cm_releaselevel='b',
+        ),
+    dict(name='getdirlist',
+        name_isupper=1,
+        parent_id=7,
+        description=('Помещает в массив список каталогов, найденных согласно маске.'),
+        syntax='GETDIRLIST($arr, [dir])',
+        parameters=(
+                    '$arr - принимающий массив\n'
+                    'dir - необязательный параметр; адрес, содержащий маску выборки'
+                    ),
+        example=(
+                '// вывод всех каталогов на C:\n'
+                'GETDIRLIST($arr, "C:\*")\n'
+                '\n'
+                'FOR($i=0, $i < ARRSIZE($arr))\n'
+                '   LOGWRITE($arr[$i])\n'
+                'END_CYC\n'
+                '\n'
+                'HALT'
+                ),
+        notes='Путь должен обязательно содержать маску. По умолчанию путь равен "*". ',
+        keywords='getdirlist, гетдирлист, получить список каталогов в массив, считать список каталогов в массив, получить список папок в массив, считать список папок в массив, получить список директорий в массив, считать список директорий в массив',
+        version_cm_major=4,
+        version_cm_minor=14,
+        version_cm_build=3,
+        version_cm_releaselevel='b',
+        ),
+])
+
 # Мышь
 DATA_ELEMENTS.extend([
     dict(name='lclick',
         name_isupper=1,
-        parent_id=7,
+        parent_id=8,
         description=('Делает клик левой клавишей мышки в указанной точке.'),
         syntax='LCLICK(x, y)',
         parameters=('x, y - координаты точки на экране'),
@@ -1184,7 +1416,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='ldown',
         name_isupper=1,
-        parent_id=7,
+        parent_id=8,
         description=('Зажимает левую клавишу мышки в указанной точке.'),
         syntax='LDOWN(x, y)',
         parameters=('x, y - координаты точки на экране'),
@@ -1203,7 +1435,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='lup',
         name_isupper=1,
-        parent_id=7,
+        parent_id=8,
         description=('Отпускает левую клавишу мышки в указанной точке.'),
         syntax='LUP(x, y)',
         parameters=('x, y - координаты точки на экране'),
@@ -1222,7 +1454,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='rclick',
         name_isupper=1,
-        parent_id=7,
+        parent_id=8,
         description=('Делает клик правой клавишей мышки в указанной точке.'),
         syntax='RCLICK(x, y)',
         parameters=('x, y - координаты точки на экране'),
@@ -1242,7 +1474,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='rdown',
         name_isupper=1,
-        parent_id=7,
+        parent_id=8,
         description=('Зажимает правой клавишу мышки в указанной точке.'),
         syntax='RDOWN(x, y)',
         parameters=('x, y - координаты точки на экране'),
@@ -1261,7 +1493,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='rup',
         name_isupper=1,
-        parent_id=7,
+        parent_id=8,
         description=('Отпускает правую клавишу мышки в указанной точке.'),
         syntax='RUP(x, y)',
         parameters=('x, y - координаты точки на экране'),
@@ -1280,7 +1512,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='mclick',
         name_isupper=1,
-        parent_id=7,
+        parent_id=8,
         description=('Делает клик средней клавишей мышки в указанной точке.'),
         syntax='MCLICK(x, y)',
         parameters=('x, y - координаты точки на экране'),
@@ -1300,7 +1532,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='mdown',
         name_isupper=1,
-        parent_id=7,
+        parent_id=8,
         description=('Зажимает среднюю клавишу мышки в указанной точке.'),
         syntax='MDOWN(x, y)',
         parameters=('x, y - координаты точки на экране'),
@@ -1319,7 +1551,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='mup',
         name_isupper=1,
-        parent_id=7,
+        parent_id=8,
         description=('Отпускает среднюю клавишу мышки в указанной точке.'),
         syntax='MUP(x, y)',
         parameters=('x, y - координаты точки на экране'),
@@ -1338,7 +1570,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='dblclick',
         name_isupper=1,
-        parent_id=7,
+        parent_id=8,
         description=('Делает двойной клик левой клавишей мышки в указанной точке.'),
         syntax='DBLCLICK(x, y)',
         parameters=('x, y - координаты точки на экране'),
@@ -1358,7 +1590,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='move',
         name_isupper=1,
-        parent_id=7,
+        parent_id=8,
         description=('Перемещает указатель мышки в указанную точку.'),
         syntax='MOVE(x, y)',
         parameters=('x, y - координаты точки на экране'),
@@ -1375,7 +1607,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='mover',
         name_isupper=1,
-        parent_id=7,
+        parent_id=8,
         description=('Смещает указатель мышки относительно текущего положения.'),
         syntax='MOVER(rx, ry)',
         parameters=('rx, ry - величины, на которые указатель будет сдвинут по соотв. осям'),
@@ -1392,7 +1624,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='wheeldown',
         name_isupper=1,
-        parent_id=7,
+        parent_id=8,
         description=('Прокручивает колесико мышки вниз (на себя).'),
         syntax='WHEELDOWN([mult])',
         parameters=('mult - необязательный параметр; множитель прокрутки'),
@@ -1409,7 +1641,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='wheelup',
         name_isupper=1,
-        parent_id=7,
+        parent_id=8,
         description=('Прокручивает колесико мышки вверх (от себя).'),
         syntax='WHEELUP([mult])',
         parameters=('mult - необязательный параметр; множитель прокрутки'),
@@ -1430,7 +1662,7 @@ DATA_ELEMENTS.extend([
 DATA_ELEMENTS.extend([
     dict(name='keypress',
         name_isupper=1,
-        parent_id=8,
+        parent_id=9,
         description=('Нажимает и отпускает клавишу клавиатуры.'),
         syntax='KEYPRESS(keycode)',
         parameters=('keycode - код клавиши'),
@@ -1450,7 +1682,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='keydown',
         name_isupper=1,
-        parent_id=8,
+        parent_id=9,
         description=('Нажимает и удерживает клавишу клавиатуры.'),
         syntax='KEYDOWN(keycode)',
         parameters=('keycode - код клавиши'),
@@ -1469,7 +1701,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='keyup',
         name_isupper=1,
-        parent_id=8,
+        parent_id=9,
         description=('Отжимает ранее зажатую клавишу клавиатуры.'),
         syntax='KEYUP(keycode)',
         parameters=('keycode - код клавиши'),
@@ -1488,7 +1720,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='keystring',
         name_isupper=1,
-        parent_id=8,
+        parent_id=9,
         description=('Нажимает клавиши соответственно символам входной строки.'),
         syntax='KEYSTRING(string, [delay])',
         parameters=(
@@ -1505,7 +1737,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='iskeydown',
         name_isupper=1,
-        parent_id=8,
+        parent_id=9,
         description=('Функция. Проверяет зажата ли указанная клавиша клавиатуры'),
         syntax='ISKEYDOWN(keycode)',
         parameters=('keycode - код клавиши либо 0'),
@@ -1529,7 +1761,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='getkeysdown',
         name_isupper=1,
-        parent_id=8,
+        parent_id=9,
         description=('Помещает список зажатых в момент вызова клавиш в массив.'),
         syntax='SETKBLAYOUT(hwnd, lang)',
         parameters=(
@@ -1550,7 +1782,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='getkblayout',
         name_isupper=1,
-        parent_id=8,
+        parent_id=9,
         description=('Функция. Возвращает идентификатор языка ввода (раскладки) в конкретном окне.'),
         syntax='GETKBLAYOUT(hwnd)',
         parameters=('hwnd - hwnd окна'),
@@ -1570,7 +1802,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='setkblayout',
         name_isupper=1,
-        parent_id=8,
+        parent_id=9,
         description=('Устанавливает языка ввода (раскладки) в конкретном окне.'),
         syntax='SETKBLAYOUT(hwnd, lang)',
         parameters=(
@@ -1597,7 +1829,7 @@ DATA_ELEMENTS.extend([
 DATA_ELEMENTS.extend([
     dict(name='if ... end_if',
         name_isupper=1,
-        parent_id=9,
+        parent_id=10,
         description=('Условная конструкция. Выполняет часть сценария в зависимости от значения параметра условия.'),
         syntax=(
                 'IF(expression)\n'
@@ -1627,7 +1859,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='else',
         name_isupper=1,
-        parent_id=9,
+        parent_id=10,
         description=('Необязательная часть условной конструкции. Выполняет часть сценария в зависимости от результата проверки условия.'),
         syntax=(
                 'IF(expression)\n'
@@ -1661,7 +1893,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='switch ... end_switch',
         name_isupper=1,
-        parent_id=9,
+        parent_id=10,
         description=('Условная конструкция, состоящая из множества условий. Выполняет часть сценария в зависимости от значения параметра переключателя.'),
         syntax=(
                 'SWITCH(var)\n'
@@ -1701,7 +1933,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='for ... end_cyc',
         name_isupper=1,
-        parent_id=9,
+        parent_id=10,
         description=('Цикл в параметром.'),
         syntax=(
                 'FOR($var [=value], expression, [step])\n'
@@ -1734,7 +1966,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='while ... end_cyc',
         name_isupper=1,
-        parent_id=9,
+        parent_id=10,
         description=('Цикл с предусловием.'),
         syntax=(
                 'WHILE(expression)\n'
@@ -1769,7 +2001,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='sub ... end_sub',
         name_isupper=1,
-        parent_id=9,
+        parent_id=10,
         description=('Подпрограмма. Описывает подпрограмму.'),
         syntax=(
                 'SUB(sub_name, [$par1, $par2, ...])\n'
@@ -1814,7 +2046,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='thread ... end_thread',
         name_isupper=1,
-        parent_id=9,
+        parent_id=10,
         description=('Потоки. Описывает поток.'),
         syntax=(
                 'THREAD(thread_name, [init_state])\n'
@@ -1844,7 +2076,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='setthread',
         name_isupper=1,
-        parent_id=9,
+        parent_id=10,
         description=('Меняет состояние потока.'),
         syntax='SETTHREAD(thread_name, state)',
         parameters=(
@@ -1966,7 +2198,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='',
         name_isupper=1,
-        parent_id=10,
+        parent_id=11,
         description=(''),
         syntax='',
         parameters=(''),
@@ -1980,7 +2212,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='',
         name_isupper=1,
-        parent_id=10,
+        parent_id=11,
         description=(''),
         syntax='',
         parameters=(''),
@@ -1994,7 +2226,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='',
         name_isupper=1,
-        parent_id=10,
+        parent_id=11,
         description=(''),
         syntax='',
         parameters=(''),
@@ -2008,7 +2240,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='',
         name_isupper=1,
-        parent_id=10,
+        parent_id=11,
         description=(''),
         syntax='',
         parameters=(''),
@@ -2022,7 +2254,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='',
         name_isupper=1,
-        parent_id=10,
+        parent_id=11,
         description=(''),
         syntax='',
         parameters=(''),
@@ -2036,7 +2268,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='',
         name_isupper=1,
-        parent_id=10,
+        parent_id=11,
         description=(''),
         syntax='',
         parameters=(''),
@@ -2050,7 +2282,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='',
         name_isupper=1,
-        parent_id=10,
+        parent_id=11,
         description=(''),
         syntax='',
         parameters=(''),
@@ -2111,7 +2343,7 @@ DATA_ELEMENTS.extend([
 DATA_ELEMENTS.extend([
     dict(name='',
         name_isupper=1,
-        parent_id=10,
+        parent_id=12,
         description=(''),
         syntax='',
         parameters=(''),
@@ -2125,7 +2357,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='',
         name_isupper=1,
-        parent_id=10,
+        parent_id=12,
         description=(''),
         syntax='',
         parameters=(''),
@@ -2139,7 +2371,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='',
         name_isupper=1,
-        parent_id=10,
+        parent_id=12,
         description=(''),
         syntax='',
         parameters=(''),
@@ -2153,7 +2385,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='',
         name_isupper=1,
-        parent_id=10,
+        parent_id=12,
         description=(''),
         syntax='',
         parameters=(''),
@@ -2167,7 +2399,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='',
         name_isupper=1,
-        parent_id=10,
+        parent_id=12,
         description=(''),
         syntax='',
         parameters=(''),
@@ -2181,7 +2413,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='',
         name_isupper=1,
-        parent_id=10,
+        parent_id=12,
         description=(''),
         syntax='',
         parameters=(''),
@@ -2195,7 +2427,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='',
         name_isupper=1,
-        parent_id=10,
+        parent_id=12,
         description=(''),
         syntax='',
         parameters=(''),
@@ -2209,7 +2441,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='',
         name_isupper=1,
-        parent_id=10,
+        parent_id=12,
         description=(''),
         syntax='',
         parameters=(''),
@@ -2223,7 +2455,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='',
         name_isupper=1,
-        parent_id=10,
+        parent_id=12,
         description=(''),
         syntax='',
         parameters=(''),
@@ -2237,7 +2469,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='',
         name_isupper=1,
-        parent_id=10,
+        parent_id=12,
         description=(''),
         syntax='',
         parameters=(''),
@@ -2251,7 +2483,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='',
         name_isupper=1,
-        parent_id=10,
+        parent_id=12,
         description=(''),
         syntax='',
         parameters=(''),
@@ -2265,7 +2497,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='',
         name_isupper=1,
-        parent_id=10,
+        parent_id=12,
         description=(''),
         syntax='',
         parameters=(''),
@@ -2279,7 +2511,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='',
         name_isupper=1,
-        parent_id=10,
+        parent_id=12,
         description=(''),
         syntax='',
         parameters=(''),
@@ -2293,7 +2525,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='',
         name_isupper=1,
-        parent_id=10,
+        parent_id=12,
         description=(''),
         syntax='',
         parameters=(''),
@@ -2307,7 +2539,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='',
         name_isupper=1,
-        parent_id=10,
+        parent_id=12,
         description=(''),
         syntax='',
         parameters=(''),
@@ -2321,7 +2553,7 @@ DATA_ELEMENTS.extend([
         ),
     dict(name='',
         name_isupper=1,
-        parent_id=10,
+        parent_id=12,
         description=(''),
         syntax='',
         parameters=(''),
