@@ -14,7 +14,7 @@ import configs.msg_const as msg_const
 from configs.formatting import frm
 
 
-bot = telebot.TeleBot(CLICKERMANN_HELP_BOT_TOKEN, parse_mode='MARKDOWN')  # None, HTML or MARKDOWN / MarkdownV2
+bot = TeleBot(CLICKERMANN_HELP_BOT_TOKEN, parse_mode='MARKDOWN')  # None, HTML or MARKDOWN / MarkdownV2
 db = DB()
 
 
@@ -41,8 +41,10 @@ def logger_user(handler):
         handler(message)
     return wrapper_logger_user
 
-def safe_underscore(item):
-    if item.find('_') != -1:
+def safe_underscore(item, italic=False):
+    if italic and item.find('_') != -1:
+        item = item.replace('_', '_\__')
+    elif item.find('_') != -1:
         item = item.replace('_', '\_')
     if item.find('#') != -1:
         item = item.replace('#', '\#')
@@ -215,7 +217,7 @@ def template_engine_element(el):
         text.append('')
     if el.notes:
         text.append(f'{frm.b}Примечания{frm.b}')
-        text.append(f'{frm.i}{safe_underscore(el.notes)}{frm.i}')
+        text.append(f'{frm.i}{safe_underscore(el.notes, italic=True)}{frm.i}')
         text.append('')
 
     text.append(assembly_version(el))
@@ -289,7 +291,7 @@ if __name__ == '__main__':
 
     __author__ = 'master by Vint'
     __title__ = '--- Clickermann_bot ---'
-    __version__ = '0.1.5'
+    __version__ = '0.1.6'
     __copyright__ = 'Copyright 2020 (c)  bitbucket.org/Vintets'
     auth_sh.authorship(__author__, __title__, __version__, __copyright__, width=_width)
 
