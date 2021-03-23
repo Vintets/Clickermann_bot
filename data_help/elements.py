@@ -2112,234 +2112,407 @@ DATA_ELEMENTS.extend([
 
 # Анализ экрана
 DATA_ELEMENTS.extend([
-    dict(name='',
-        name_isupper=1,
-        parent_id=10,
-        description=(''),
-        syntax='',
-        parameters=(''),
-        example=(''),
-        notes='',
-        keywords='',
-        version_cm_major=3,
-        version_cm_minor=2,
-        version_cm_build=0,
-        version_cm_releaselevel='',
-        ),
-    dict(name='',
-        name_isupper=1,
-        parent_id=10,
-        description=(''),
-        syntax='',
-        parameters=(''),
-        example=(''),
-        notes='',
-        keywords='',
-        version_cm_major=3,
-        version_cm_minor=2,
-        version_cm_build=0,
-        version_cm_releaselevel='',
-        ),
-    dict(name='',
-        name_isupper=1,
-        parent_id=10,
-        description=(''),
-        syntax='',
-        parameters=(''),
-        example=(''),
-        notes='',
-        keywords='',
-        version_cm_major=3,
-        version_cm_minor=2,
-        version_cm_build=0,
-        version_cm_releaselevel='',
-        ),
-    dict(name='',
-        name_isupper=1,
-        parent_id=10,
-        description=(''),
-        syntax='',
-        parameters=(''),
-        example=(''),
-        notes='',
-        keywords='',
-        version_cm_major=3,
-        version_cm_minor=2,
-        version_cm_build=0,
-        version_cm_releaselevel='',
-        ),
-    dict(name='',
-        name_isupper=1,
-        parent_id=10,
-        description=(''),
-        syntax='',
-        parameters=(''),
-        example=(''),
-        notes='',
-        keywords='',
-        version_cm_major=3,
-        version_cm_minor=2,
-        version_cm_build=0,
-        version_cm_releaselevel='',
-        ),
-    dict(name='',
-        name_isupper=1,
-        parent_id=10,
-        description=(''),
-        syntax='',
-        parameters=(''),
-        example=(''),
-        notes='',
-        keywords='',
-        version_cm_major=3,
-        version_cm_minor=2,
-        version_cm_build=0,
-        version_cm_releaselevel='',
-        ),
-    dict(name='',
+    dict(name='getscreen',
         name_isupper=1,
         parent_id=11,
-        description=(''),
-        syntax='',
-        parameters=(''),
-        example=(''),
-        notes='',
-        keywords='',
+        description=('Делает снимок экрана и помещает его в буфер анализа программы.'),
+        syntax='GETSCREEN([x1, y1, x2, y2])',
+        parameters=('x1, y1, x2, y2 - параметры, описывающие область экрана; необязательны'),
+        # example=(''),
+        notes='Данная процедура помещает снимок экрана в буфер программы. Затем, из этого буфера берут данные все графические функции, вызываемые в сценарии. Соответственно, в случае когда необходимо обновить хранящееся в памяти состояние экрана, нужно вызвать getscreen() еще раз.\nВ случае, если указаны параметры, описывающие область, будет обновлена только соответствующая область в графическом буфере. На некоторых системах это позволяет ускорить выполнение данной инструкции.',
+        keywords='getscreen, гетскрин, снимок экрана в память, экран в буфер, снимок в буфер экрана, поместить в буфер анализа',
         version_cm_major=3,
-        version_cm_minor=2,
+        version_cm_minor=1,
         version_cm_build=0,
-        version_cm_releaselevel='',
+        version_cm_releaselevel='alpha',
         ),
-    dict(name='',
+    dict(name='pxl',
         name_isupper=1,
         parent_id=11,
-        description=(''),
-        syntax='',
-        parameters=(''),
-        example=(''),
-        notes='',
-        keywords='',
-        version_cm_major=3,
-        version_cm_minor=2,
-        version_cm_build=0,
+        description=('Функция. Возвращает код цвета для заданного пикселя.'),
+        syntax='PXL(x, y)',
+        parameters=('x, y - координаты пикселя'),
+        example=('$clr = PXL(50,50)'),
+        notes='Функция получает данные о цвете из буфера экрана кликера. Буфер обновляется командой GETSCREEN.',
+        keywords='pxl. пиксел, получить цвет пикселя, получить цвет пиксела, получить цвет в координатах, получить цвет пикселя в координатах, получить цвет пиксела в координатах, получить цвет по координатам, получить цвет пикселя по координатам, получить цвет пиксела по координатам, цвет в точке на экране, цвет точки на экране',
+        version_cm_major=4,
+        version_cm_minor=0,
+        version_cm_build=2,
         version_cm_releaselevel='',
         ),
-    dict(name='',
+    dict(name='pxlcount',
         name_isupper=1,
         parent_id=11,
-        description=(''),
-        syntax='',
-        parameters=(''),
-        example=(''),
-        notes='',
-        keywords='',
-        version_cm_major=3,
-        version_cm_minor=2,
-        version_cm_build=0,
+        description=('Функция. Производит подсчет количества пикселей заданного цвета в прямоугольной области буфера анализа.'),
+        syntax='PXLCOUNT(x1, y1, x2, y2, color)',
+        parameters=(
+                    'x1, y1 - числовые координаты левого верхнего угла области\n'
+                    'x2, y2 - числовые координаты правого нижнего угла области\n'
+                    'color - код цвета'
+                    ),
+        example=(
+                '// считаем в области количество пикселов с цветом 255 (красный)\n'
+                'GETSCREEN\n'
+                '$count = PXLCOUNT(10,20, 100, 40, 255)\n'
+                'LOGWRITE("pixels: ", $count)'
+                ),
+        notes='Если ни одного пикселя не будет найдено, функция вернет нолью\nФункция получает данные из буфера экрана кликера. Буфер обновляется командой GETSCREEN.',
+        keywords='pxlcount, пикселькаунт, пикселькоунт, пикселкаунт, пикселкоунт, посчитать количество заданного цвета пикселей в прямоугольной области буфера экрана, посчитать количество пикселей в области экрана, посчитать количество пикселей заданного цвета в области экрана, посчитать количество цвета в области экрана',
+        version_cm_major=4,
+        version_cm_minor=0,
+        version_cm_build=2,
         version_cm_releaselevel='',
         ),
-    dict(name='',
+    dict(name='pxlxor',
         name_isupper=1,
         parent_id=11,
-        description=(''),
-        syntax='',
-        parameters=(''),
-        example=(''),
-        notes='',
-        keywords='',
-        version_cm_major=3,
-        version_cm_minor=2,
-        version_cm_build=0,
+        description=('Функция. Производит подсчет контрольной суммы пикселей в заданной области, складывая их цвета оператором XOR.'),
+        syntax='PXLXOR(x1, y1, x2, y2)',
+        parameters=(
+                    'x1, y1 - числовые координаты левого верхнего угла области\n'
+                    'x2, y2 - числовые координаты правого нижнего угла области'
+                    ),
+        example=(
+                'GETSCREEN\n'
+                '$count = PXLXOR(10,20, 100, 40)\n'
+                'LOGWRITE("Hash: ", $count)'
+                ),
+        notes='Необходимо понимать что контрольная сумма используется для характеристики области экрана. То есть если была подсчитана сумма, в области изменился хотя бы один пиксель и если подсчитать сумму снова - она будет отличаться от первой. Такой способ не очень надежен в плане получения уникального хеша для простых изображений, но весьма быстр.\nФункция получает данные из буфера экрана кликера. Буфер обновляется командой GETSCREEN.',
+        keywords='pxlxor, пикселхор, пиксельхор, подсчёт контрольной суммы пикселей в заданной области, подсчёт контрольной суммы в заданной области, контрольная сумма пикселей в заданной области, складывание цвета пикселей в области',
+        version_cm_major=4,
+        version_cm_minor=0,
+        version_cm_build=2,
         version_cm_releaselevel='',
         ),
-    dict(name='',
+    dict(name='pxlcrc',
         name_isupper=1,
         parent_id=11,
-        description=(''),
-        syntax='',
-        parameters=(''),
-        example=(''),
-        notes='',
-        keywords='',
-        version_cm_major=3,
-        version_cm_minor=2,
+        description=('Функция. Производит подсчет контрольной суммы пикселей в заданной области, используя алгоритм CRC32.'),
+        syntax='PXLCRC(x1, y1, x2, y2)',
+        parameters=(
+                    'x1, y1 - числовые координаты левого верхнего угла области\n'
+                    'x2, y2 - числовые координаты правого нижнего угла области'
+                    ),
+        example=(
+                'GETSCREEN\n'
+                '$count = PXLCRC(10,20, 100, 40)\n'
+                'LOGWRITE("Hash: ", $count)'
+                ),
+        notes='Более актуальный метод подсчета хеша для области экрана. Лишен недостатков PXLXOR(), хотя работает примерно в два раза медленнее.\nФункция получает данные из буфера экрана кликера. Буфер обновляется командой GETSCREEN.',
+        keywords='pxlcrc, пикселкрк, пикселькрк, подсчёт контрольной суммы пикселей в заданной области используя алгоритм CRC32, подсчёт контрольной суммы в заданной области, контрольная сумма пикселей в заданной области, складывание цвета пикселей в области',
+        version_cm_major=4,
+        version_cm_minor=7,
         version_cm_build=0,
         version_cm_releaselevel='',
         ),
-    dict(name='',
+    dict(name='pxlreplace',
         name_isupper=1,
         parent_id=11,
-        description=(''),
-        syntax='',
-        parameters=(''),
-        example=(''),
-        notes='',
-        keywords='',
-        version_cm_major=3,
-        version_cm_minor=2,
-        version_cm_build=0,
+        description=('Производит замену в области графического буфера пикселей одного цвета на пиксели другого цвета.'),
+        syntax='PXLREPLACE(x1, y1, x2, y2, color, newcolor)',
+        parameters=(
+                    'x1, y1 - числовые координаты левого верхнего угла области\n'
+                    'x2, y2 - числовые координаты правого нижнего угла области\n'
+                    'color - заменяемый цвет\n'
+                    'newcolor - новый цвет'
+                    ),
+        example=(
+                '// заменяем в области все цвета на цвет 255 (красный)\n'
+                'GETSCREEN\n'
+                'PXLREPLACE(10,20, 100, 40, -1, 255)\n'
+                'SCREENSHOT'
+                ),
+        notes='Чтобы заменялись пиксели любого цвета, параметр color должен быть равен -1.\nФункция получает данные из буфера экрана кликера. Буфер обновляется командой GETSCREEN.',
+        keywords='pxlreplace, пикселреплэйс, пиксельреплэйс, замена цвета пикселей в области, замена пикселей в области, заменить цвет в буфере экрана, замена цвета в буфере экрана, закрасить область в буфере экрана, заменить цвет один на другой в буфере экрана',
+        version_cm_major=4,
+        version_cm_minor=12,
+        version_cm_build=1,
         version_cm_releaselevel='',
         ),
-    dict(name='',
+    dict(name='if_pixel_in ... end_if',
         name_isupper=1,
         parent_id=11,
-        description=(''),
-        syntax='',
-        parameters=(''),
-        example=(''),
-        notes='',
-        keywords='',
+        description=('Производит поиск пикселя заданного цвета в прямоугольной области буфера анализа.'),
+        syntax=(
+                'IF_PIXEL_IN(x1, y1, x2, y2, color1, ...)\n'
+                '   ...\n'
+                'END_IF'
+                ),
+        parameters=(
+                    'x1, y1 - числовые координаты левого верхнего угла области поиска\n'
+                    'x2, y2 - числовые координаты правого нижнего угла области поиска\n'
+                    'color1, ... - цвета, поиск которых будет осуществляться'
+                    ),
+        example=(
+                'GETSCREEN\n'
+                '// поиск красного пикселя\n'
+                'IF_PIXEL_IN(10,20, 100,40, 255)\n'
+                '   LCLICK($_return1, $_return2)\n'
+                'END_IF\n'
+                '\n'
+                '// поиск красного или зеленого пикселя\n'
+                'IF_PIXEL_IN(10,20, 100,40, 255, 65280)\n'
+                '   LCLICK($_return1, $_return2)\n'
+                'END_IF'
+                ),
+        notes='Как только первый попавшийся пиксель будет найден, инструкция вернет его координаты в переменные $_return1, $_return2 и прекратит анализю\nДобавление каждого цвета увеличивает длительность анализа на 100%',
+        keywords='if_pixel_in end_if, ифпикселин, иф_пиксел_ин, поиск пикселя заданного цвета в прямоугольной области буфера экрана, поиск пикселя в прямоугольной области буфера экрана, поиск пикселя в области буфера экрана, поиск пикселя в буфере экрана, поиск цвета в прямоугольной области буфера экрана, поиск цвета в области буфера экрана, поиск цвета в буфере экрана, найти пиксель, найти цвет',
         version_cm_major=3,
+        version_cm_minor=1,
+        version_cm_build=0,
+        version_cm_releaselevel='RC1',
+        ),
+    dict(name='if_picture_in... end_if',
+        name_isupper=1,
+        parent_id=11,
+        description=('Производит поиск изображения в прямоугольной области буфера анализа.'),
+        syntax=(
+                'IF_PICTURE_IN(x1, y1, x2, y2, file, [bgcolor], [currency])\n'
+                '   ...\n'
+                'END_IF'
+                ),
+        parameters=(
+                    'x1, y1 - числовые координаты левого верхнего угла области поиска\n'
+                    'x2, y2 - числовые координаты правого нижнего угла области поиска\n'
+                    'file - bmp файл, поиск которого будет осуществляться\n'
+                    'bgcolor - необязательный параметр; игнорируемый цвет фона входного изображения\n'
+                    'currency - необязательный параметр; точность поиска в процентах (1..100)'
+                    ),
+        example=(
+                'GETSCREEN\n'
+                'IF_PICTURE_IN(10,20, 300,300, "somefile.bmp")\n'
+                '   MOVE($_return1, $_return2)\n'
+                'END_IF'
+                ),
+        notes='Работает аналогично IF_PIXEL_IN. Как только первый попавшийся участок будет найден, инструкция вернет его координаты в переменные $_return1, $_return2 (координаты верхнего левого угла) и прекратит анализ.\nДля того что бы участок признался подходящим, необходимо 100% соответствие пикселей bmp-файла и текущего снимка экрана. Так же можно задать цвет фона изображения, который не будет учитываться при поиске на экране. Если цвет фона не задан, изображение ищется с учетом всех пикселей.\nМожно задать не 100% совпадение. Для этого укажите в параметре currency необходимую точность. Этот параметр определяет количество несовпавших пикселей, которые будут проигнорированы при анализе. Чем ниже значение точности, тем дольше идет поиск.\nЕсли параметр currency не задан, по умолчанию он равен 100. Если параметр bgcolor не задан, по умолчанию он равен -1. Если есть необходимость задать точность, не задавая фон, сделайте bgcolor равным -1.\nВходные файлы для анализа должны находиться в директории проекта, быть формта BMP и иметь стандартную разрядность 24 бита. В случае использования цветокоррекции, входной файл должен быть уже откорректирован. Чтобы добиться этого результата, сохраните скриншот формата bmp после вызова colormode(), затем вырежьте нужный участок картинки в графическом редакторе и сохраните как bmp.',
+        keywords='if_picture_in end_if, ифпиктуреин, ифпикчуреин, иф_пикчуре_ин, поиск изображения в прямоугольной области буфера экрана, поиск изображения в области буфера экрана, поиск изображения в буфере экрана, поиск картинки в прямоугольной области буфера экрана, поиск картинки в области буфера экрана, поиск картинки в буфере экрана, найти картинку',
+        version_cm_major=4,
+        version_cm_minor=5,
+        version_cm_build=0,
+        version_cm_releaselevel='',
+        ),
+    dict(name='scanpicture',
+        name_isupper=1,
+        parent_id=11,
+        description=('Производит поиск изображений в прямоугольной области буфера анализа и выводит координаты найденных экземпляров в массив.'),
+        syntax='SCANPICTURE($arr, x1, y1, x2, y2, file, [bgcolor], [currency])',
+        parameters=(
+                    '$arr - массив\n'
+                    'x1, y1 - числовые координаты левого верхнего угла области поиска\n'
+                    'x2, y2 - числовые координаты правого нижнего угла области поиска\n'
+                    'file - bmp файл, поиск которого будет осуществляться\n'
+                    'bgcolor - необязательный параметр; игнорируемый цвет фона входного изображения\n'
+                    'currency - необязательный параметр; точность поиска в процентах (1..100)'
+                    ),
+        example=(
+                'GETSCREEN\n'
+                '// поиск изображения pict.bmp в области 0,0 - 1250,959\n'
+                'SCANPICTURE($arr, 0,0, 1250,959, "pict.bmp")\n'
+                '\n'
+                '// вывод массива, содержащего результаты поиска\n'
+                'WHILE(ARRSIZE($arr) > 0)\n'
+                '   $y = ARRPOP($arr)\n'
+                '   $x = ARRPOP($arr)\n'
+                '   LOGWRITE($x,":", $y)\n'
+                'END_CYC'
+                ),
+        notes='Основные параметры и тонкости работы аналогичны IF_PICTURE_IN.\nРезультатом работы является массив $arr, в который добавляются координаты найденных экземпляров изображения. Таким образом, координаты первого найденного изображения будут лежать в $arr[0] и $arr[1] для X и Y соответственно. Для второго экземпляра $arr[2] и $arr[3] и т.д.\nSCANPICTURE и SCANPXL используют в своей работе массивы.',
+        keywords='scanpicture, сканпикчюре, сканпикчурэ, сканпиктурэ, поиск изображений в прямоугольной области буфера, поиск изображений в области буфера, поиск картинок в прямоугольной области буфера, поиск картинок в области буфера, поиск нескольких картинок, поиск нескольких изображений, найти нескольких картинок, найти нескольких изображений',
+        version_cm_major=4,
+        version_cm_minor=8,
+        version_cm_build=0,
+        version_cm_releaselevel='',
+        ),
+    dict(name='scanpxl',
+        name_isupper=1,
+        parent_id=11,
+        description=('Производит поиск пикселей заданного цвета в прямоугольной области буфера анализа.'),
+        syntax='SCANPXL($arr, x1, y1, x2, y2, color)',
+        parameters=(
+                    '$arr - принимающий массив\n'
+                    'x1, y1 - числовые координаты левого верхнего угла области поиска\n'
+                    'x2, y2 - числовые координаты правого нижнего угла области поиска\n'
+                    'color - цвет, поиск которого будет осуществляться'
+                    ),
+        example=(
+                'GETSCREEN\n'
+                '// поиск всех красный (255) пикселей в области 0,0 - 1250,959\n'
+                'SCANPXL($arr, 0,0, 1250,959, 255)\n'
+                '\n'
+                '// вывод массива, содержащего результаты поиска\n'
+                'WHILE(ARRSIZE($arr) > 0)\n'
+                '   $y = ARRPOP($arr)\n'
+                '   $x = ARRPOP($arr)\n'
+                '   LOGWRITE($x, ":", $y)\n'
+                'END_CYC'
+                ),
+        notes='Результатом работы является массив $arr, в который добавляются координаты найденных пикселей заданного цвета. Таким образом, координаты первого найденного пикселя будут лежать в $arr[0] и $arr[1] для X и Y соответственно. Для второго экземпляра $arr[2] и $arr[3] и т.д.',
+        keywords='scanpxl, сканпиксель, поиск пикселей заданного цвета в прямоугольной области буфера, поиск пикселей заданного цвета в области буфера, поиск пикселей в прямоугольной области буфера, поиск пикселей в области буфера',
+        version_cm_major=4,
+        version_cm_minor=8,
+        version_cm_build=0,
+        version_cm_releaselevel='',
+        ),
+    dict(name='screenshot',
+        name_isupper=1,
+        parent_id=11,
+        description=('Сохраняет графический буфер анализа на диск.'),
+        syntax='SCREENSHOT([pref])',
+        parameters=('pref - необязательный параметр; префикс для названия файла'),
+        example=(
+                'GETSCREEN\n'
+                '// будут созданы скриншоты error0000.bmp, error0001.bmp, error0002.bmp\n'
+                'SCREENSHOT("error")\n'
+                'SCREENSHOT("error")\n'
+                'SCREENSHOT("error")\n'
+                '\n'
+                '// будет создан скриншот shot0000.bmp\n'
+                'SCREENSHOT'
+                ),
+        notes='Скриншот экрана помещается в директорию текущено скрипта в каталог screens и ему присваивается имя вида pref0000.bmp. При этом номер 0000 будет наращиваться по мере необходимости.\nЕсли параметр pref опущен, он считается равным "shot". В случае использования оконного режима будет сделан скриншот только рабочей области. ',
+        keywords='screenshot? скриншот, сохранить скриншот в файл, скриншот в файл с инкрементом имени, скриншот с инкрементом имени, скриншот с наращиванием имени',
+        version_cm_major=3,
+        version_cm_minor=1,
+        version_cm_build=0,
+        version_cm_releaselevel='alpha',
+        ),
+    dict(name='screenshotex',
+        name_isupper=1,
+        parent_id=11,
+        description=('Сохраняет часть графического буфера анализа на диск.'),
+        syntax='SCREENSHOTEX(x1, y1, x2, y2, [pref], [format])',
+        parameters=(
+                    'x1, y1, x2, y2 - четыре координаты, описывающие сохраняемую область буфера\n'
+                    'pref - необязательный параметр; префикс названия\n'
+                    'format - необязательный параметр; тип файла (сжатие): 0 - bmp; 1 - jpeg'
+                    ),
+        example=(
+                'GETSCREEN\n'
+                '// будет создан скриншот небольшого кусочка левого верхнего угла\n'
+                'SCREENSHOTEX(10,10, 50,50, "image_", 0)'
+                ),
+        notes='Скриншот экрана помещается в директорию текущено скрипта в каталог screens и ему присваивается имя вида pref0000.bmp. При этом номер 0000 будет наращиваться по мере необходимости.\nЕсли параметр pref опущен, он считается равным "shot". В случае использования оконного режима скриншот будет вырезан из привязанной рабочей области.',
+        keywords='screenshotex, скриншотэкс, сохранить скриншот области, сохранить скриншот в файл, сохранить скриншот в файл с инкрементом имени, сохранить скриншот с инкрементом имени, сохранить скриншот с наращиванием имени, сохранить скриншот области в файл, сохранить скриншот области в файл с инкрементом имени, сохранить скриншот области с инкрементом имени, сохранить скриншот области с наращиванием имени',
+        version_cm_major=4,
+        version_cm_minor=9,
+        version_cm_build=5,
+        version_cm_releaselevel='',
+        ),
+    dict(name='screenshotfix',
+        name_isupper=1,
+        parent_id=11,
+        description=('Сохраняет часть графического буфера анализа на диск в конкретный файл.'),
+        syntax='SCREENSHOTFIX(x1, y1, x2, y2, path, [format])',
+        parameters=(
+                    'x1, y1, x2, y2 - четыре координаты, описывающие сохраняемую область буфера\n'
+                    'path - путь, по которому будет сохранен скриншот\n'
+                    'format - необязательный параметр; тип файла (сжатие): 0 - bmp; 1 - jpeg'
+                    ),
+        example=(
+                'GETSCREEN\n'
+                '// будет создан скриншот небольшого кусочка левого верхнего угла\n'
+                'SCREENSHOTFIX(10,10, 50,50, "D:\file.bmp")'
+                ),
+        notes='В отличие от SCREENSHOTEX, файл сохраняется в конкретное место по относительному или абсолютному пути, каждый раз перезаписываясь. Расширение файла желательно задавать исходя из параметра format (по умолчанию 0).',
+        keywords='screenshotfix, скриншотфикс, скриншот, сохранить скриншот области, сохранить скриншот в файл, сохранить скриншот в один файл, сохранить скриншот области в файл, сохранить скриншот области в один файл, сохранить скриншот в один и тот же файл',
+        version_cm_major=4,
+        version_cm_minor=12,
+        version_cm_build=1,
+        version_cm_releaselevel='',
+        ),
+    dict(name='colormode',
+        name_isupper=1,
+        parent_id=11,
+        description=('Применяет цветокоррекцию к текущему снимку экрана.'),
+        syntax='COLORMODE(mode, [x1, y1, x2, y2])',
+        parameters=(
+                    'mode - число, соответствующее режиму коррекции\n'
+                    'x1, y1, x2, y2 - область снимка экрана, к которой будет применена коррекция'
+                    ),
+        example=(
+                '// применяем к области режим цветокоррекции 7\n'
+                'GETSCREEN\n'
+                'COLORMODE(7, 100,100, 200, 200)'
+                ),
+        notes=(
+                'Процедура изменяет текущий снимок экрана, применяя к нему фильтр, снижающий количество цветов в палитре. В основной справке есть статья посвещенная цветокоррекции.\n'
+                'Есть возможность указать отдельную область для применения фильтра. Стоит учитывать, что на его применение так же затрачивается время, поэтому если нет необходимости менять весь снимок, указание конкретной области позволит выиграть немного времени в процессе выполнения сценария. Если область не описана, коррекция применяется ко всему экрану.\n'
+                'Вызов COLORMODE(0) не имеет смысла. Поддерживается одностороннее увеличение режима (1, 2, 3..) без необходимости повторного вызова GETSCREEN. Обратно увеличить количество цветов невозможно. Новый "чистый" снимок экрана получается новым вызовом GETSCREEN\n'
+                '\n'
+                'Таблица значений mode\n'
+                'mode Макс. цветов\n'
+                '0   16 777 216\n'
+                '1   2 097 152\n'
+                '2   262 144\n'
+                '3   32 768\n'
+                '4   4 096\n'
+                '5   512\n'
+                '6   64\n'
+                '7   8\n'
+                '8   2'
+                ),
+        keywords='colormode, колормод, колормодэ, колормоде, цветокоррекция буфера экрана, цветокоррекция снимка экрана, цветокоррекция экрана, уменьшение цветов, уменьшение количества цветов, уменьшить количество цветов в буфере экрана, уменьшить количество цветов на экране',
+        version_cm_major=4,
         version_cm_minor=2,
         version_cm_build=0,
         version_cm_releaselevel='',
         ),
-    dict(name='',
+    dict(name='colorgen',
         name_isupper=1,
-        parent_id=10,
-        description=(''),
-        syntax='',
-        parameters=(''),
-        example=(''),
-        notes='',
-        keywords='',
-        version_cm_major=3,
-        version_cm_minor=2,
+        parent_id=11,
+        description=('Функция. Генерирует код цвета путем соединения значений красного, зеленого и синего каналов.'),
+        syntax='COLORGEN(red, green, blue)',
+        parameters=(
+                    'red - значение красного канала (0..255)\n'
+                    'green - значение зеленого канала (0..255)\n'
+                    'blue - значение синего канала (0..255)'
+                    ),
+        example=(
+                '// создаем цвет\n'
+                '$c = COLORGEN(234,34,65)\n'
+                '\n'
+                '// и разбираем его по каналам\n'
+                'LOGWRITE("red: ", colorR($c)) // красный\n'
+                'LOGWRITE("grn: ", colorG($c)) // зеленый\n'
+                'LOGWRITE("blu: ", colorB($c)) // синий'
+                ),
+        notes='Получаем код цвета в десятичном формате из трёх значений RGB (красного, зелёного и синего)',
+        keywords='colorgen, колорген, rgb to dec, rgb2dec, каналы цвета в десятичный формат цвета кликера, узнать десятичный формат цвета кликера, вычислить десятичный формат цвета кликера, высчитать десятичный формат цвета кликера из значений rgb, цвет из значений красного, зелёного и синего, цвет из значений красного, зеленого и синего',
+        version_cm_major=4,
+        version_cm_minor=4,
         version_cm_build=0,
         version_cm_releaselevel='',
         ),
-    dict(name='',
+    dict(name='colorr, colorg, colorb',
         name_isupper=1,
-        parent_id=10,
-        description=(''),
-        syntax='',
-        parameters=(''),
-        example=(''),
-        notes='',
-        keywords='',
-        version_cm_major=3,
-        version_cm_minor=2,
-        version_cm_build=0,
-        version_cm_releaselevel='',
-        ),
-    dict(name='',
-        name_isupper=1,
-        parent_id=10,
-        description=(''),
-        syntax='',
-        parameters=(''),
-        example=(''),
-        notes='',
-        keywords='',
-        version_cm_major=3,
-        version_cm_minor=2,
+        parent_id=11,
+        description=('Функции. Извлекают из цвета значение красного (зеленого) (синего) канала.'),
+        syntax=(
+                'COLORR(color)\n'
+                'COLORG(color)\n'
+                'COLORB(color)'
+                ),
+        parameters=('color - код цвета'),
+        example=(
+                '// хватаем произвольный пиксель с экрана\n'
+                'GETSCREEN\n'
+                '$p = PXL(RND(0, 300), RND(0, 300))\n'
+                '\n'
+                '// и разбираем его по цветам\n'
+                'LOGWRITE("R:", COLORR($p))\n'
+                'LOGWRITE("G:", COLORG($p))\n'
+                'LOGWRITE("B:", COLORB($p))'
+                ),
+        notes='Код цвета указывается в десятичном формате - формате кликера',
+        keywords='colorr, colorg, colorb, получить составляющую цвета, получить красную составляющую цвета, получить синюю составляющую цвета, получить зелёную составляющую цвета, получить зеленую составляющую цвета, получить знаначение канала цвета, получить знаначение красного канала цвета, получить знаначение синего канала цвета, получить знаначение зелёного канала цвета, получить знаначение зеленого канала цвета',
+        version_cm_major=4,
+        version_cm_minor=4,
         version_cm_build=0,
         version_cm_releaselevel='',
         ),
 ])
 
 
-'''
 DATA_ELEMENTS.extend([
     dict(name='',
         name_isupper=1,
@@ -2425,148 +2598,8 @@ DATA_ELEMENTS.extend([
         version_cm_build=0,
         version_cm_releaselevel='',
         ),
-    dict(name='',
-        name_isupper=1,
-        parent_id=12,
-        description=(''),
-        syntax='',
-        parameters=(''),
-        example=(''),
-        notes='',
-        keywords='',
-        version_cm_major=3,
-        version_cm_minor=2,
-        version_cm_build=0,
-        version_cm_releaselevel='',
-        ),
-    dict(name='',
-        name_isupper=1,
-        parent_id=12,
-        description=(''),
-        syntax='',
-        parameters=(''),
-        example=(''),
-        notes='',
-        keywords='',
-        version_cm_major=3,
-        version_cm_minor=2,
-        version_cm_build=0,
-        version_cm_releaselevel='',
-        ),
-    dict(name='',
-        name_isupper=1,
-        parent_id=12,
-        description=(''),
-        syntax='',
-        parameters=(''),
-        example=(''),
-        notes='',
-        keywords='',
-        version_cm_major=3,
-        version_cm_minor=2,
-        version_cm_build=0,
-        version_cm_releaselevel='',
-        ),
-    dict(name='',
-        name_isupper=1,
-        parent_id=12,
-        description=(''),
-        syntax='',
-        parameters=(''),
-        example=(''),
-        notes='',
-        keywords='',
-        version_cm_major=3,
-        version_cm_minor=2,
-        version_cm_build=0,
-        version_cm_releaselevel='',
-        ),
-    dict(name='',
-        name_isupper=1,
-        parent_id=12,
-        description=(''),
-        syntax='',
-        parameters=(''),
-        example=(''),
-        notes='',
-        keywords='',
-        version_cm_major=3,
-        version_cm_minor=2,
-        version_cm_build=0,
-        version_cm_releaselevel='',
-        ),
-    dict(name='',
-        name_isupper=1,
-        parent_id=12,
-        description=(''),
-        syntax='',
-        parameters=(''),
-        example=(''),
-        notes='',
-        keywords='',
-        version_cm_major=3,
-        version_cm_minor=2,
-        version_cm_build=0,
-        version_cm_releaselevel='',
-        ),
-    dict(name='',
-        name_isupper=1,
-        parent_id=12,
-        description=(''),
-        syntax='',
-        parameters=(''),
-        example=(''),
-        notes='',
-        keywords='',
-        version_cm_major=3,
-        version_cm_minor=2,
-        version_cm_build=0,
-        version_cm_releaselevel='',
-        ),
-    dict(name='',
-        name_isupper=1,
-        parent_id=12,
-        description=(''),
-        syntax='',
-        parameters=(''),
-        example=(''),
-        notes='',
-        keywords='',
-        version_cm_major=3,
-        version_cm_minor=2,
-        version_cm_build=0,
-        version_cm_releaselevel='',
-        ),
-    dict(name='',
-        name_isupper=1,
-        parent_id=12,
-        description=(''),
-        syntax='',
-        parameters=(''),
-        example=(''),
-        notes='',
-        keywords='',
-        version_cm_major=3,
-        version_cm_minor=2,
-        version_cm_build=0,
-        version_cm_releaselevel='',
-        ),
-    dict(name='',
-        name_isupper=1,
-        parent_id=12,
-        description=(''),
-        syntax='',
-        parameters=(''),
-        example=(''),
-        notes='',
-        keywords='',
-        version_cm_major=3,
-        version_cm_minor=2,
-        version_cm_build=0,
-        version_cm_releaselevel='',
-        ),
 ])
-'''
+
 
 
 # fromclip
