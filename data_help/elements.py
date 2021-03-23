@@ -2512,81 +2512,159 @@ DATA_ELEMENTS.extend([
         ),
 ])
 
+# Вывод информации
+DATA_ELEMENTS.extend([
+    dict(name='logwrite, print',
+        name_isupper=1,
+        parent_id=12,
+        description=('Выводит сообщение в окно лога программы.'),
+        syntax=(
+                'LOGWRITE(str, ...)\n'
+                '// или\n'
+                'PRINT(str, ...)'
+                ),
+        parameters=('str - строка сообщения'),
+        example=(
+                '$var = 5\n'
+                '// вывод составного сообщения (коментарий и значение переменной)\n'
+                'LOGWRITE("Переменная $var = ", $var)'
+                ),
+        notes='Данная инструкция имеет псевдоним PRINT, синтаксис аналогичен. Число параметров данной инструкции неограниченно. В случае указания директивы #logfile, помимо окна лога, сообщение записывается в файл %папка_проекта%/log.txt',
+        keywords='logwrite, print, логврайт, принт, логирование, вывод сообщения в лог, вывод текста в лог, вывести сообщение в лог, вывести текст в лог, печать в лог, вывод сообщения в окно лога, вывод текста в окно лога, вывести сообщение в окно лога, вывести текст в окно лога, печать в окно лога',
+        version_cm_major=3,
+        version_cm_minor=1,
+        version_cm_build=0,
+        version_cm_releaselevel='alpha',
+        ),
+    dict(name='logclear',
+        name_isupper=1,
+        parent_id=12,
+        description=('Очищает окно лога программы.'),
+        syntax='LOGCLEAR()',
+        # parameters=(''),
+        # example=(''),
+        notes='Очищается только окно, если лог дублируется в файл, файл не затрагивается',
+        keywords='logclear, логклеар, логклэар, логклир, очистить окно лога, очистить лог, удалить лог из программы',
+        version_cm_major=3,
+        version_cm_minor=1,
+        version_cm_build=0,
+        version_cm_releaselevel='alpha',
+        ),
+    dict(name='logshow',
+        name_isupper=1,
+        parent_id=12,
+        description=('Отображает либо скрывает окно лога программы.'),
+        syntax='LOGSHOW(show, [x, y])',
+        parameters=(
+                    'show - флаг отображения; если = 1, окно будет отображено, если = 0, то скрыто\n'
+                    'x, y - необязательные параметры; позиция окна лога на экране'
+                    ),
+        example=(
+                'LOGSHOW(1, 10, 100])\n'
+                'LOGWRITE("Это текст в логе")'
+                ),
+        # notes='',
+        keywords='logshow, логшов, отобразить окно лога в координатах, показать окно лога в координатах, скрыть окно лога, убрать окно лога, спрятать окно лога, задать координаты окну лога, переместить окно лога в координаты, передвинуть окно лога в координаты, задать координаты логу, переместить лог в координаты, передвинуть лог в координаты',
+        version_cm_major=3,
+        version_cm_minor=1,
+        version_cm_build=0,
+        version_cm_releaselevel='alpha',
+        ),
+    dict(name='sound',
+        name_isupper=1,
+        parent_id=12,
+        description=('Воспроизводит звуковой *.wav файл.'),
+        syntax='SOUND(file)',
+        parameters=('file - путь к файлу'),
+        example=('SOUND("tadam.wav")'),
+        notes='поддерживается только WAV формат. На время проигрывания скрипт приостанавливается.',
+        keywords='sound, соунд, проиграть звук, воспроизвести звук, проиграть звуковой файл, воспроизвести звуковой файл, звуковой сигнал',
+        version_cm_major=3,
+        version_cm_minor=1,
+        version_cm_build=0,
+        version_cm_releaselevel='RC1',
+        ),
+    dict(name='beep',
+        name_isupper=1,
+        parent_id=12,
+        description=('Воспроизводит звуковой сигнал через системный динамик (спикер).'),
+        syntax='BEEP(freq, [time])',
+        parameters=(
+                'freq - высота воспроизводимого звука\n'
+                'time - необязательный параметр; продолжительность воспроизведения звука в миллисекундах'
+                    ),
+        example=(
+                '// Queen - Another One Bites The Dust (lol :D)\n'
+                'BEEP(110, 170)\n'
+                'WAITMS(10)\n'
+                'BEEP(100, 140)\n'
+                'waitms(190)\n'
+                '\n'
+                'FOR($i=0, $i < 2)\n'
+                '    BEEP(90, 200)\n'
+                '    WAITMS(300)\n'
+                '    BEEP(90, 200)\n'
+                '    WAITMS(300)\n'
+                '    BEEP(90, 200)\n'
+                '    WAITMS(500)\n'
+                '\n'
+                '    BEEP(90, 140)\n'
+                '    WAITMS(60)\n'
+                '    BEEP(90, 140)\n'
+                '    WAITMS(60)\n'
+                '    BEEP(95, 120)\n'
+                '    WAITMS(75)\n'
+                '\n'
+                '    BEEP(90, 120)\n'
+                '    WAITMS(60)\n'
+                '    BEEP(95, 140)\n'
+                '    WAITMS(105)\n'
+                '\n'
+                '    BEEP(90, 170)\n'
+                '    WAITMS(10)\n'
+                '    BEEP(110, 150)\n'
+                '    WAITMS(500)\n'
+                'END_CYC'
+                ),
+        notes='Данная процедура задерживает сценарий на время проигрывания сигнала. По умолчанию time = 333 (треть секунды). Звук будет воспроизводится через спикер материнской платы, если он существует на вашем компьютере!',
+        keywords='beep, бип, бипер, спикер, воспроизвести звук спикера, воспроизвести звук через спикер, проиграть звук спикера, проиграть звук через спикер, воспроизвести звук через системный динамик, воспроизвести звук через через системный динамик, проиграть звук через системный динамик, воспроизвести звуковой сигнал, проиграть звуковой сигнал',
+        version_cm_major=4,
+        version_cm_minor=4,
+        version_cm_build=0,
+        version_cm_releaselevel='',
+        ),
+    dict(name='hintpopup',
+        name_isupper=1,
+        parent_id=12,
+        description=('Выводит всплывающее сообщение в системный трей.'),
+        syntax='HINTPOPUP(message, [title])',
+        parameters=(
+                    'message - строка сообщения\n'
+                    'title - необязательный параметр; заголовок сообщения'
+                    ),
+        example=('HINTPOPUP("Внимание!", "Это суперважное сообщение")'),
+        notes='В системх по Windows 7 последующее сообщение убирало предыдущее',
+        keywords='hintpopup, хинтпопап, выводит всплывающее сообщение в системный трей, выводит всплывающее сообщение в трей, выводит сообщение в системный трей, выводит сообщение в трей, вывести всплывающее сообщение в системный трей, вывести всплывающее сообщение в трей, вывести сообщение в системный трей, вывести сообщение в трей',
+        version_cm_major=4,
+        version_cm_minor=6,
+        version_cm_build=0,
+        version_cm_releaselevel='',
+        ),
+])
 
+
+# fromclip
+# toclip
+# httpget
+
+
+# --------------------------------------------------------------------------------------------------
+
+'''
 DATA_ELEMENTS.extend([
     dict(name='',
         name_isupper=1,
-        parent_id=12,
-        description=(''),
-        syntax='',
-        parameters=(''),
-        example=(''),
-        notes='',
-        keywords='',
-        version_cm_major=3,
-        version_cm_minor=2,
-        version_cm_build=0,
-        version_cm_releaselevel='',
-        ),
-    dict(name='',
-        name_isupper=1,
-        parent_id=12,
-        description=(''),
-        syntax='',
-        parameters=(''),
-        example=(''),
-        notes='',
-        keywords='',
-        version_cm_major=3,
-        version_cm_minor=2,
-        version_cm_build=0,
-        version_cm_releaselevel='',
-        ),
-    dict(name='',
-        name_isupper=1,
-        parent_id=12,
-        description=(''),
-        syntax='',
-        parameters=(''),
-        example=(''),
-        notes='',
-        keywords='',
-        version_cm_major=3,
-        version_cm_minor=2,
-        version_cm_build=0,
-        version_cm_releaselevel='',
-        ),
-    dict(name='',
-        name_isupper=1,
-        parent_id=12,
-        description=(''),
-        syntax='',
-        parameters=(''),
-        example=(''),
-        notes='',
-        keywords='',
-        version_cm_major=3,
-        version_cm_minor=2,
-        version_cm_build=0,
-        version_cm_releaselevel='',
-        ),
-    dict(name='',
-        name_isupper=1,
-        parent_id=12,
-        description=(''),
-        syntax='',
-        parameters=(''),
-        example=(''),
-        notes='',
-        keywords='',
-        version_cm_major=3,
-        version_cm_minor=2,
-        version_cm_build=0,
-        version_cm_releaselevel='',
-        ),
-    dict(name='',
-        name_isupper=1,
-        parent_id=12,
+        parent_id=,
         description=(''),
         syntax='',
         parameters=(''),
@@ -2599,31 +2677,6 @@ DATA_ELEMENTS.extend([
         version_cm_releaselevel='',
         ),
 ])
-
-
-
-# fromclip
-# toclip
-# httpget
-
-
-# --------------------------------------------------------------------------------------------------
-
-'''
-    dict(name='',
-        # name_isupper=1,
-        parent_id=,
-        description=(''),
-        syntax='',
-        # parameters='',
-        example='',
-        # notes='',
-        keywords='',
-        version_cm_major=3,
-        version_cm_minor=2,
-        version_cm_build=0,
-        version_cm_releaselevel='',
-        ),
 '''
 
 
