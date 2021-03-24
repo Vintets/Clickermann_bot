@@ -48,6 +48,8 @@ def safe_underscore(item, italic=False):
         item = item.replace('_', '\_')
     if item.find('#') != -1:
         item = item.replace('#', '\#')
+    if item.find('*') != -1:
+        item = item.replace('*', '\*')
     return item
 
 @bot.message_handler(commands=['start', 'Start', 'START'])
