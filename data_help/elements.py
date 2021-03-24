@@ -2690,12 +2690,19 @@ DATA_ELEMENTS.extend([
     dict(name='inputbox',
         name_isupper=1,
         parent_id=13,
-        description=(''),
-        syntax='',
-        parameters=(''),
-        example=(''),
-        notes='',
-        keywords='inputbox',
+        description=('Функция. Выводит диалоговое окно для ввода строки.'),
+        syntax='INPUTBOX(message, default, [delay])',
+        parameters=(
+                    'message - сообщение диалогового окна\n'
+                    'default - значение по умолчанию\n'
+                    'delay - необязательный параметр; таймаут'
+                    ),
+        example=(
+                '$str = INPUTBOX("text", "hello")\n'
+                'LOGWRITE($str)'
+                ),
+        notes='Диалоговое окно находится на экране delay секунд. Если за это время пользователь не начал ввод или не нажал одну из кнопок, то функция вернет строку по умолчанию - default. Если пользователь нажал отмену, то будет возвращена пустая строка. По умолчанию параметр delay равен 5. Возможно использовать кнопки Enter для ввода и Esc для отмены.',
+        keywords='inputbox, инпутбокс, вывести диалоговое окно, выводит диалоговое окно, окно ввода строки, ввести строку в окно',
         version_cm_major=4,
         version_cm_minor=5,
         version_cm_build=0,
@@ -2704,12 +2711,52 @@ DATA_ELEMENTS.extend([
     dict(name='dialogbox',
         name_isupper=1,
         parent_id=13,
-        description=(''),
-        syntax='',
-        parameters=(''),
-        example=(''),
-        notes='',
-        keywords='dialogbox',
+        description=('Функция. Выводит диалоговое окно с кнопками.'),
+        syntax='DIALOGBOX(message, buttons, [icon])',
+        parameters=(
+                    'message - сообщение диалогового окна\n'
+                    'buttons - код набора кнопок\n'
+                    'icon - код иконки\n'
+                    '\n'
+                    'Коды наборов кнопок\n'
+                    'Код Кнопка\n'
+                    '0 OK\n'
+                    '1 OK, CANCEL\n'
+                    '2 ABORT, RETRY, IGNORE\n'
+                    '3 YES, NO, CANCEL\n'
+                    '4 YES, NO\n'
+                    '5 RETRY, CANCEL\n'
+                    '\n'
+                    'Коды иконок\n'
+                    'Код Кнопка\n'
+                    '0 Без иконки\n'
+                    '1 Ошибка\n'
+                    '2 Вопрос\n'
+                    '3 Внимание\n'
+                    '4 Информирование\n'
+                    '\n'
+                    'Возвращаемые коды\n'
+                    'Код Кнопка\n'
+                    '1 OK\n'
+                    '2 CANCEL\n'
+                    '3 ABORT\n'
+                    '4 RETRY\n'
+                    '5 IGNORE\n'
+                    '6 YES\n'
+                    '7 NO'
+                    ),
+        example=(
+                '// Выводит диалоговое окно с двумя кнопками - Yes, No\n'
+                '$mr = DIALOGBOX("Yes or No?", 4)\n'
+                '\n'
+                'IF($mr = 6)\n'
+                '   LOGWRITE("Yes")\n'
+                'ELSE\n'
+                '   LOGWRITE("No")\n'
+                'END_IF'
+                ),
+        notes='Функция возвращает код той кнопки, которую нажал пользователь. Выполнение скрипта будет остановлено до тех пор, пока какая-либо из кнопок не будет нажата. По умолчанию параметр icon равен 0.',
+        keywords='dialogbox, диалогбокс, вывести диалоговое окно с кнопками, выводит диалоговое окно с кнопками, выбор кнопками в окне',
         version_cm_major=4,
         version_cm_minor=8,
         version_cm_build=0,
@@ -2718,12 +2765,22 @@ DATA_ELEMENTS.extend([
     dict(name='radiobox',
         name_isupper=1,
         parent_id=13,
-        description=(''),
-        syntax='',
-        parameters=(''),
-        example=(''),
-        notes='',
-        keywords='radiobox',
+        description=('Функция. Выводит диалоговое окно с переключателями.'),
+        syntax='RADIOBOX(message, radio1, ...)',
+        parameters=(
+                    'message - сообщение диалогового окна\n'
+                    'radio1 - строка, описывающая переключатель'
+                    ),
+        example=(
+                '$res = RADIOBOX("Выберете пункт", "1 Мясо", "2 Птица", "3 Рыба")\n'
+                'IF($res > 0)\n'
+                '   LOGWRITE("Вы выбрали: ", $res)\n'
+                'ELSE\n'
+                '   LOGWRITE("Вы ничего не выбрали")\n'
+                'END_IF'
+                ),
+        notes='Число параметров данной инструкции неограниченно. Функция возвращает порядковый номер выбранного элемента. Выполнение скрипта будет остановлено до тех пор, пока не будет нажаты OK или CANCEL. В случае нажатия CANCEL, функция вернет 0.',
+        keywords='кнопки radiobox, кнопки радиобокс, вывести диалоговое окно с переключателями, выводит диалоговое окно с переключателями, выбор кнопками в окне, окно выбора одного из вариантов, радио кнопки, радиокнопки',
         version_cm_major=4,
         version_cm_minor=12,
         version_cm_build=1,
@@ -2732,12 +2789,15 @@ DATA_ELEMENTS.extend([
     dict(name='toclip',
         name_isupper=1,
         parent_id=13,
-        description=(''),
-        syntax='',
-        parameters=(''),
-        example=(''),
-        notes='',
-        keywords='toclip',
+        description=('Помещает текст сообщения в буфер обмена.'),
+        syntax='TOCLIP(str)',
+        parameters=('str - строка'),
+        example=(
+                'TOCLIP("https://yandex.ru/")\n'
+                'WAITMS(150)'
+                ),
+        notes='Работа с буфером обмена осуществляется Windows не моментально. После команды занесения, если собираетесь сразу использовать значение из буфера, необходимо поставить задержку. Задержка зависит от загруженности системы и других условий работы.',
+        keywords='toclip, токлип, туклип, помещает текст сообщения в буфер обмена, помещает текст в буфер обмена, помещает сообщение в буфер обмена, помещает в буфер обмена, поместить текст сообщения в буфер обмена, поместить текст в буфер обмена, поместить сообщение в буфер обмена, поместить в буфер обмена, строку в буфер обмена, значение в буфер обмена',
         version_cm_major=3,
         version_cm_minor=2,
         version_cm_build=0,
@@ -2746,12 +2806,19 @@ DATA_ELEMENTS.extend([
     dict(name='readmem',
         name_isupper=1,
         parent_id=13,
-        description=(''),
-        syntax='',
-        parameters=(''),
-        example=(''),
-        notes='',
-        keywords='readmem',
+        description=('Функция. Извлекает целое значение из памяти процесса.'),
+        syntax='READMEM(pid, addr, [size])',
+        parameters=(
+                    'pid - идентификатор процесса\n'
+                    'addr - строка, адрес памяти\n'
+                    'size - тип значения (1,2,4,8)'
+                    ),
+        example=(
+                '$var = READMEM(2080, 0x0006F2B7)\n'
+                'LOGWRITE($var)'
+                ),
+        notes='Идентификатор процесса pid можно узнать в диспетчере задач либо в самом кликере: в области "Оконный режим" и через функцию hgetpid().\nАдрес представляет собой обычное целое число в десятичной или шестнадцатеричной записи. Параметр size указывает на размер целого значения: 1, 2, 4 или 8 байт. Если данный параметр опущен, то он принимается за 4',
+        keywords='readmem, реадмем, реадмэм, извлекает целое значение из памяти процесса, извлекает значение из памяти процесса, извлекает из памяти процесса, читает целое значение из памяти процесса, читает значение из памяти процесса, читает из памяти процесса',
         version_cm_major=4,
         version_cm_minor=1,
         version_cm_build=0,
@@ -2760,27 +2827,29 @@ DATA_ELEMENTS.extend([
     dict(name='httpget',
         name_isupper=1,
         parent_id=13,
-        description=(''),
-        syntax='',
-        parameters=(''),
-        example=(''),
-        notes='',
-        keywords='httpget',
+        description=('Функция. Возвращает результат web-запроса.'),
+        syntax='HTTPGET(url, [headers, ...])',
+        parameters=(
+                    'url - запрос\n'
+                    'headers - дополнительные заголовки запроса'
+                    ),
+        example=(
+                '// код вернет последную опубликованную версию Clickermann (можете проверить в браузере)\n'
+                '$str = HTTPGET("http://crapware.aidf.org/version/clickermann.php")\n'
+                '\n'
+                '// тот же запрос, но с добавленным заголовком Referrer\n'
+                '$str = HTTPGET("http://crapware.aidf.org/version/clickermann.php", "Referrer: http://crapware.aidf.org")\n'
+                '\n'
+                'LOGWRITE($str)'
+                ),
+        notes='Функция запрашивает данные по протоколу HTTP. Следовательно пока удаленный сервер не ответит (или не истечет таймаут), функция не завершится.\nТак же функция может использоваться для отправки командных запросов (запросов с параметрами) удаленному серверу (запросы типа http://somegame.ru/index.php?act=go_to_work&player_id=12345). В любом случае, даже если возвращаемая строка не важна, функция должна вызываться как функция (см. пример)',
+        keywords='httpget, finngutn, ашттпгэт, возвращает результат web-запроса, вернуть результат web-запроса, сделать web-запрос, гет запрос, гэт запрос, http get запрос, http get-запрос',
         version_cm_major=4,
         version_cm_minor=5,
         version_cm_build=0,
         version_cm_releaselevel='',
         ),
 ])
-
-
-inputbox
-dialogbox
-radiobox
-toclip
-readmem
-httpget
-
 
 
 # --------------------------------------------------------------------------------------------------
