@@ -73,7 +73,9 @@ def process_help_command(message: types.Message):
 
 @bot.message_handler(commands=['?', 'f'])
 @logger_user
-def get_sticker_id(message: types.Message):
+def process_search_command(message: types.Message):
+    """keyword search processing"""
+
     print(message.text[3:])
     # bot.send_message(message.chat.id, message.text[3:])
     bot.send_message(message.chat.id, msg_const.MSG_IN_THE_PIPELINE)
