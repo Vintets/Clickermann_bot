@@ -3,6 +3,7 @@
 
 import os
 import sys
+import time
 from itertools import chain
 from telebot import TeleBot, types
 from configs.config import CLICKERMANN_HELP_BOT_TOKEN
@@ -23,7 +24,9 @@ def indicator_chat_action(message: types.Message):
     bot.send_chat_action(message.chat.id, 'typing')
 
 def logger_user_single(message: types.Message, text: str):
-    is_user_in_db(message)
+    """Логирование нажатий на InlineKeyboard кнопки пользователями"""
+
+    adding_or_updating_user_information_in_db(message)
     user = db.get_user_by_user_id(message.chat.id) # так надо (chat.id) чтобы логирование по кнопке назад приписывалось юзеру, а не боту
     username = str(message.from_user.first_name)
     request_ = dict(
@@ -33,8 +36,10 @@ def logger_user_single(message: types.Message, text: str):
     db.request2log(request_)
 
 def logger_user(handler):
+    """Логирование запросов пользователей"""
+
     def wrapper_logger_user(message: types.Message):
-        is_user_in_db(message)
+        adding_or_updating_user_information_in_db(message)
         user = db.get_user_by_user_id(message.from_user.id)
         username = str(message.from_user.first_name)
         request_ = dict(
@@ -46,6 +51,8 @@ def logger_user(handler):
     return wrapper_logger_user
 
 def safe_underscore(item, italic=False):
+    """Экранирование разметочных символов MARKDOWN"""
+
     if italic and item.find('_') != -1:
         item = item.replace('_', '_\__')
     elif item.find('_') != -1:
@@ -111,6 +118,8 @@ def cm_help_inline(message: types.Message):
     bot.send_message(message.chat.id, text=msg, reply_markup=keyboard_main)
 
 def cm_help(message: types.Message):
+    """main handler section cm_help"""
+
     keyboard_main = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True, row_width=2)
     core_partitions = db.get_subpartitions(parent=0)
     for partition in core_partitions:
@@ -123,6 +132,8 @@ def cm_help(message: types.Message):
     bot.send_message(message.chat.id, text=msg, reply_markup=keyboard_main)
 
 def processing_text_types(message: types.Message):
+    """handler text messages"""
+
     text_ok = False
     text = message.text.lower()
     if text == '<-- вернуться в корень меню':
@@ -130,9 +141,11 @@ def processing_text_types(message: types.Message):
         return True         # принудительно завершаем эту ветку
     if text[:16] == '<-- вернуться в ':
         text = text[16:]
+
     # ищем подразделы и подэлементы, выводим как список
     if is_partition_processing(message.chat.id, text):
         text_ok = True
+
     # если дочерних нет, то выводим как элемент
     if not text_ok:
         if is_element_processing(message.chat.id, text):
@@ -140,6 +153,8 @@ def processing_text_types(message: types.Message):
     return text_ok
 
 def is_partition_processing(chat_id, text):
+    """output partition"""
+
     happily = False
     find_partitions = db.get_partition_by_name(text.capitalize())
     if find_partitions.count() == 1:
@@ -179,6 +194,8 @@ def is_partition_processing(chat_id, text):
     return happily
 
 def is_element_processing(chat_id, text):
+    """output element"""
+
     happily = False
     find_element = db.get_elements_by_name(text)
     if find_element.count() == 1:
@@ -196,7 +213,7 @@ def is_element_processing(chat_id, text):
 
 @bot.callback_query_handler(func=lambda call: True)
 def callback_worker(call):
-    '''Обработчик нажатий на кнопки'''
+    '''InlineKeyboard click handler'''
 
     if call.data.startswith('return_partition'):
         parent_id = int(call.data[17:])
@@ -206,6 +223,8 @@ def callback_worker(call):
         is_partition_processing(call.message.chat.id, parent_name)
 
 def template_engine_element(el):
+    """template engine for elements"""
+
     name = el.name
     if el.name_isupper:
         name = name.upper()
@@ -236,6 +255,8 @@ def template_engine_element(el):
     return '\n'.join(text)
 
 def assembly_version(el):
+    """template engine for version Clickermann"""
+
     version = 'с версии Clickermann {major}.{minor}.{build:0>3}'.format(
                         major=el.version_cm_major,
                         minor=el.version_cm_minor,
@@ -251,14 +272,17 @@ def assembly_version(el):
 
 @bot.message_handler(func=lambda commands: True)
 def unknown_message(message: types.Message):
+    """If the message is not recognized"""
+
     bot.reply_to(message, msg_const.MSG_NOT_UNDERSTAND)
 
-def server_started():
+def sending_messages_at_server_start():
+    """Sending messages at server start"""
+
     menu_remove = types.ReplyKeyboardRemove()
     bot.send_message('829838425', msg_const.MSG_SERVER, reply_markup=menu_remove)
-    cp.cprint('9Clickermann_bot запущен!')
 
-def is_user_in_db(message: types.Message):
+def adding_or_updating_user_information_in_db(message: types.Message):
     user = db.get_user_by_user_id(message.from_user.id)
     us = dict(
         tm_user_id=message.from_user.id,
@@ -303,13 +327,17 @@ if __name__ == '__main__':
 
     __author__ = 'master by Vint'
     __title__ = '--- Clickermann_bot ---'
-    __version__ = '0.1.6'
+    __version__ = '0.1.7'
     __copyright__ = 'Copyright 2020 (c)  bitbucket.org/Vintets'
     auth_sh.authorship(__author__, __title__, __version__, __copyright__, width=_width)
 
-    server_started()
+    cp.cprint('9Clickermann_bot запущен!')
+    sending_messages_at_server_start()
 
-    bot.polling(none_stop=True, interval=1)
+    try:
+        bot.polling(none_stop=True, interval=1)
+    except Exception as ex:
+        print(time.strftime('%Y.%m.%d %H:%M:%S', time.localtime(time.time())), ex)
 
 
 
