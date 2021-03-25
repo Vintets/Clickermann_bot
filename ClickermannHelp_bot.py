@@ -75,7 +75,8 @@ def process_help_command(message: types.Message):
 @logger_user
 def get_sticker_id(message: types.Message):
     print(message.text[3:])
-    bot.send_message(message.chat.id, message.text[3:])
+    # bot.send_message(message.chat.id, message.text[3:])
+    bot.send_message(message.chat.id, msg_const.MSG_IN_THE_PIPELINE)
 
 @bot.message_handler(content_types=['sticker'])
 def get_sticker_id(message: types.Message):
