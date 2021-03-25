@@ -50,7 +50,10 @@ def safe_underscore(item, italic=False):
         item = item.replace('_', '_\__')
     elif item.find('_') != -1:
         item = item.replace('_', '\_')
-    if item.find('#') != -1:
+    if italic and item.find('#') != -1:
+        # item = item.replace('#', '_\#_')
+        pass
+    elif item.find('#') != -1:
         item = item.replace('#', '\#')
     if item.find('*') != -1:
         item = item.replace('*', '\*')
