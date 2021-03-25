@@ -17,6 +17,10 @@ from configs.formatting import frm
 bot = TeleBot(CLICKERMANN_HELP_BOT_TOKEN, parse_mode='MARKDOWN')  # None, HTML or MARKDOWN / MarkdownV2
 db = DB()
 
+def indicator_chat_action(message: types.Message):
+    """индикатор ввода текста"""
+
+    bot.send_chat_action(message.chat.id, 'typing')
 
 def logger_user_single(message: types.Message, text: str):
     is_user_in_db(message)
