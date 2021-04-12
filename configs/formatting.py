@@ -8,6 +8,8 @@ from configs.config import PARSE_MODE
 class Formatting:
     b: str
     i: str
+    u: str
+    s: str
     c: str
     cm: str
     # bold: str
@@ -34,12 +36,16 @@ if PARSE_MODE == 'marcdown':
     frm = Formatting(
                     b='*',
                     i='_',
+                    u='__',
+                    s='~',
                     c='`',
                     cm='```'
                     # bold='**',
                     # ebold='**',
                     # italic='*',
                     # eitalic='*',
+                    # underline='',
+                    # eunderline='',
                     # strike='<s>',
                     # estrike='</s>',
                     # blockquotes='>',
