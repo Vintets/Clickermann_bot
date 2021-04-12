@@ -3047,6 +3047,31 @@ DATA_ELEMENTS.extend([
         version_cm_build=3,
         version_cm_releaselevel='b',
         ),
+    dict(name='httpget',
+        name_isupper=1,
+        parent_id=14,
+        description=('Функция. Возвращает результат web-запроса.'),
+        syntax='HTTPGET(url, [headers, ...])',
+        parameters=(
+                    'url - запрос\n'
+                    'headers - дополнительные заголовки запроса'
+                    ),
+        example=(
+                '// код вернет последную опубликованную версию Clickermann\n'
+                '$str = HTTPGET("http://crapware.aidf.org/version/clickermann.php")\n'
+                '\n'
+                '// тот же запрос, но с добавленным заголовком Referrer\n'
+                '$str = HTTPGET("http://crapware.aidf.org/version/clickermann.php", "Referrer: http://crapware.aidf.org")\n'
+                '\n'
+                'LOGWRITE($str)'
+                ),
+        notes='Функция запрашивает данные по протоколу HTTP. Следовательно пока удаленный сервер не ответит (или не истечет таймаут), функция не завершится.\nТак же функция может использоваться для отправки командных запросов (запросов с параметрами) удаленному серверу (запросы типа http://somegame.ru/index.php?act=go_to_work&player_id=12345). В любом случае, даже если возвращаемая строка не важна, функция должна вызываться как функция (см. пример).',
+        keywords='httpget, сделать web-запрос к сайту, сделать web запрос к сайту, сделать запрос к сайту, сделать get-запрос к сайту, сделать get запрос к сайту',
+        version_cm_major=4,
+        version_cm_minor=5,
+        version_cm_build=0,
+        version_cm_releaselevel='b',
+        ),
 ])
 
 # Работа с окнами. WinAPI
