@@ -16,7 +16,7 @@ cm_bot.db
 
 # Other files
 Очистка_компил_py3.bat
-help.chm*
+help*.chm*
 
 # User other data
 
