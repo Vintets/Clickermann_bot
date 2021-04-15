@@ -4,7 +4,7 @@
 import os
 import sys
 from datetime import datetime
-from sqlalchemy import create_engine, and_
+from sqlalchemy import create_engine, and_, func
 from sqlalchemy.engine.url import URL
 from sqlalchemy.orm import sessionmaker
 from configs.config import DATABASE, ECHO_SQL
@@ -74,7 +74,7 @@ class DB():
 
     def get_partition_by_name(self, name, visible=1):
         return self.session.query(Partitions).filter(
-                            and_(Partitions.name == name, Partitions.visible == visible))
+                            and_(func.lower(Partitions.name) == func.lower(name), Partitions.visible == visible))
 
     def get_elements_by_parent(self, parent=0, visible=1):
         return self.session.query(Elements).filter(
@@ -82,7 +82,7 @@ class DB():
 
     def get_elements_by_name(self, name, visible=1):
         return self.session.query(Elements).filter(
-                            and_(Elements.name == name, Elements.visible == visible))
+                            and_(func.lower(Elements.name) == func.lower(name), Elements.visible == visible))
 
     def get_partition_by_id(self, id=0, visible=1):
         return (self.session.query(Partitions).filter(
