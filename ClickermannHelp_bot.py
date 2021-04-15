@@ -395,7 +395,7 @@ if __name__ == '__main__':
 
     __author__ = 'master by Vint'
     __title__ = '--- Clickermann_bot ---'
-    __version__ = '0.1.10'
+    __version__ = '0.1.11'
     __copyright__ = 'Copyright 2020 (c)  bitbucket.org/Vintets'
     auth_sh.authorship(__author__, __title__, __version__, __copyright__, width=_width)
 
