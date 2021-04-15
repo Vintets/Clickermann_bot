@@ -305,7 +305,7 @@ def sending_messages_at_server_start():
 
     # ToDo sendin messages  <=30 requests per second
     menu_remove = types.ReplyKeyboardRemove()
-    bot.send_message('829838425', msg_const.MSG_SERVER, reply_markup=menu_remove)
+    bot.send_message('829838425', msg_const.MSG_SERVER, disable_notification=True, reply_markup=menu_remove)
     time.sleep(0.04)
     time.sleep(1)
 
@@ -385,9 +385,10 @@ if __name__ == '__main__':
 
 # Убрать клавиатуру принудительно
 # menu_remove = types.ReplyKeyboardRemove()
-# bot.send_message(message.chat.id, text='...', reply_markup=menu_remove)
+# bot.send_message(message.chat.id, text='...', reply_markup=menu_remove, disable_notification=True)
 
 # Скрыть клавиатуру
 # menu_hide = types.ReplyKeyboardHide()
-# bot.send_message(message.chat.id, text='...', reply_markup=menu_hide)
+# bot.send_message(message.chat.id, text='...', reply_markup=menu_hide, disable_notification=True)
 
+# disable_notification=True   # беззвучно
