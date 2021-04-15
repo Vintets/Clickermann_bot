@@ -279,6 +279,7 @@ def unknown_message(message: types.Message):
 def sending_messages_at_server_start():
     """Sending messages at server start"""
 
+    # ToDo sendin messages  <=30 requests per second
     menu_remove = types.ReplyKeyboardRemove()
     bot.send_message('829838425', msg_const.MSG_SERVER, reply_markup=menu_remove)
 
@@ -313,6 +314,10 @@ def adding_or_updating_user_information_in_db(message: types.Message):
                         )
         db.request2log(request_)
 
+def main():
+    sending_messages_at_server_start()
+    bot.polling(none_stop=True, interval=2)
+
 
 if __name__ == '__main__':
     _width = 100
@@ -327,17 +332,25 @@ if __name__ == '__main__':
 
     __author__ = 'master by Vint'
     __title__ = '--- Clickermann_bot ---'
-    __version__ = '0.1.7'
+    __version__ = '0.1.8'
     __copyright__ = 'Copyright 2020 (c)  bitbucket.org/Vintets'
     auth_sh.authorship(__author__, __title__, __version__, __copyright__, width=_width)
 
     cp.cprint('9Clickermann_bot запущен!')
-    sending_messages_at_server_start()
 
-    try:
-        bot.polling(none_stop=True, interval=1)
-    except Exception as ex:
-        print(time.strftime('%Y.%m.%d %H:%M:%S', time.localtime(time.time())), ex)
+    while True:
+        try:
+            main()
+        except KeyboardInterrupt:
+            cp.cprint('13Работа бота остановлена')
+            try:
+                sys.exit(0)
+            except SystemExit:
+                os._exit(0)
+        except Exception as ex:
+            print(time.strftime('%Y.%m.%d %H:%M:%S', time.localtime(time.time())), ex)
+            cp.cprint('13Перезапуск бота…')
+        break
 
 
 
