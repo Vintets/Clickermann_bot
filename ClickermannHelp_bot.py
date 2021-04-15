@@ -18,12 +18,12 @@ from configs.formatting import frm
 bot = TeleBot(CLICKERMANN_HELP_BOT_TOKEN, parse_mode='MARKDOWN')  # None, HTML or MARKDOWN / MarkdownV2
 db = DB()
 
-def send_message(chat_id, text, reply_markup=None):
-    bot.send_message(chat_id, text, reply_markup=reply_markup)
+def send_message(chat_id, text, **kwargs):
+    bot.send_message(chat_id, text, **kwargs)
     time.sleep(0.9)
 
-def reply_to(message: types.Message, text):
-    bot.reply_to(message, text)
+def reply_to(message: types.Message, text, **kwargs):
+    bot.reply_to(message, text, **kwargs)
     time.sleep(1)
 
 def indicator_chat_action(message: types.Message):
