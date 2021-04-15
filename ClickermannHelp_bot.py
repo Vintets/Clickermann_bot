@@ -86,6 +86,21 @@ def process_start_command(message: types.Message):
 def process_help_command(message: types.Message):
     send_message(message.chat.id, msg_const.MSG_HELP)
 
+@bot.message_handler(commands=['code'])
+@logger_user
+def process_character_code_command(message: types.Message):
+    """Get character code.
+    example: /code shift"""
+
+    text = message.text[6:]
+    print(text)
+    if text:
+        # TODO
+        ...
+    else:
+        print(msg_const.MSG_CODE_PARAM)
+    reply_to(message.chat.id, msg_const.MSG_IN_THE_PIPELINE)
+
 @bot.message_handler(commands=['?', 'f'])
 @logger_user
 def process_search_command(message: types.Message):
