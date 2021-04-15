@@ -84,6 +84,10 @@ class DB():
         return self.session.query(Elements).filter(
                             and_(func.lower(Elements.name) == func.lower(name), Elements.visible == visible))
 
+    def get_elements_by_keywords(self, keywords, visible=1):
+        return self.session.query(Elements).filter(
+                            and_(Elements.keywords.like(f'%{keywords}%'), Elements.visible == visible))
+
     def get_partition_by_id(self, id=0, visible=1):
         return (self.session.query(Partitions).filter(
                             and_(Partitions.id == id, Partitions.visible == visible)))[0]

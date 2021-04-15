@@ -106,9 +106,17 @@ def process_character_code_command(message: types.Message):
 def process_search_command(message: types.Message):
     """keyword search processing"""
 
-    print(message.text[3:])
     # send_message(message.chat.id, message.text[3:])
-    send_message(message.chat.id, msg_const.MSG_IN_THE_PIPELINE)
+    # reply_to(message, msg_const.MSG_IN_THE_PIPELINE)
+
+    text = message.text[3:]
+    if text:
+        # ищем элементы по ключевым словам, выводим как список
+        if not is_search_elements(message.chat.id, text):
+            reply_to(message, msg_const.MSG_NOT_FIND)
+    else:
+        print(msg_const.MSG_FIND_PARAM)
+
 
 @bot.message_handler(content_types=['sticker'])
 def get_sticker_id(message: types.Message):
@@ -203,7 +211,7 @@ def is_partition_processing(chat_id, text):
             key = types.KeyboardButton(child_name)
             keyboard.add(key)
 
-        # если не корневой раздел добавляем пункт/кнопку назад
+        # добавляем пункт/кнопку назад
         if find_partition.id != 0:
             if find_partition.parent_id == 0:
                 parent_name = f'корень меню'
@@ -233,6 +241,35 @@ def is_element_processing(chat_id, text):
                                         callback_data=f'return_partition:{current_element.parent_id}')
         keyboard.add(key_return)
         send_message(chat_id, output, reply_markup=keyboard)
+    return happily
+
+def is_search_elements(chat_id, text):
+    """search elements by keywords"""
+
+    # test /f остановить скрипт
+    happily = False
+    found_elements = db.get_elements_by_keywords(keywords=text.lower())
+    if found_elements.count() > 0:
+        happily = True
+        keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True, row_width=1)
+        for children_el in found_elements:
+            cp.cprint(f'14_найдено: {children_el}')
+            child_name = children_el.name
+            try:
+                isupper = getattr(children_el, 'name_isupper')
+            except AttributeError:
+                isupper = 0
+            if isupper:
+                child_name = child_name.upper()
+            key = types.KeyboardButton(child_name)
+            keyboard.add(key)
+
+        # добавляем пункт/кнопку 'в корень меню'
+        keyboard.add(f'<-- вернуться в корень меню')
+
+        # отправляем имя и описание раздела
+        send_message(chat_id, f"Поиск по ключевой фразе\n'{text}'",
+                        reply_markup=keyboard)
     return happily
 
 @bot.callback_query_handler(func=lambda call: True)
@@ -350,7 +387,7 @@ if __name__ == '__main__':
     _hight = 50
     if sys.platform == 'win32':
         os.system('color 71')
-        # os.system('mode con cols=%d lines=%d' % (_width, _hight))
+        os.system('mode con cols=%d lines=%d' % (_width, _hight))
     cur_script = __file__
     PATH_SCRIPT = os.path.abspath(os.path.dirname(cur_script))
     os.chdir(PATH_SCRIPT)
@@ -376,6 +413,7 @@ if __name__ == '__main__':
         except Exception as ex:
             print(time.strftime('%Y.%m.%d %H:%M:%S', time.localtime(time.time())), ex)
             cp.cprint('13Перезапуск бота…')
+            raise(ex)
         break
 
 
