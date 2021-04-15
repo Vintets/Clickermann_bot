@@ -18,6 +18,14 @@ from configs.formatting import frm
 bot = TeleBot(CLICKERMANN_HELP_BOT_TOKEN, parse_mode='MARKDOWN')  # None, HTML or MARKDOWN / MarkdownV2
 db = DB()
 
+def send_message(chat_id, text, reply_markup=None):
+    bot.send_message(chat_id, text, reply_markup=reply_markup)
+    time.sleep(0.9)
+
+def reply_to(message: types.Message, text):
+    bot.reply_to(message, text)
+    time.sleep(1)
+
 def indicator_chat_action(message: types.Message):
     """индикатор ввода текста"""
 
@@ -71,12 +79,12 @@ def safe_underscore(item, italic=False):
 def process_start_command(message: types.Message):
     # logger_user(message)
     menu_remove = types.ReplyKeyboardRemove()
-    bot.send_message(message.chat.id, msg_const.MSG_WELCOME, reply_markup=menu_remove)
+    send_message(message.chat.id, msg_const.MSG_WELCOME, reply_markup=menu_remove)
 
 @bot.message_handler(commands=['help', 'Help', 'HELP'])
 @logger_user
 def process_help_command(message: types.Message):
-    bot.send_message(message.chat.id, msg_const.MSG_HELP)
+    send_message(message.chat.id, msg_const.MSG_HELP)
 
 @bot.message_handler(commands=['?', 'f'])
 @logger_user
@@ -84,8 +92,8 @@ def process_search_command(message: types.Message):
     """keyword search processing"""
 
     print(message.text[3:])
-    # bot.send_message(message.chat.id, message.text[3:])
-    bot.send_message(message.chat.id, msg_const.MSG_IN_THE_PIPELINE)
+    # send_message(message.chat.id, message.text[3:])
+    send_message(message.chat.id, msg_const.MSG_IN_THE_PIPELINE)
 
 @bot.message_handler(content_types=['sticker'])
 def get_sticker_id(message: types.Message):
@@ -100,11 +108,11 @@ def process_cm_help_command(message: types.Message):
 @logger_user
 def get_text_messages(message: types.Message):
     if message.text.lower() == 'привет' or message.text.lower() == 'hello':
-        bot.send_message(message.chat.id, msg_const.MSG_HELLO.format(username=str(message.from_user.first_name)))
+        send_message(message.chat.id, msg_const.MSG_HELLO.format(username=str(message.from_user.first_name)))
     else:
         text_ok = processing_text_types(message)
         if not text_ok:
-            bot.reply_to(message, f'{message.text}:{msg_const.MSG_NOT_UNDERSTAND}')
+            reply_to(message, msg_const.MSG_NOT_UNDERSTAND)
 
 def cm_help_inline(message: types.Message):
     '''Вариант меню с кнопками Inline'''
@@ -116,7 +124,7 @@ def cm_help_inline(message: types.Message):
     keyboard_main.add(key_numbers, key_strings)
 
     msg = f'{msg_const.MSG_CM_HELP_MAIN1}\n{msg_const.MSG_CM_HELP_MAIN2}'
-    bot.send_message(message.chat.id, text=msg, reply_markup=keyboard_main)
+    send_message(message.chat.id, text=msg, reply_markup=keyboard_main)
 
 def cm_help(message: types.Message):
     """main handler section cm_help"""
@@ -130,7 +138,7 @@ def cm_help(message: types.Message):
 
     # Показываем все кнопки сразу и пишем сообщение о выборе
     msg = f'{msg_const.MSG_CM_HELP_MAIN1}\n{msg_const.MSG_CM_HELP_MAIN2}'
-    bot.send_message(message.chat.id, text=msg, reply_markup=keyboard_main)
+    send_message(message.chat.id, text=msg, reply_markup=keyboard_main)
 
 def processing_text_types(message: types.Message):
     """handler text messages"""
@@ -190,7 +198,7 @@ def is_partition_processing(chat_id, text):
             keyboard.add(f'<-- Вернуться в {parent_name}')
 
         # отправляем имя и описание раздела
-        bot.send_message(chat_id, f'{frm.b}{find_partition.name}{frm.b}\n{find_partition.description}',
+        send_message(chat_id, f'{frm.b}{find_partition.name}{frm.b}\n{find_partition.description}',
                         reply_markup=keyboard)
     return happily
 
@@ -209,7 +217,7 @@ def is_element_processing(chat_id, text):
                                         text='Вернуться назад',
                                         callback_data=f'return_partition:{current_element.parent_id}')
         keyboard.add(key_return)
-        bot.send_message(chat_id, output, reply_markup=keyboard)
+        send_message(chat_id, output, reply_markup=keyboard)
     return happily
 
 @bot.callback_query_handler(func=lambda call: True)
@@ -269,13 +277,13 @@ def assembly_version(el):
 
 # @bot.message_handler(func=lambda commands: True)
 # def unknown_command(message: types.Message):
-    # bot.send_message(message.chat.id, msg_const.MSG_NOT_UNDERSTAND)
+    # send_message(message.chat.id, msg_const.MSG_NOT_UNDERSTAND)
 
 @bot.message_handler(func=lambda commands: True)
 def unknown_message(message: types.Message):
     """If the message is not recognized"""
 
-    bot.reply_to(message, msg_const.MSG_NOT_UNDERSTAND)
+    reply_to(message, msg_const.MSG_NOT_UNDERSTAND)
 
 def sending_messages_at_server_start():
     """Sending messages at server start"""
@@ -283,6 +291,8 @@ def sending_messages_at_server_start():
     # ToDo sendin messages  <=30 requests per second
     menu_remove = types.ReplyKeyboardRemove()
     bot.send_message('829838425', msg_const.MSG_SERVER, reply_markup=menu_remove)
+    time.sleep(0.04)
+    time.sleep(1)
 
 def adding_or_updating_user_information_in_db(message: types.Message):
     user = db.get_user_by_user_id(message.from_user.id)
@@ -333,7 +343,7 @@ if __name__ == '__main__':
 
     __author__ = 'master by Vint'
     __title__ = '--- Clickermann_bot ---'
-    __version__ = '0.1.9'
+    __version__ = '0.1.10'
     __copyright__ = 'Copyright 2020 (c)  bitbucket.org/Vintets'
     auth_sh.authorship(__author__, __title__, __version__, __copyright__, width=_width)
 
