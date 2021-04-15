@@ -135,11 +135,11 @@ def processing_text_types(message: types.Message):
     """handler text messages"""
 
     text_ok = False
-    text = message.text.lower()
-    if text == '<-- вернуться в корень меню':
+    text = message.text
+    if text.lower() == '<-- вернуться в корень меню':
         cm_help(message)    # в ручную имитируем команду /cm_help и
         return True         # принудительно завершаем эту ветку
-    if text[:16] == '<-- вернуться в ':
+    if text[:16].lower() == '<-- вернуться в ':
         text = text[16:]
 
     # ищем подразделы и подэлементы, выводим как список
@@ -156,7 +156,7 @@ def is_partition_processing(chat_id, text):
     """output partition"""
 
     happily = False
-    find_partitions = db.get_partition_by_name(text.capitalize())
+    find_partitions = db.get_partition_by_name(text)
     if find_partitions.count() == 1:
         happily = True
         find_partition = find_partitions[0]
@@ -332,7 +332,7 @@ if __name__ == '__main__':
 
     __author__ = 'master by Vint'
     __title__ = '--- Clickermann_bot ---'
-    __version__ = '0.1.8'
+    __version__ = '0.1.9'
     __copyright__ = 'Copyright 2020 (c)  bitbucket.org/Vintets'
     auth_sh.authorship(__author__, __title__, __version__, __copyright__, width=_width)
 
