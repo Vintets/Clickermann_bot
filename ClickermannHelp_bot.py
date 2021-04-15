@@ -160,7 +160,7 @@ def is_partition_processing(chat_id, text):
     if find_partitions.count() == 1:
         happily = True
         find_partition = find_partitions[0]
-        cp.cprint(f'14find_partition {find_partition}')
+        cp.cprint(f'14_{chat_id} find_partition {find_partition}')
         keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True, row_width=1)
 
         # ищем подразделы
