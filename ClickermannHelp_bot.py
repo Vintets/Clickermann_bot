@@ -101,9 +101,10 @@ def process_cm_help_command(message: types.Message):
 def get_text_messages(message: types.Message):
     if message.text.lower() == 'привет' or message.text.lower() == 'hello':
         bot.send_message(message.chat.id, msg_const.MSG_HELLO.format(username=str(message.from_user.first_name)))
-    text_ok = processing_text_types(message)
-    if not text_ok:
-        bot.reply_to(message, f'{message.text}:{msg_const.MSG_NOT_UNDERSTAND}')
+    else:
+        text_ok = processing_text_types(message)
+        if not text_ok:
+            bot.reply_to(message, f'{message.text}:{msg_const.MSG_NOT_UNDERSTAND}')
 
 def cm_help_inline(message: types.Message):
     '''Вариант меню с кнопками Inline'''
