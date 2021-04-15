@@ -122,7 +122,7 @@ def process_cm_help_command(message: types.Message):
 @bot.message_handler(content_types=['text'])
 @logger_user
 def get_text_messages(message: types.Message):
-    if message.text.lower() == 'привет' or message.text.lower() == 'hello':
+    if message.text.lower() in ('привет', 'hello'):
         send_message(message.chat.id, msg_const.MSG_HELLO.format(username=str(message.from_user.first_name)))
     else:
         text_ok = processing_text_types(message)
