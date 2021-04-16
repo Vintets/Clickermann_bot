@@ -127,6 +127,14 @@ def process_search_command(message: types.Message):
     else:
         reply_to(message, msg_const.MSG_FIND_PARAM, reply_markup=menu_remove)
 
+# @bot.message_handler(commands=['test'])
+# def get_sticker_id(message: types.Message):
+    # send_message(IDADMIN, f'{frm.b}тестовое сообщение{frm.b}')
+
+# @bot.message_handler(func=lambda commands: True)
+# def unknown_command(message: types.Message):
+    # send_message(message.chat.id, msg_const.MSG_NOT_UNDERSTAND)
+
 @bot.message_handler(content_types=['sticker'])
 def get_sticker_id(message: types.Message):
     print(message)
@@ -335,10 +343,6 @@ def assembly_version(el):
     if el.version_cm_releaselevel:
         version += f' {el.version_cm_releaselevel}'
     return version
-
-# @bot.message_handler(func=lambda commands: True)
-# def unknown_command(message: types.Message):
-    # send_message(message.chat.id, msg_const.MSG_NOT_UNDERSTAND)
 
 @bot.message_handler(func=lambda commands: True)
 def unknown_message(message: types.Message):
