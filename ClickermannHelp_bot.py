@@ -94,6 +94,11 @@ def process_start_command(message: types.Message):
 def process_help_command(message: types.Message):
     send_message(message.chat.id, msg_const.MSG_HELP)
 
+@bot.message_handler(commands=['info', 'Info', 'INFO'])
+@logger_user
+def process_info_command(message: types.Message):
+    send_message(message.chat.id, msg_const.MSG_INFO)
+
 @bot.message_handler(commands=['code'])
 @logger_user
 def process_character_code_command(message: types.Message):
