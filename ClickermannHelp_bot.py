@@ -101,13 +101,13 @@ def process_character_code_command(message: types.Message):
     example: /code shift"""
 
     text = message.text[6:]
-    print(text)
+    cp.cprint(f"14_{message.chat.id} /code '{text}'")
     if text:
         # TODO
         ...
     else:
         print(msg_const.MSG_CODE_PARAM)
-    reply_to(message.chat.id, msg_const.MSG_IN_THE_PIPELINE)
+    reply_to(message, msg_const.MSG_IN_THE_PIPELINE)
 
 @bot.message_handler(commands=['f'])
 @logger_user
