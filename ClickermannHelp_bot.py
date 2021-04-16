@@ -31,6 +31,14 @@ def indicator_chat_action(message: types.Message):
 
     bot.send_chat_action(message.chat.id, 'typing')
 
+def keyboard_main_comands():
+        keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True, row_width=2)
+        main_comands = ('/start', '/help', '/info', '/cm_help')
+        for command in main_comands:
+            key = types.KeyboardButton(command)
+            keyboard.add(key)
+        return keyboard
+
 def logger_user_single(message: types.Message, text: str):
     """Логирование нажатий на InlineKeyboard кнопки пользователями"""
 
@@ -77,7 +85,6 @@ def safe_underscore(item, italic=False):
 @bot.message_handler(commands=['start', 'Start', 'START'])
 @logger_user
 def process_start_command(message: types.Message):
-    # logger_user(message)
     menu_remove = types.ReplyKeyboardRemove()
     send_message(message.chat.id, msg_const.MSG_WELCOME, reply_markup=menu_remove)
 
