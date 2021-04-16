@@ -1,5 +1,6 @@
 # System
 Thumbs.db
+*.bak
 
 # Venv
 
