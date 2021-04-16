@@ -108,22 +108,22 @@ def process_character_code_command(message: types.Message):
         print(msg_const.MSG_CODE_PARAM)
     reply_to(message.chat.id, msg_const.MSG_IN_THE_PIPELINE)
 
-@bot.message_handler(commands=['?', 'f'])
+@bot.message_handler(commands=['f'])
 @logger_user
 def process_search_command(message: types.Message):
     """keyword search processing"""
 
     # send_message(message.chat.id, message.text[3:])
-    # reply_to(message, msg_const.MSG_IN_THE_PIPELINE)
+    # reply_to(message, msg_const.MSG_IN_THE_PIPELINE, reply_markup=types.ReplyKeyboardRemove())
 
     text = message.text[3:]
+    menu_remove = types.ReplyKeyboardRemove()
     if text:
         # ищем элементы по ключевым словам, выводим как список
         if not is_search_elements(message.chat.id, text):
-            reply_to(message, msg_const.MSG_NOT_FIND)
+            reply_to(message, msg_const.MSG_NOT_FIND, reply_markup=menu_remove)
     else:
-        print(msg_const.MSG_FIND_PARAM)
-
+        reply_to(message, msg_const.MSG_FIND_PARAM, reply_markup=menu_remove)
 
 @bot.message_handler(content_types=['sticker'])
 def get_sticker_id(message: types.Message):
@@ -431,9 +431,5 @@ if __name__ == '__main__':
 # Убрать клавиатуру принудительно
 # menu_remove = types.ReplyKeyboardRemove()
 # bot.send_message(message.chat.id, text='...', reply_markup=menu_remove, disable_notification=True)
-
-# Скрыть клавиатуру
-# menu_hide = types.ReplyKeyboardHide()
-# bot.send_message(message.chat.id, text='...', reply_markup=menu_hide, disable_notification=True)
 
 # disable_notification=True   # беззвучно
