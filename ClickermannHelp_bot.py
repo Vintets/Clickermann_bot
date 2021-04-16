@@ -40,7 +40,7 @@ def keyboard_main_comands():
             keyboard.add(key)
         return keyboard
 
-def logger_user_single(message: types.Message, text: str):
+def logging_user_single(message: types.Message, text: str):
     """Логирование нажатий на InlineKeyboard кнопки пользователями"""
 
     adding_or_updating_user_information_in_db(message)
@@ -52,10 +52,10 @@ def logger_user_single(message: types.Message, text: str):
                     )
     db.request2log(request_)
 
-def logger_user(handler):
+def logging_user(handler):
     """Логирование запросов пользователей"""
 
-    def wrapper_logger_user(message: types.Message):
+    def wrapper_logging_user(message: types.Message):
         adding_or_updating_user_information_in_db(message)
         user = db.get_user_by_user_id(message.from_user.id)
         username = str(message.from_user.first_name)
@@ -65,7 +65,7 @@ def logger_user(handler):
                         )
         db.request2log(request_)
         handler(message)
-    return wrapper_logger_user
+    return wrapper_logging_user
 
 def safe_underscore(item, italic=False):
     """Экранирование разметочных символов MARKDOWN"""
@@ -84,23 +84,23 @@ def safe_underscore(item, italic=False):
     return item
 
 @bot.message_handler(commands=['start', 'Start', 'START'])
-@logger_user
+@logging_user
 def process_start_command(message: types.Message):
     menu_remove = types.ReplyKeyboardRemove()
     send_message(message.chat.id, msg_const.MSG_WELCOME, reply_markup=menu_remove)
 
 @bot.message_handler(commands=['help', 'Help', 'HELP'])
-@logger_user
+@logging_user
 def process_help_command(message: types.Message):
     send_message(message.chat.id, msg_const.MSG_HELP)
 
 @bot.message_handler(commands=['info', 'Info', 'INFO'])
-@logger_user
+@logging_user
 def process_info_command(message: types.Message):
     send_message(message.chat.id, msg_const.MSG_INFO)
 
 @bot.message_handler(commands=['code'])
-@logger_user
+@logging_user
 def process_character_code_command(message: types.Message):
     """Get character code.
     example: /code shift"""
@@ -116,7 +116,7 @@ def process_character_code_command(message: types.Message):
     reply_to(message, msg_const.MSG_IN_THE_PIPELINE)
 
 @bot.message_handler(commands=['f'])
-@logger_user
+@logging_user
 def process_search_command(message: types.Message):
     """keyword search processing"""
 
@@ -145,12 +145,12 @@ def get_sticker_id(message: types.Message):
     print(message)
 
 @bot.message_handler(commands=['cm_help'])
-@logger_user
+@logging_user
 def process_cm_help_command(message: types.Message):
     cm_help(message)
 
 @bot.message_handler(content_types=['text'])
-@logger_user
+@logging_user
 def get_text_messages(message: types.Message):
     if message.text.lower() in ('привет', 'hello'):
         send_message(message.chat.id, msg_const.MSG_HELLO.format(username=str(message.from_user.first_name)))
@@ -302,7 +302,7 @@ def callback_worker(call):
         parent_id = int(call.data[17:])
         parent_name = db.get_partition_by_id(id=parent_id).name
         # print(f'parent:  id = {parent_id},  name={parent_name}')
-        logger_user_single(call.message, parent_name)
+        logging_user_single(call.message, parent_name)
         is_partition_processing(call.message.chat.id, parent_name)
 
 def template_engine_element(el):
@@ -457,7 +457,7 @@ if __name__ == '__main__':
             print(time.strftime('%Y.%m.%d %H:%M:%S', time.localtime(time.time())), ex)
             cp.cprint('13Перезапуск бота…')
             raise(ex)
-        break
+            break
 
 
 
