@@ -3,8 +3,10 @@
 
 CLICKERMANN_HELP_BOT_TOKEN = 'token'
 DBNAME = 'cm_bot'
+IDADMIN = '00000000'
 
 ECHO_SQL = False
+PARSE_MODE = 'marcdown'
 
 # db mysql
 # engine = create_engine(f'mysql+mysqlconnector://user:pwd@localhost/{DBNAME}', echo = True)
@@ -23,3 +25,4 @@ DATABASE = {
     'drivername': 'sqlite',
     'database': f'{DBNAME}.db'
 }
+

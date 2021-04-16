@@ -6,7 +6,7 @@ import sys
 import time
 from itertools import chain
 from telebot import TeleBot, types
-from configs.config import CLICKERMANN_HELP_BOT_TOKEN
+from configs.config import CLICKERMANN_HELP_BOT_TOKEN, IDADMIN
 from cm_database import DB
 import accessory.colorprint as cp
 import accessory.clear_consol as cc
@@ -375,6 +375,19 @@ def adding_or_updating_user_information_in_db(message: types.Message):
     if user is None:
         db.add_user(us)
         print(f"Add user: id={us['tm_user_id']}, username={us['username']}, first_name={us['first_name']}")
+
+        # Оповещение Админу
+        msg_to_admin = (
+                        f'{frm.b}Clickermann_bot оповещение!{frm.b}\n'
+                        f'Добавлен новый пользователь:\n' +
+                        safe_underscore(
+                            f"id         = {us['tm_user_id']}\n"
+                            f"username   = {us['username']}\n"
+                            f"first_name = {us['first_name']}\n"
+                            f"last_name  = {us['last_name']}"
+                            )
+                        )
+        send_message(IDADMIN, msg_to_admin)
     elif (
             user.username != us['username'] or
             user.first_name != us['first_name'] or
@@ -384,16 +397,29 @@ def adding_or_updating_user_information_in_db(message: types.Message):
         print('Update user:', user)
         # запишем в лог что данные пользователя изменились
         msg = (
-                f"Пользователь N сменил данные на "
-                f"username={us['username']}, "
-                f"first_name={us['first_name']}, "
-                f"last_name={us['last_name']}"
+                f"Пользователь {user.tm_user_id} сменил данные на "
+                f"username  = {us['username']}, "
+                f"first_name= {us['first_name']}, "
+                f"last_name = {us['last_name']}"
                 )
         request_ = dict(
                         user_id=user.id,
                         request=msg,
                         )
         db.request2log(request_)
+        send_message(IDADMIN, f'{frm.b}тестовое _сообщение{frm.b}')
+
+        # Оповещение Админу
+        msg_to_admin = (
+                        f'{frm.b}Clickermann_bot оповещение!{frm.b}\n'
+                        f'Пользователь {user.tm_user_id} сменил данные на\n' +
+                        safe_underscore(
+                            f"username={us['username']}\n"
+                            f"first_name={us['first_name']}\n"
+                            f"last_name={us['last_name']}"
+                            )
+                        )
+        send_message(IDADMIN, msg_to_admin)
 
 def main():
     sending_messages_at_server_start()
