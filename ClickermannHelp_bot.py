@@ -15,7 +15,7 @@ import configs.msg_const as msg_const
 from configs.formatting import frm
 
 
-__version__ = '0.1.12'
+__version__ = '0.1.13'
 bot = TeleBot(CLICKERMANN_HELP_BOT_TOKEN, parse_mode='MARKDOWN')  # None, HTML or MARKDOWN / MarkdownV2
 db = DB()
 
@@ -101,12 +101,13 @@ def process_character_code_command(message: types.Message):
     example: /code shift"""
 
     text = message.text[6:]
-    cp.cprint(f"14_{message.chat.id} /code '{text}'")
+    menu_remove = types.ReplyKeyboardRemove()
     if text:
+        cp.cprint(f"14_{message.chat.id} /code '{text}'")
         # TODO
         ...
     else:
-        print(msg_const.MSG_CODE_PARAM)
+        send_message(message.chat.id, msg_const.MSG_CODE_PARAM, reply_markup=menu_remove)
     reply_to(message, msg_const.MSG_IN_THE_PIPELINE)
 
 @bot.message_handler(commands=['f'])
