@@ -5,32 +5,20 @@ import os
 import sys
 import time
 from itertools import chain
-from telebot import TeleBot, types
-from configs.config import CLICKERMANN_HELP_BOT_TOKEN, IDADMIN
-from cm_database import DB
+from telebot import types
+from cm_tbot import bot
+from cm_database import db
+from cm_sender import send_message, reply_to, indicator_chat_action
 import accessory.colorprint as cp
 import accessory.clear_consol as cc
 import accessory.authorship as auth_sh
 import configs.msg_const as msg_const
 from configs.formatting import frm
+from configs.config import IDADMIN
+from cm_logging2db import logging_user, logging_user_single
 
 
-__version__ = '0.1.13'
-bot = TeleBot(CLICKERMANN_HELP_BOT_TOKEN, parse_mode='MARKDOWN')  # None, HTML or MARKDOWN / MarkdownV2
-db = DB()
-
-def send_message(chat_id, text, **kwargs):
-    bot.send_message(chat_id, text, **kwargs)
-    time.sleep(0.9)
-
-def reply_to(message: types.Message, text, **kwargs):
-    bot.reply_to(message, text, **kwargs)
-    time.sleep(1)
-
-def indicator_chat_action(message: types.Message):
-    """индикатор ввода текста"""
-
-    bot.send_chat_action(message.chat.id, 'typing')
+__version__ = '0.2.0'
 
 def keyboard_main_comands():
         keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True, row_width=2)
@@ -39,33 +27,6 @@ def keyboard_main_comands():
             key = types.KeyboardButton(command)
             keyboard.add(key)
         return keyboard
-
-def logging_user_single(message: types.Message, text: str):
-    """Логирование нажатий на InlineKeyboard кнопки пользователями"""
-
-    adding_or_updating_user_information_in_db(message)
-    user = db.get_user_by_user_id(message.chat.id) # так надо (chat.id) чтобы логирование по кнопке назад приписывалось юзеру, а не боту
-    username = str(message.from_user.first_name)
-    request_ = dict(
-                    user_id=user.id,
-                    request=text,
-                    )
-    db.request2log(request_)
-
-def logging_user(handler):
-    """Логирование запросов пользователей"""
-
-    def wrapper_logging_user(message: types.Message):
-        adding_or_updating_user_information_in_db(message)
-        user = db.get_user_by_user_id(message.from_user.id)
-        username = str(message.from_user.first_name)
-        request_ = dict(
-                        user_id=user.id,
-                        request=message.text,
-                        )
-        db.request2log(request_)
-        handler(message)
-    return wrapper_logging_user
 
 def safe_underscore(item, italic=False):
     """Экранирование разметочных символов MARKDOWN"""
@@ -133,7 +94,7 @@ def process_search_command(message: types.Message):
         reply_to(message, msg_const.MSG_FIND_PARAM, reply_markup=menu_remove)
 
 # @bot.message_handler(commands=['test'])
-# def get_sticker_id(message: types.Message):
+# def process_test(message: types.Message):
     # send_message(IDADMIN, f'{frm.b}тестовое сообщение{frm.b}')
 
 # @bot.message_handler(func=lambda commands: True)
@@ -363,63 +324,6 @@ def sending_messages_at_server_start():
     bot.send_message('829838425', msg_const.MSG_SERVER, disable_notification=True, reply_markup=menu_remove)
     time.sleep(0.04)
     time.sleep(1)
-
-def adding_or_updating_user_information_in_db(message: types.Message):
-    user = db.get_user_by_user_id(message.from_user.id)
-    us = dict(
-        tm_user_id=message.from_user.id,
-        username=message.from_user.username,
-        first_name=message.from_user.first_name,
-        last_name=message.from_user.last_name,
-        )
-    if user is None:
-        db.add_user(us)
-        print(f"Add user: id={us['tm_user_id']}, username={us['username']}, first_name={us['first_name']}")
-
-        # Оповещение Админу
-        msg_to_admin = (
-                        f'{frm.b}Clickermann_bot оповещение!{frm.b}\n'
-                        f'Добавлен новый пользователь:\n' +
-                        safe_underscore(
-                            f"id         = {us['tm_user_id']}\n"
-                            f"username   = {us['username']}\n"
-                            f"first_name = {us['first_name']}\n"
-                            f"last_name  = {us['last_name']}"
-                            )
-                        )
-        send_message(IDADMIN, msg_to_admin)
-    elif (
-            user.username != us['username'] or
-            user.first_name != us['first_name'] or
-            user.last_name != us['last_name']
-            ):
-        db.update_user(us)
-        print('Update user:', user)
-        # запишем в лог что данные пользователя изменились
-        msg = (
-                f"Пользователь {user.tm_user_id} сменил данные на "
-                f"username  = {us['username']}, "
-                f"first_name= {us['first_name']}, "
-                f"last_name = {us['last_name']}"
-                )
-        request_ = dict(
-                        user_id=user.id,
-                        request=msg,
-                        )
-        db.request2log(request_)
-        send_message(IDADMIN, f'{frm.b}тестовое _сообщение{frm.b}')
-
-        # Оповещение Админу
-        msg_to_admin = (
-                        f'{frm.b}Clickermann_bot оповещение!{frm.b}\n'
-                        f'Пользователь {user.tm_user_id} сменил данные на\n' +
-                        safe_underscore(
-                            f"username={us['username']}\n"
-                            f"first_name={us['first_name']}\n"
-                            f"last_name={us['last_name']}"
-                            )
-                        )
-        send_message(IDADMIN, msg_to_admin)
 
 def main():
     sending_messages_at_server_start()

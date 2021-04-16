@@ -110,6 +110,7 @@ class DB():
     def __del__(self):
         self.session.close()
 
+db = DB()
 
 if __name__ == '__main__':
     _width = 100
