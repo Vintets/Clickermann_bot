@@ -8,11 +8,12 @@ from sqlalchemy import create_engine, and_, func
 from sqlalchemy.engine.url import URL
 from sqlalchemy.orm import sessionmaker
 from configs.config import DATABASE, ECHO_SQL
-from cm_db_models import Base, Partitions, Elements, Users, LogRequests, create_db_tables
+from cm_db_models import Base, Partitions, Elements, Users, LogRequests, CodeKeys, create_db_tables
 from sqlalchemy.exc import IntegrityError
 # from sqlalchemy_utils import database_exists
 from data_help.partitions import DATA_PARTITIONS
 from data_help.elements import DATA_ELEMENTS
+from data_help.code_keys import DATA_CODE_KEYS
 import accessory.colorprint as cp
 import accessory.clear_consol as cc
 import accessory.authorship as auth_sh
@@ -62,6 +63,19 @@ class DB():
         except IntegrityError:
             # self.session.rollback()
             cp.cprint('12Дубль уникальных значений элементов')
+
+        for code_keys in DATA_CODE_KEYS:
+            new_element = CodeKeys(**code_keys)
+            has_name = self.session.query(CodeKeys).filter(CodeKeys.name == code_keys['name'])
+            if has_name.count() == 0:
+                self.session.add(new_element)
+                cp.cprint(f"2Добавляем элемент' '{code_keys['name']}'")
+
+        try:
+            self.session.commit()
+        except IntegrityError:
+            # self.session.rollback()
+            cp.cprint('12Дубль уникальных значений кодов клавиш')
 
     def create_and_filling(self):
         self.create_tables()
