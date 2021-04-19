@@ -94,6 +94,16 @@ class LogRequests(BaseModel):
     rtime = Column(DateTime, nullable=False, server_default=text('CURRENT_TIMESTAMP'))  # или default=current_timestamp()
 
 
+class CodeKeys(BaseModel):
+    __tablename__ = 'code_keys'
+    name    = Column(String(32), nullable=False, unique=True)
+    group   = Column(Integer, nullable=False, default='0', server_default='0')
+    constant        = Column(String(32), unique=True)
+    code_decimal    = Column(Integer, nullable=False, unique=True)
+    # code_hex        = Column(String(32), nullable=False, unique=True)
+    alias           = Column(String(255))
+
+
 def create_db(engine):
     if not database_exists(engine.url):
         create_database(engine.url)
