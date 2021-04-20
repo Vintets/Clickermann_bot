@@ -6,7 +6,7 @@ from configs.formatting import frm
 
 MSG_SERVER_START = f'Server {frm.b}started{frm.b}'
 
-MSG_SERVER_RESTART = f'Server {frm.b}REstart{frm.b}'
+MSG_SERVER_RESTART = f'Server {frm.b}REstarted{frm.b}'
 
 MSG_WELCOME = (
             'Привет, сейчас я расскажу тебе про Clickermann.\n'
