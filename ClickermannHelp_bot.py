@@ -255,16 +255,7 @@ def is_search_elements(chat_id, text):
                         reply_markup=keyboard)
     return happily
 
-@bot.callback_query_handler(func=lambda call: True)
-def callback_worker(call):
-    '''InlineKeyboard click handler'''
 
-    if call.data.startswith('return_partition'):
-        parent_id = int(call.data[17:])
-        parent_name = db.get_partition_by_id(id=parent_id).name
-        # print(f'parent:  id = {parent_id},  name={parent_name}')
-        logging_user_single(call.message, parent_name)
-        is_partition_processing(call.message.chat.id, parent_name)
 
 def template_engine_element(el):
     """template engine for elements"""
@@ -310,6 +301,17 @@ def assembly_version(el):
         version += f' {el.version_cm_releaselevel}'
     return version
 
+@bot.callback_query_handler(func=lambda call: True)
+def callback_worker(call):
+    '''InlineKeyboard click handler'''
+
+    if call.data.startswith('return_partition'):
+        parent_id = int(call.data[17:])
+        parent_name = db.get_partition_by_id(id=parent_id).name
+        # print(f'parent:  id = {parent_id},  name={parent_name}')
+        logging_user_single(call.message, parent_name)
+        is_partition_processing(call.message.chat.id, parent_name)
+
 @bot.message_handler(func=lambda commands: True)
 def unknown_message(message: types.Message):
     """If the message is not recognized"""
@@ -335,7 +337,7 @@ if __name__ == '__main__':
     _hight = 50
     if sys.platform == 'win32':
         os.system('color 71')
-        os.system('mode con cols=%d lines=%d' % (_width, _hight))
+        # os.system('mode con cols=%d lines=%d' % (_width, _hight))
     cur_script = __file__
     PATH_SCRIPT = os.path.abspath(os.path.dirname(cur_script))
     os.chdir(PATH_SCRIPT)
@@ -373,3 +375,7 @@ if __name__ == '__main__':
 # bot.send_message(message.chat.id, text='...', reply_markup=menu_remove, disable_notification=True)
 
 # disable_notification=True   # беззвучно
+
+# Сообщение: Функционал в разработке
+# reply_to(message, msg_const.MSG_IN_THE_PIPELINE)
+
