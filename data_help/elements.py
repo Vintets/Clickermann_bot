@@ -3426,6 +3426,24 @@ DATA_ELEMENTS.extend([
         ),
 ])
 
+# Приложение 1. Коды клавиш
+DATA_ELEMENTS.extend([
+    dict(name='коды клавиш',
+        name_isupper=0,
+        visible=0,
+        parent_id=16,
+        description=(''),
+        syntax='',
+        parameters=(''),
+        example=(''),
+        notes='',
+        keywords='',
+        version_cm_major=3,
+        version_cm_minor=2,
+        version_cm_build=0,
+        version_cm_releaselevel='',
+        ),
+])
 
 # --------------------------------------------------------------------------------------------------
 
