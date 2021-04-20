@@ -334,12 +334,18 @@ def sending_messages_at_server_start():
 
     # ToDo sendin messages  <=30 requests per second
     menu_remove = types.ReplyKeyboardRemove()
-    bot.send_message('829838425', msg_const.MSG_SERVER, disable_notification=True, reply_markup=menu_remove)
+    bot.send_message('829838425', msg_const.MSG_SERVER_START, disable_notification=True, reply_markup=menu_remove)
     time.sleep(0.04)
     time.sleep(1)
 
+def sending_messages_at_server_restart():
+    """Sending messages at server restart"""
+
+    menu_remove = types.ReplyKeyboardRemove()
+    bot.send_message('829838425', msg_const.MSG_SERVER_RESTART, disable_notification=True, reply_markup=menu_remove)
+    time.sleep(1)
+
 def main():
-    sending_messages_at_server_start()
     bot.polling(none_stop=True, interval=2)
 
 
@@ -360,6 +366,7 @@ if __name__ == '__main__':
     auth_sh.authorship(__author__, __title__, __version__, __copyright__, width=_width)
 
     cp.cprint('9Clickermann_bot запущен!')
+    sending_messages_at_server_start()
 
     while True:
         try:
@@ -373,6 +380,7 @@ if __name__ == '__main__':
         except Exception as ex:
             print(time.strftime('%Y.%m.%d %H:%M:%S', time.localtime(time.time())), ex)
             cp.cprint('13Перезапуск бота…')
+            sending_messages_at_server_restart()
             raise(ex)
             break
 
