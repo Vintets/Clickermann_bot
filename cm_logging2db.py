@@ -6,6 +6,7 @@ from cm_tbot import bot
 from cm_database import db
 from cm_sender import send_message
 from configs.formatting import frm
+from accessory.safe_markdown import safe_markdown_symbol
 
 
 def logging_user(handler):
@@ -51,7 +52,7 @@ def adding_or_updating_user_information_in_db(message: types.Message):
         msg_to_admin = (
                         f'{frm.b}Clickermann_bot оповещение!{frm.b}\n'
                         f'Добавлен новый пользователь:\n' +
-                        safe_underscore(
+                        safe_markdown_symbol(
                             f"id         = {us['tm_user_id']}\n"
                             f"username   = {us['username']}\n"
                             f"first_name = {us['first_name']}\n"
@@ -84,7 +85,7 @@ def adding_or_updating_user_information_in_db(message: types.Message):
         msg_to_admin = (
                         f'{frm.b}Clickermann_bot оповещение!{frm.b}\n'
                         f'Пользователь {user.tm_user_id} сменил данные на\n' +
-                        safe_underscore(
+                        safe_markdown_symbol(
                             f"username={us['username']}\n"
                             f"first_name={us['first_name']}\n"
                             f"last_name={us['last_name']}"

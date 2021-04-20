@@ -12,13 +12,14 @@ from cm_sender import send_message, reply_to, indicator_chat_action
 import accessory.colorprint as cp
 import accessory.clear_consol as cc
 import accessory.authorship as auth_sh
+from accessory.safe_markdown import safe_markdown_symbol
 import configs.msg_const as msg_const
 from configs.formatting import frm
 from configs.config import IDADMIN
 from cm_logging2db import logging_user, logging_user_single
 
 
-__version__ = '0.2.1'
+__version__ = '0.2.2'
 
 def keyboard_main_comands():
         keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True, row_width=2)
@@ -27,22 +28,6 @@ def keyboard_main_comands():
             key = types.KeyboardButton(command)
             keyboard.add(key)
         return keyboard
-
-def safe_underscore(item, italic=False):
-    """Экранирование разметочных символов MARKDOWN"""
-
-    if italic and item.find('_') != -1:
-        item = item.replace('_', '_\__')
-    elif item.find('_') != -1:
-        item = item.replace('_', '\_')
-    if italic and item.find('#') != -1:
-        # item = item.replace('#', '_\#_')
-        pass
-    elif item.find('#') != -1:
-        item = item.replace('#', '\#')
-    if item.find('*') != -1:
-        item = item.replace('*', '\*')
-    return item
 
 @bot.message_handler(commands=['start', 'Start', 'START'])
 @logging_user
@@ -289,11 +274,11 @@ def template_engine_element(el):
     name = el.name
     if el.name_isupper:
         name = name.upper()
-        name = safe_underscore(name)
+        name = safe_markdown_symbol(name)
     text = [f'{frm.b}{name}{frm.b}']
     if el.description:
-        text.append(safe_underscore(el.description))
-        # print(safe_underscore(el.description))
+        text.append(safe_markdown_symbol(el.description))
+        # print(safe_markdown_symbol(el.description))
         text.append('')
     if el.syntax:
         text.append(f'{frm.b}Синтаксис{frm.b}')
@@ -309,7 +294,7 @@ def template_engine_element(el):
         text.append('')
     if el.notes:
         text.append(f'{frm.b}Примечания{frm.b}')
-        text.append(f'{frm.i}{safe_underscore(el.notes, italic=True)}{frm.i}')
+        text.append(f'{frm.i}{safe_markdown_symbol(el.notes, italic=True)}{frm.i}')
         text.append('')
 
     text.append(assembly_version(el))
