@@ -16,16 +16,18 @@ else:
 
 PY34 = sys.version_info >= (3, 4, 0)
 
+
 def _pr(cstr):
     clst = cstr.split('^')
     color = 0x0001
     for cstr in clst:
-        dglen = re.search('\D', cstr).start()
+        dglen = re.search(r'\D', cstr).start()
         if dglen:
             color = int(cstr[:dglen])
         text = cstr[dglen:]
         text = text.replace(u'\u0456', u'i')
-        if text[:1] == '_': text = text[1:]
+        if text[:1] == '_':
+            text = text[1:]
         text = _set_color(color) + text
         if (PLATFORM == 'win32') and (not PY34):
             text = text.encode('cp866', 'ignore')
@@ -33,34 +35,38 @@ def _pr(cstr):
         print(text, end='')
         sys.stdout.flush()
 
+
 def _restore_colors(e=''):
     # sys.stdout.write(_set_color(20) + u'')
     print(_set_color(20) + u'', end=e)
     sys.stdout.flush()
+
 
 def cprint(cstr):
     _pr(cstr)
     _restore_colors(e=u'\n')
     # print('')
 
+
 def cprint2(cstr):
     _pr(cstr)
     _restore_colors()
     # print('', end='')
 
+
 def colors_win():
     return {
-            0 : u'чёрный',
-            1 : u'синий',
-            2 : u'зелёный',
-            3 : u'голубой',
-            4 : u'красный',
-            5 : u'фиолетовый',
-            6 : u'жёлтый',
-            7 : u'серый',
+            0 : u'чёрный',  # noqa
+            1 : u'синий',  # noqa
+            2 : u'зелёный',  # noqa
+            3 : u'голубой',  # noqa
+            4 : u'красный',  # noqa
+            5 : u'фиолетовый',  # noqa
+            6 : u'жёлтый',  # noqa
+            7 : u'серый',  # noqa
 
-            8 : u'тёмно-серый',
-            9 : u'светло-синий',
+            8 : u'тёмно-серый',  # noqa
+            9 : u'светло-синий',  # noqa
             10: u'светло-зелёный',
             11: u'светло-голубой',
             12: u'светло-красный',
@@ -69,19 +75,20 @@ def colors_win():
             15: u'белый',
             }
 
+
 def colors_win2linux():
     return {
-            0 : 30,
-            1 : 34,
-            2 : 32,
-            3 : 36,
-            4 : 31,
-            5 : 35,
-            6 : 33,
-            7 : 37,
+            0 : 30,  # noqa
+            1 : 34,  # noqa
+            2 : 32,  # noqa
+            3 : 36,  # noqa
+            4 : 31,  # noqa
+            5 : 35,  # noqa
+            6 : 33,  # noqa
+            7 : 37,  # noqa
 
-            8 : 90,
-            9 : 94,
+            8 : 90,  # noqa
+            9 : 94,  # noqa
             10: 92,
             11: 96,
             12: 91,
@@ -89,6 +96,7 @@ def colors_win2linux():
             14: 93,
             15: 97,
             }
+
 
 def _dafault_color():
     # цвет по умолчанию: 20
@@ -100,12 +108,13 @@ def _dafault_color():
         def_color = 0
     return def_color
 
+
 def _set_color(color):
     if color == 20:
         color = _dafault_color()
     prefix_color = u''
     if PLATFORM == 'win32':
-        _SetConsoleTextAttribute(_stdout_handle, color | 0x0070) #78
+        _SetConsoleTextAttribute(_stdout_handle, color | 0x0070)  # 78
     elif 'linux' in PLATFORM:
         prefix_color = u'\033[%(col_linux)sm' % {'col_linux': colors_win2linux()[color]}
     return prefix_color
@@ -133,6 +142,6 @@ if __name__ == '__main__':
     if PY34:
         input(u'\n---------------   END   ---------------')
     else:
-        raw_input(u'\n---------------   END   ---------------')
+        raw_input(u'\n---------------   END   ---------------')  # noqa
 
 # ==================================================================================================

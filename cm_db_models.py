@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from datetime import datetime
-from sqlalchemy import create_engine  #, MetaData
+from sqlalchemy import create_engine  # MetaData
 from sqlalchemy.engine.url import URL
-from sqlalchemy import Table, Column, Integer, String, Text, DateTime, TIMESTAMP, ForeignKey
+from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import text
 from sqlalchemy.sql.functions import current_timestamp
@@ -23,6 +22,7 @@ class BaseModel(Base):
     __abstract__ = True
 
     id = Column(Integer, nullable=False, unique=True, primary_key=True, autoincrement=True)
+    # from sqlalchemy import TIMESTAMP
     # created_at = Column(TIMESTAMP, nullable=False)
     # updated_at = Column(TIMESTAMP, nullable=False)
 
@@ -75,9 +75,9 @@ class Users(BaseModel):
     # created = Column(TIMESTAMP, nullable=False, default=current_timestamp())
     created = Column(DateTime, nullable=False, server_default=text('CURRENT_TIMESTAMP'))
     last_modified = Column(DateTime, nullable=False,
-                            server_default=text('CURRENT_TIMESTAMP'),
-                            onupdate=current_timestamp()
-                            )
+                           server_default=text('CURRENT_TIMESTAMP'),
+                           onupdate=current_timestamp()
+                           )
 
     # for MySQL
     # datemodified = Column(DateTime, server_default=text('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'))
@@ -96,17 +96,18 @@ class LogRequests(BaseModel):
 
 class CodeKeys(BaseModel):
     __tablename__ = 'code_keys'
-    name    = Column(String(32), nullable=False, unique=True)
-    group   = Column(Integer, nullable=False, default='0', server_default='0')
-    constant        = Column(String(32), unique=True)
-    code_decimal    = Column(Integer, nullable=False, unique=True)
-    # code_hex        = Column(String(32), nullable=False, unique=True)
-    alias           = Column(String(255))
+    name    = Column(String(32), nullable=False, unique=True)  # noqa
+    group   = Column(Integer, nullable=False, default='0', server_default='0')  # noqa
+    constant        = Column(String(32), unique=True)  # noqa
+    code_decimal    = Column(Integer, nullable=False, unique=True)  # noqa
+    # code_hex        = Column(String(32), nullable=False, unique=True)  # noqa
+    alias           = Column(String(255))  # noqa
 
 
 def create_db(engine):
     if not database_exists(engine.url):
         create_database(engine.url)
+
 
 def create_db_tables(engine):
     '''создает таблиц в БД'''
@@ -116,7 +117,7 @@ def create_db_tables(engine):
 
 
 if __name__ == '__main__':
-    engine = create_engine(URL(**DATABASE), echo = True)
+    engine = create_engine(URL(**DATABASE), echo=True)
     create_db_tables(engine)
 
 
@@ -131,6 +132,7 @@ if __name__ == '__main__':
 
 
 '''
+from sqlalchemy import Table
 opt_managers_bind = db.Table('opt_managers_bind',
             db.Column('opt_user_id', INTEGER(unsigned=True), db.ForeignKey('opt_users.id'), nullable=False),
             db.Column('opt_manager_id', INTEGER(unsigned=True), db.ForeignKey('opt_managers.id'), nullable=False)
@@ -143,4 +145,3 @@ post_tags = db.Table('post_tags',
 
 tags = db.relationship('Tag', secondary=post_tags, backref=db.backref('posts', lazy='dynamic'))
 '''
-

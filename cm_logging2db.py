@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 from telebot import types
-from cm_tbot import bot
 from cm_database import db
 from cm_sender import send_message
 from configs.formatting import frm
@@ -16,7 +15,7 @@ def logging_user(handler):
     def wrapper_logging_user(message: types.Message):
         adding_or_updating_user_information_in_db(message)
         user = db.get_user_by_user_id(message.from_user.id)
-        username = str(message.from_user.first_name)
+        # username = str(message.from_user.first_name)
         request_ = dict(
                         user_id=user.id,
                         request=message.text,
@@ -25,17 +24,19 @@ def logging_user(handler):
         handler(message)
     return wrapper_logging_user
 
+
 def logging_user_single(message: types.Message, text: str):
     """Логирование нажатий на InlineKeyboard кнопки пользователями"""
 
     adding_or_updating_user_information_in_db(message)
-    user = db.get_user_by_user_id(message.chat.id) # так надо (chat.id) чтобы логирование по кнопке назад приписывалось юзеру, а не боту
-    username = str(message.from_user.first_name)
+    user = db.get_user_by_user_id(message.chat.id)  # так надо (chat.id) чтобы логирование по кнопке назад приписывалось юзеру, а не боту
+    # username = str(message.from_user.first_name)
     request_ = dict(
                     user_id=user.id,
                     request=text,
                     )
     db.request2log(request_)
+
 
 def adding_or_updating_user_information_in_db(message: types.Message):
     user = db.get_user_by_user_id(message.from_user.id)
@@ -52,13 +53,12 @@ def adding_or_updating_user_information_in_db(message: types.Message):
         # Оповещение Админу
         msg_to_admin = (
                         f'{frm.b}Clickermann_bot оповещение!{frm.b}\n'
-                        f'Добавлен новый пользователь:\n' +
-                        safe_markdown_symbol(
-                            f"id         = {us['tm_user_id']}\n"
-                            f"username   = {us['username']}\n"
-                            f"first_name = {us['first_name']}\n"
-                            f"last_name  = {us['last_name']}"
-                            )
+                        f'Добавлен новый пользователь:\n' + safe_markdown_symbol(
+                                    f"id         = {us['tm_user_id']}\n"
+                                    f"username   = {us['username']}\n"
+                                    f"first_name = {us['first_name']}\n"
+                                    f"last_name  = {us['last_name']}"
+                                    )
                         )
         send_message(IDADMIN, msg_to_admin)
     elif (
@@ -85,12 +85,10 @@ def adding_or_updating_user_information_in_db(message: types.Message):
         # Оповещение Админу
         msg_to_admin = (
                         f'{frm.b}Clickermann_bot оповещение!{frm.b}\n'
-                        f'Пользователь {user.tm_user_id} сменил данные на\n' +
-                        safe_markdown_symbol(
-                            f"username={us['username']}\n"
-                            f"first_name={us['first_name']}\n"
-                            f"last_name={us['last_name']}"
-                            )
+                        f'Пользователь {user.tm_user_id} сменил данные на\n' + safe_markdown_symbol(
+                                    f"username={us['username']}\n"
+                                    f"first_name={us['first_name']}\n"
+                                    f"last_name={us['last_name']}"
+                                    )
                         )
         send_message(IDADMIN, msg_to_admin)
-

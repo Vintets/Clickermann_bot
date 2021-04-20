@@ -3,12 +3,11 @@
 
 import os
 import sys
-from datetime import datetime
 from sqlalchemy import create_engine, and_, func
 from sqlalchemy.engine.url import URL
 from sqlalchemy.orm import sessionmaker
 from configs.config import DATABASE, ECHO_SQL
-from cm_db_models import Base, Partitions, Elements, Users, LogRequests, CodeKeys, create_db_tables
+from cm_db_models import Partitions, Elements, Users, LogRequests, CodeKeys, create_db_tables
 from sqlalchemy.exc import IntegrityError
 # from sqlalchemy_utils import database_exists
 from data_help.partitions import DATA_PARTITIONS
@@ -20,7 +19,8 @@ import accessory.authorship as auth_sh
 
 
 class DB():
-    engine = create_engine(URL(**DATABASE), connect_args={'check_same_thread':False}, echo=ECHO_SQL)
+    engine = create_engine(URL(**DATABASE), connect_args={'check_same_thread': False}, echo=ECHO_SQL)
+
     def __init__(self):
         self.session = self.create_session()
 
@@ -118,7 +118,7 @@ class DB():
         self.session.commit()
 
     def update_user(self, us):
-        self.session.query(Users).filter(Users.tm_user_id == us['tm_user_id']).update(us, synchronize_session = False)
+        self.session.query(Users).filter(Users.tm_user_id == us['tm_user_id']).update(us, synchronize_session=False)
         self.session.commit()
 
     def request2log(self, request_):
@@ -128,7 +128,9 @@ class DB():
     def __del__(self):
         self.session.close()
 
+
 db = DB()
+
 
 if __name__ == '__main__':
     _width = 100
@@ -155,4 +157,3 @@ if __name__ == '__main__':
 # --------------------------------------------------------------------------------------------------
 
 # cp.cprint(f'12Неправильные данные в файле ^15_{filename}')
-

@@ -8,26 +8,28 @@ from itertools import chain
 from telebot import types
 from cm_tbot import bot
 from cm_database import db
-from cm_sender import send_message, reply_to, indicator_chat_action
+from cm_sender import send_message, reply_to  # , indicator_chat_action
 import accessory.colorprint as cp
 import accessory.clear_consol as cc
 import accessory.authorship as auth_sh
 from accessory.safe_markdown import safe_markdown_symbol
 import configs.msg_const as msg_const
 from configs.formatting import frm
-from configs.config import IDADMIN
+# from configs.config import IDADMIN
 from cm_logging2db import logging_user, logging_user_single
 
 
 __version__ = '0.2.2'
 
+
 def keyboard_main_comands():
-        keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True, row_width=2)
-        main_comands = ('/start', '/help', '/info', '/cm_help')
-        for command in main_comands:
-            key = types.KeyboardButton(command)
-            keyboard.add(key)
-        return keyboard
+    keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True, row_width=2)
+    main_comands = ('/start', '/help', '/info', '/cm_help')
+    for command in main_comands:
+        key = types.KeyboardButton(command)
+        keyboard.add(key)
+    return keyboard
+
 
 @bot.message_handler(commands=['start', 'Start', 'START'])
 @logging_user
@@ -35,15 +37,18 @@ def process_start_command(message: types.Message):
     menu_remove = types.ReplyKeyboardRemove()
     send_message(message.chat.id, msg_const.MSG_WELCOME, reply_markup=menu_remove)
 
+
 @bot.message_handler(commands=['help', 'Help', 'HELP'])
 @logging_user
 def process_help_command(message: types.Message):
     send_message(message.chat.id, msg_const.MSG_HELP)
 
+
 @bot.message_handler(commands=['info', 'Info', 'INFO'])
 @logging_user
 def process_info_command(message: types.Message):
     send_message(message.chat.id, msg_const.MSG_INFO)
+
 
 @bot.message_handler(commands=['code'])
 @logging_user
@@ -65,6 +70,7 @@ def process_character_code_command(message: types.Message):
     else:
         send_message(message.chat.id, msg_const.MSG_CODE_PARAM, reply_markup=menu_remove)
 
+
 @bot.message_handler(commands=['f'])
 @logging_user
 def process_search_command(message: types.Message):
@@ -82,32 +88,41 @@ def process_search_command(message: types.Message):
     else:
         reply_to(message, msg_const.MSG_FIND_PARAM, reply_markup=menu_remove)
 
+
 # @bot.message_handler(commands=['test'])
 # def process_test(message: types.Message):
     # send_message(IDADMIN, f'{frm.b}тестовое сообщение{frm.b}')
+
 
 # @bot.message_handler(func=lambda commands: True)
 # def unknown_command(message: types.Message):
     # send_message(message.chat.id, msg_const.MSG_NOT_UNDERSTAND)
 
+
 @bot.message_handler(content_types=['sticker'])
 def get_sticker_id(message: types.Message):
     print(message)
+
 
 @bot.message_handler(commands=['cm_help'])
 @logging_user
 def process_cm_help_command(message: types.Message):
     cm_help(message)
 
+
 @bot.message_handler(content_types=['text'])
 @logging_user
 def get_text_messages(message: types.Message):
     if message.text.lower() in ('привет', 'hello'):
-        send_message(message.chat.id, msg_const.MSG_HELLO.format(username=str(message.from_user.first_name)))
+        send_message(
+                message.chat.id,
+                msg_const.MSG_HELLO.format(username=str(message.from_user.first_name))
+                )
     else:
         text_ok = processing_text_types(message)
         if not text_ok:
             reply_to(message, msg_const.MSG_NOT_UNDERSTAND)
+
 
 def cm_help_inline(message: types.Message):
     '''Вариант меню с кнопками Inline'''
@@ -121,10 +136,15 @@ def cm_help_inline(message: types.Message):
     msg = f'{msg_const.MSG_CM_HELP_MAIN1}\n{msg_const.MSG_CM_HELP_MAIN2}'
     send_message(message.chat.id, text=msg, reply_markup=keyboard_main)
 
+
 def cm_help(message: types.Message):
     """main handler section cm_help"""
 
-    keyboard_main = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True, row_width=2)
+    keyboard_main = types.ReplyKeyboardMarkup(
+                                            resize_keyboard=True,
+                                            one_time_keyboard=True,
+                                            row_width=2
+                                            )
     core_partitions = db.get_subpartitions(parent=0)
     for partition in core_partitions:
         # print(partition)
@@ -134,6 +154,7 @@ def cm_help(message: types.Message):
     # Показываем все кнопки сразу и пишем сообщение о выборе
     msg = f'{msg_const.MSG_CM_HELP_MAIN1}\n{msg_const.MSG_CM_HELP_MAIN2}'
     send_message(message.chat.id, text=msg, reply_markup=keyboard_main)
+
 
 def processing_text_types(message: types.Message):
     """handler text messages"""
@@ -156,6 +177,7 @@ def processing_text_types(message: types.Message):
             text_ok = True
     return text_ok
 
+
 def is_partition_processing(chat_id, text):
     """output partition"""
 
@@ -165,7 +187,11 @@ def is_partition_processing(chat_id, text):
         happily = True
         find_partition = find_partitions[0]
         cp.cprint(f'14_{chat_id} find_partition {find_partition}')
-        keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True, row_width=1)
+        keyboard = types.ReplyKeyboardMarkup(
+                                            resize_keyboard=True,
+                                            one_time_keyboard=True,
+                                            row_width=1
+                                            )
 
         # ищем подразделы
         output_childrens = db.get_subpartitions(parent=find_partition.id)
@@ -186,16 +212,20 @@ def is_partition_processing(chat_id, text):
         # добавляем пункт/кнопку назад
         if find_partition.id != 0:
             if find_partition.parent_id == 0:
-                parent_name = f'корень меню'
+                parent_name = 'корень меню'
             else:
                 parent_name = db.get_partition_by_id(id=find_partition.parent_id).name
             # print(f'parent:  id={find_partition.parent_id},  name={parent_name}')
             keyboard.add(f'<-- Вернуться в {parent_name}')
 
         # отправляем имя и описание раздела
-        send_message(chat_id, f'{frm.b}{find_partition.name}{frm.b}\n{find_partition.description}',
-                        reply_markup=keyboard)
+        send_message(
+                    chat_id,
+                    f'{frm.b}{find_partition.name}{frm.b}\n{find_partition.description}',
+                    reply_markup=keyboard
+                    )
     return happily
+
 
 def is_element_processing(chat_id, text):
     """output element"""
@@ -209,11 +239,13 @@ def is_element_processing(chat_id, text):
         # print(output)
         keyboard = types.InlineKeyboardMarkup()
         key_return = types.InlineKeyboardButton(
-                                        text='Вернуться назад',
-                                        callback_data=f'return_partition:{current_element.parent_id}')
+                                    text='Вернуться назад',
+                                    callback_data=f'return_partition:{current_element.parent_id}'
+                                    )
         keyboard.add(key_return)
         send_message(chat_id, output, reply_markup=keyboard)
     return happily
+
 
 def is_search_elements(chat_id, text):
     """search elements by keywords"""
@@ -223,7 +255,11 @@ def is_search_elements(chat_id, text):
     found_elements = db.get_elements_by_keywords(keywords=text.lower())
     if found_elements.count() > 0:
         happily = True
-        keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True, row_width=1)
+        keyboard = types.ReplyKeyboardMarkup(
+                                            resize_keyboard=True,
+                                            one_time_keyboard=True,
+                                            row_width=1
+                                            )
         for children_el in found_elements:
             cp.cprint(f'14_найдено: {children_el}')
             child_name = children_el.name
@@ -237,12 +273,16 @@ def is_search_elements(chat_id, text):
             keyboard.add(key)
 
         # добавляем пункт/кнопку 'в корень меню'
-        keyboard.add(f'<-- вернуться в корень меню')
+        keyboard.add('<-- вернуться в корень меню')
 
         # отправляем имя и описание раздела
-        send_message(chat_id, f"Поиск по ключевой фразе\n'{text}'",
-                        reply_markup=keyboard)
+        send_message(
+                    chat_id,
+                    f"Поиск по ключевой фразе\n'{text}'",
+                    reply_markup=keyboard
+                    )
     return happily
+
 
 def is_code_processing(chat_id, text):
     """output code_key"""
@@ -258,6 +298,7 @@ def is_code_processing(chat_id, text):
         send_message(chat_id, output, reply_markup=menu_remove)
     return happily
 
+
 def template_engine_code_key(ck):
     """template engine for code key"""
 
@@ -267,6 +308,7 @@ def template_engine_code_key(ck):
     text.append(f'10-ный код:  {frm.c}{ck.code_decimal}{frm.c}')
     text.append(f'16-ный код:  {frm.c}0x{ck.code_decimal:X}{frm.c}')
     return '\n'.join(text)
+
 
 def template_engine_element(el):
     """template engine for elements"""
@@ -300,6 +342,7 @@ def template_engine_element(el):
     text.append(assembly_version(el))
     return '\n'.join(text)
 
+
 def assembly_version(el):
     """template engine for version Clickermann"""
 
@@ -312,6 +355,7 @@ def assembly_version(el):
         version += f' {el.version_cm_releaselevel}'
     return version
 
+
 @bot.callback_query_handler(func=lambda call: True)
 def callback_worker(call):
     '''InlineKeyboard click handler'''
@@ -323,27 +367,41 @@ def callback_worker(call):
         logging_user_single(call.message, parent_name)
         is_partition_processing(call.message.chat.id, parent_name)
 
+
 @bot.message_handler(func=lambda commands: True)
 def unknown_message(message: types.Message):
     """If the message is not recognized"""
 
     reply_to(message, msg_const.MSG_NOT_UNDERSTAND)
 
+
 def sending_messages_at_server_start():
     """Sending messages at server start"""
 
     # ToDo sendin messages  <=30 requests per second
     menu_remove = types.ReplyKeyboardRemove()
-    bot.send_message('829838425', msg_const.MSG_SERVER_START, disable_notification=True, reply_markup=menu_remove)
+    bot.send_message(
+                    '829838425',
+                    msg_const.MSG_SERVER_START,
+                    disable_notification=True,
+                    reply_markup=menu_remove
+                    )
     time.sleep(0.04)
     time.sleep(1)
+
 
 def sending_messages_at_server_restart():
     """Sending messages at server restart"""
 
     menu_remove = types.ReplyKeyboardRemove()
-    bot.send_message('829838425', msg_const.MSG_SERVER_RESTART, disable_notification=True, reply_markup=menu_remove)
+    bot.send_message(
+                    '829838425',
+                    msg_const.MSG_SERVER_RESTART,
+                    disable_notification=True,
+                    reply_markup=menu_remove
+                    )
     time.sleep(1)
+
 
 def main():
     bot.polling(none_stop=True, interval=2)
@@ -381,9 +439,8 @@ if __name__ == '__main__':
             print(time.strftime('%Y.%m.%d %H:%M:%S', time.localtime(time.time())), ex)
             cp.cprint('13Перезапуск бота…')
             sending_messages_at_server_restart()
-            raise(ex)
+            raise ex
             break
-
 
 
 # --------------------------------------------------------------------------------------------------
@@ -397,4 +454,3 @@ if __name__ == '__main__':
 
 # Сообщение: Функционал в разработке
 # reply_to(message, msg_const.MSG_IN_THE_PIPELINE)
-

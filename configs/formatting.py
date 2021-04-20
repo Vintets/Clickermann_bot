@@ -4,6 +4,7 @@
 from dataclasses import dataclass
 from configs.config import PARSE_MODE
 
+
 @dataclass
 class Formatting:
     b: str
@@ -31,6 +32,7 @@ class Formatting:
     # eh5: str
     # h6: str
     # eh6: str
+
 
 if PARSE_MODE == 'marcdown':
     frm = Formatting(
@@ -62,4 +64,3 @@ if PARSE_MODE == 'marcdown':
                     # h6='######',
                     # eh6='######',
                     )
-
