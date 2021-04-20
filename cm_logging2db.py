@@ -6,6 +6,7 @@ from cm_tbot import bot
 from cm_database import db
 from cm_sender import send_message
 from configs.formatting import frm
+from configs.config import IDADMIN
 from accessory.safe_markdown import safe_markdown_symbol
 
 
