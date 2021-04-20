@@ -106,6 +106,10 @@ class DB():
         return (self.session.query(Partitions).filter(
                             and_(Partitions.id == id, Partitions.visible == visible)))[0]
 
+    def get_code_key_by_alias(self, alias):
+        alias = f',{alias.lower()},'
+        return self.session.query(CodeKeys).filter(CodeKeys.alias.like(f'%{alias}%'))
+
     def get_user_by_user_id(self, user_id):
         return self.session.query(Users).filter(Users.tm_user_id == user_id).first()
 

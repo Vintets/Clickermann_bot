@@ -18,7 +18,7 @@ from configs.config import IDADMIN
 from cm_logging2db import logging_user, logging_user_single
 
 
-__version__ = '0.2.0'
+__version__ = '0.2.1'
 
 def keyboard_main_comands():
         keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True, row_width=2)
@@ -63,18 +63,22 @@ def process_info_command(message: types.Message):
 @bot.message_handler(commands=['code'])
 @logging_user
 def process_character_code_command(message: types.Message):
-    """Get character code.
-    example: /code shift"""
+    """
+    Get character code.
+    example: /code shift
+    """
 
-    text = message.text[6:]
+    text = message.text[6:].strip()
     menu_remove = types.ReplyKeyboardRemove()
     if text:
         cp.cprint(f"14_{message.chat.id} /code '{text}'")
-        # TODO
-        ...
+        # ищем код клавиши и выводим
+        if is_code_processing(message.chat.id, text):
+            pass
+        else:
+            reply_to(message, msg_const.MSG_KEYS_NOT_FIND)
     else:
         send_message(message.chat.id, msg_const.MSG_CODE_PARAM, reply_markup=menu_remove)
-    reply_to(message, msg_const.MSG_IN_THE_PIPELINE)
 
 @bot.message_handler(commands=['f'])
 @logging_user
@@ -255,7 +259,29 @@ def is_search_elements(chat_id, text):
                         reply_markup=keyboard)
     return happily
 
+def is_code_processing(chat_id, text):
+    """output code_key"""
 
+    happily = False
+    find_key = db.get_code_key_by_alias(text)
+    if find_key.count() == 1:
+        happily = True
+        current_key = find_key[0]
+        output = template_engine_code_key(current_key)
+        # print(output)
+        menu_remove = types.ReplyKeyboardRemove()
+        send_message(chat_id, output, reply_markup=menu_remove)
+    return happily
+
+def template_engine_code_key(ck):
+    """template engine for code key"""
+
+    text = [f'Клавиша:   {frm.b}{ck.name}{frm.b}\n']
+    if ck.constant:
+        text.append(f'константа:    {frm.c}{ck.constant}{frm.c}')
+    text.append(f'10-ный код:  {frm.c}{ck.code_decimal}{frm.c}')
+    text.append(f'16-ный код:  {frm.c}0x{ck.code_decimal:X}{frm.c}')
+    return '\n'.join(text)
 
 def template_engine_element(el):
     """template engine for elements"""
