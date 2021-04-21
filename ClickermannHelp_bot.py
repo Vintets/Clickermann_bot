@@ -403,6 +403,22 @@ def sending_messages_at_server_restart():
     time.sleep(1)
 
 
+def wait(seconds):
+    seconds_int = int(seconds)
+    seconds_rest = seconds - seconds_int
+    for s in range(seconds_int, 0, -1):
+        cp.cprint2(f'14_\rДо перезапуска ^5_{s} ^14_сек.')
+        time.sleep(1)
+    cp.cprint('14_\rДо перезапуска ^5_0 ^14_сек.')
+    time.sleep(seconds_rest)
+
+
+def notification_restart_bot(seconds=3):
+    wait(seconds)
+    cp.cprint('13Перезапуск бота…')
+    sending_messages_at_server_restart()
+
+
 def main():
     bot.polling(none_stop=True, interval=2)
 
@@ -437,8 +453,7 @@ if __name__ == '__main__':
                 os._exit(0)
         except Exception as ex:
             print(time.strftime('%Y.%m.%d %H:%M:%S', time.localtime(time.time())), ex)
-            cp.cprint('13Перезапуск бота…')
-            sending_messages_at_server_restart()
+            notification_restart_bot()
             raise ex
             break
 
