@@ -1039,8 +1039,8 @@ DATA_ELEMENTS.extend([
                     '$arr - массив'
                     ),
          example=(
-                r'TFREADARR("C:\out.txt", $arr)\n'
-                r'LOGWRITE($arr[0])\n'
+                'TFREADARR("C:\\out.txt", $arr)\n'
+                'LOGWRITE($arr[0])\n'
                 'LOGWRITE($arr[1])'
                 ),
          # notes='',
@@ -1172,8 +1172,8 @@ DATA_ELEMENTS.extend([
                     'isfile - необязательный параметр; признак файла'
                     ),
          example=(
-                r'FCREATE("C:\mypath")\n'
-                r'FCREATE("C:\mypath\hello.txt", 1)'
+                'FCREATE("C:\\mypath")\n'
+                'FCREATE("C:\\mypath\\hello.txt", 1)'
                 ),
          notes='Если параметр isfile не задан, то инструкция создаст каталог, в противном случае будет создан пустой файл.',
          keywords='fcreate, фкриэйт, фкреатэ, создать каталог по указанному пути, создать папку по указанному пути, создать директорию по указанному пути, создать файл на диске по указанному пути, создать пустой файл на диске по указанному пути',
@@ -1193,13 +1193,13 @@ DATA_ELEMENTS.extend([
                     ),
          example=(
                 '// Копирование каталога\n'
-                r'FCOPY("C:\mypath", "C:\mypath2")\n'
+                'FCOPY("C:\\mypath", "C:\\mypath2")\n'
                 '\n'
                 '// Копирование файла\n'
-                r'FCOPY("C:\mypath\hello.txt", "C:\mypath2\hello.txt")\n'
+                'FCOPY("C:\\mypath\\hello.txt", "C:\\mypath2\\hello.txt")\n'
                 '\n'
                 '// Копирование файла с новым именем\n'
-                r'FCOPY("C:\mypath\hello.txt", "C:\mypath2\goodbye.txt")'
+                'FCOPY("C:\\mypath\\hello.txt", "C:\\mypath2\\goodbye.txt")'
                 ),
          notes='Каталоги копируются со всем содержимым. В случае совпадения имен файлов, они будут перезаписаны. При копирования объекта ему можно задать другое имя.',
          keywords='fcopy, фкопи, копировать каталог по указанному пути, копировать файл по указанному пути, копировать каталог на диске, копировать файл на диске',
@@ -1216,7 +1216,7 @@ DATA_ELEMENTS.extend([
          parameters=('path - объект для удаления'),
          example=(
                 '// Удаление каталога\n'
-                r'FDELETE("C:\mypath2")'
+                'FDELETE("C:\\mypath2")'
                 ),
          notes='Каталог будет удален вне зависимости от своего содержимого.',
          keywords='fdelete, фделит, фделитэ, удалить каталог по указанному пути, удалить папку по указанному пути, удалить директорию по указанному пути, удалить файл на диске по указанному пути, удалить файл с диска по указанному пути',
@@ -1233,7 +1233,7 @@ DATA_ELEMENTS.extend([
          parameters=('path - путь к объекту'),
          example=(
                 '// Проверка наличия каталога\n'
-                r'IF(FExists("C:\mypath2"))\n'
+                'IF(FExists("C:\\mypath2"))\n'
                 '   LOGWRITE("exists")\n'
                 'ELSE\n'
                 '   LOGWRITE("nope")\n'
@@ -1254,11 +1254,11 @@ DATA_ELEMENTS.extend([
          parameters=('path - путь к файлу'),
          example=(
                 '// Получение списка файлов\n'
-                r'GetFileList($arr, "C:\*.*")\n'
+                'GetFileList($arr, "C:\\*.*")\n'
                 '\n'
                 '// Вывод файла и его размера\n'
                 'FOR($i=0, $i < arrsize($arr))\n'
-                '   $fullname = STRCONCAT("C:\", $arr[$i])\n'
+                '   $fullname = STRCONCAT("C:\\", $arr[$i])\n'
                 '   LOGWRITE($arr[$i], " : ", FSIZE($fullname), " bytes")\n'
                 'END_CYC'
                 ),
@@ -1284,7 +1284,7 @@ DATA_ELEMENTS.extend([
                 '$str = ""\n'
                 '\n'
                 '// Считывание из exe файла 39 байт начиная с 79\n'
-                r'FREADDATA("C:\Windows\notepad.exe", $var, 78, 39)\n'
+                'FREADDATA("C:\\Windows\\notepad.exe", $var, 78, 39)\n'
                 '\n'
                 '// Перевод массива байт в строку символов\n'
                 'FOR($i=0, $i < 39)\n'
@@ -1342,7 +1342,7 @@ DATA_ELEMENTS.extend([
                     ),
          example=(
                 '// пример1 вывод всех файлов из C:\n'
-                r'GETFILELIST($arr, "C:\*.*")\n'
+                'GETFILELIST($arr, "C:\\*.*")\n'
                 'FOR($i=0, $i < ARRSIZE($arr))\n'
                 '   LOGWRITE($arr[$i])\n'
                 'END_CYC\n'
@@ -1350,7 +1350,7 @@ DATA_ELEMENTS.extend([
                 'HALT\n'
                 '\n'
                 '// пример2 вывод файлов sys из C:\n'
-                r'GETFILELIST($arr, "C:\*.sys")\n'
+                'GETFILELIST($arr, "C:\\*.sys")\n'
                 'FOR($i=0, $i < ARRSIZE($arr))\n'
                 '   LOGWRITE($arr[$i])\n'
                 'END_CYC\n'
@@ -1375,7 +1375,7 @@ DATA_ELEMENTS.extend([
                     ),
          example=(
                 '// вывод всех каталогов на C:\n'
-                r'GETDIRLIST($arr, "C:\*")\n'
+                'GETDIRLIST($arr, "C:\\*")\n'
                 '\n'
                 'FOR($i=0, $i < ARRSIZE($arr))\n'
                 '   LOGWRITE($arr[$i])\n'
