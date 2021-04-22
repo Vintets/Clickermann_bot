@@ -34,7 +34,7 @@ class Formatting:
     # eh6: str
 
 
-if PARSE_MODE == 'marcdown':
+if PARSE_MODE == 'MARKDOWN':
     frm = Formatting(
                     b='*',
                     i='_',

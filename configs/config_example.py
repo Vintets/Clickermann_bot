@@ -6,7 +6,7 @@ DBNAME = 'cm_bot'
 IDADMIN = '00000000'
 
 ECHO_SQL = False
-PARSE_MODE = 'marcdown'
+PARSE_MODE = 'MARKDOWN'
 
 '''
 db mysql
