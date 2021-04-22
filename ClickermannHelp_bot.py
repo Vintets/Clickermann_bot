@@ -101,7 +101,7 @@ def process_search_command(message: types.Message):
 
 @bot.message_handler(content_types=['sticker'])
 def get_sticker_id(message: types.Message):
-    print(message)
+    print(f'sticker id: {message}')
 
 
 @bot.message_handler(commands=['cm_help'])
@@ -124,8 +124,24 @@ def get_text_messages(message: types.Message):
             reply_to(message, msg_const.MSG_NOT_UNDERSTAND)
 
 
+'''
+@bot.message_handler(func=lambda message: message.document.mime_type == 'text/plain',
+                     content_types=['document'])
+def unknown_message(message: types.Message):
+    """If the message is not recognized"""
+
+    reply_to(message, 'Нераспознанное сообщение')
+
+
+@bot.message_handler(func=lambda message: True, content_types=['audio', 'photo', 'voice', 'video', 'document', 'text', 'location', 'contact', 'sticker'])
+def default_command(message):
+    bot.send_message(message.chat.id, "This is the default command handler.")
+'''
+
+
+'''
 def cm_help_inline(message: types.Message):
-    '''Вариант меню с кнопками Inline'''
+    """Вариант меню с кнопками Inline"""
 
     # Готовим кнопки
     keyboard_main = types.InlineKeyboardMarkup()
@@ -135,6 +151,7 @@ def cm_help_inline(message: types.Message):
 
     msg = f'{msg_const.MSG_CM_HELP_MAIN1}\n{msg_const.MSG_CM_HELP_MAIN2}'
     send_message(message.chat.id, text=msg, reply_markup=keyboard_main)
+'''
 
 
 def cm_help(message: types.Message):
@@ -368,11 +385,6 @@ def callback_worker(call):
         is_partition_processing(call.message.chat.id, parent_name)
 
 
-@bot.message_handler(func=lambda commands: True)
-def unknown_message(message: types.Message):
-    """If the message is not recognized"""
-
-    reply_to(message, msg_const.MSG_NOT_UNDERSTAND)
 
 
 def sending_messages_at_server_start():
