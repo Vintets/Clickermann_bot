@@ -127,7 +127,7 @@ def get_text_messages(message: types.Message):
 
 @bot.inline_handler(func=lambda query: len(query.query) > 1)
 @logging_user_inline
-def inline_query_text(query):
+def inline_query_text(query: types.InlineQuery):
     inline_query_result = inline_search_elements(query.query)
     if inline_query_result:
         answer_inline_query(query.id, inline_query_result)
