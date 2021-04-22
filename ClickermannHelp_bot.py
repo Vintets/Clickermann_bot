@@ -8,18 +8,19 @@ from itertools import chain
 from telebot import types
 from cm_tbot import bot
 from cm_database import db
-from cm_sender import send_message, reply_to  # , indicator_chat_action
+from cm_sender import send_message, reply_to, answer_inline_query  # , indicator_chat_action
 import accessory.colorprint as cp
 import accessory.clear_consol as cc
 import accessory.authorship as auth_sh
 from accessory.safe_markdown import safe_markdown_symbol
 import configs.msg_const as msg_const
 from configs.formatting import frm
+from configs.config import PARSE_MODE
 # from configs.config import IDADMIN
-from cm_logging2db import logging_user, logging_user_single
+from cm_logging2db import logging_user, logging_user_inline, logging_user_single
 
 
-__version__ = '0.2.2'
+__version__ = '0.3.0'
 
 
 def keyboard_main_comands():
@@ -122,6 +123,14 @@ def get_text_messages(message: types.Message):
         text_ok = processing_text_types(message)
         if not text_ok:
             reply_to(message, msg_const.MSG_NOT_UNDERSTAND)
+
+
+@bot.inline_handler(func=lambda query: len(query.query) > 1)
+@logging_user_inline
+def inline_query_text(query):
+    inline_query_result = inline_search_elements(query.query)
+    if inline_query_result:
+        answer_inline_query(query.id, inline_query_result)
 
 
 '''
@@ -301,6 +310,39 @@ def is_search_elements(chat_id, text):
     return happily
 
 
+def inline_search_elements(text):
+    found_elements = db.get_elements_by_keywords(keywords=text.lower())
+    inline_query_result = []
+    if found_elements.count() > 0:
+        print(f'-‡INLINE‡- {text}')
+        for num, children_el in enumerate(found_elements):
+            cp.cprint(f'14_найдено: {children_el}')
+            child_name = children_el.name
+            try:
+                isupper = getattr(children_el, 'name_isupper')
+            except AttributeError:
+                isupper = 0
+            if isupper:
+                child_name = child_name.upper()
+
+            description = children_el.description
+            if len(description) > 70:
+                description = f'{children_el.description[:70]}…'
+
+            r = types.InlineQueryResultArticle(
+                    id=num + 1,
+                    title=child_name,
+                    description=description,
+                    input_message_content=types.InputTextMessageContent(
+                                        message_text=template_engine_element(children_el),
+                                        parse_mode=PARSE_MODE
+                                        ),
+                    # thumb_url='http://...', thumb_width=48, thumb_height=48
+                    )
+            inline_query_result.append(r)
+    return inline_query_result
+
+
 def is_code_processing(chat_id, text):
     """output code_key"""
 
@@ -383,8 +425,6 @@ def callback_worker(call):
         # print(f'parent:  id = {parent_id},  name={parent_name}')
         logging_user_single(call.message, parent_name)
         is_partition_processing(call.message.chat.id, parent_name)
-
-
 
 
 def sending_messages_at_server_start():

@@ -20,3 +20,10 @@ def indicator_chat_action(message: types.Message):
     """индикатор ввода текста"""
 
     bot.send_chat_action(message.chat.id, 'typing')
+
+
+def answer_inline_query(query_id, inline_query_result):
+    """Ответы инлайн режима"""
+
+    bot.answer_inline_query(query_id, inline_query_result)
+    time.sleep(0.9)

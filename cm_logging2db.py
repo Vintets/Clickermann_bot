@@ -25,6 +25,22 @@ def logging_user(handler):
     return wrapper_logging_user
 
 
+def logging_user_inline(handler):
+    """Логирование пользователей по инлайн-запросам"""
+
+    def wrapper_logging_user_inline(query: types.InlineQuery):
+        adding_or_updating_user_information_in_db(query)
+        user = db.get_user_by_user_id(query.from_user.id)
+        # username = str(query.from_user.first_name)
+        request_ = dict(
+                        user_id=user.id,
+                        request=f'-INLINE-{query.query}',
+                        )
+        db.request2log(request_)
+        handler(query)
+    return wrapper_logging_user_inline
+
+
 def logging_user_single(message: types.Message, text: str):
     """Логирование нажатий на InlineKeyboard кнопки пользователями"""
 
