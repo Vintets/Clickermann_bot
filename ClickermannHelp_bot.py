@@ -15,7 +15,7 @@ import accessory.authorship as auth_sh
 from accessory.safe_markdown import safe_markdown_symbol
 import configs.msg_const as msg_const
 from configs.formatting import frm
-from configs.config import PARSE_MODE
+from configs.config import PARSE_MODE, THUMB_URL
 # from configs.config import IDADMIN
 from cm_logging2db import logging_user, logging_user_inline, logging_user_single
 
@@ -337,7 +337,9 @@ def inline_search_elements(text):
                                         message_text=template_engine_element(children_el),
                                         parse_mode=PARSE_MODE
                                         ),
-                    # thumb_url='http://...', thumb_width=48, thumb_height=48
+                    thumb_url=THUMB_URL,
+                    thumb_width=48,
+                    thumb_height=48
                     )
             inline_query_result.append(r)
     return inline_query_result

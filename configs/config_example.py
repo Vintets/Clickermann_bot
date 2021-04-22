@@ -8,6 +8,8 @@ IDADMIN = '00000000'
 ECHO_SQL = False
 PARSE_MODE = 'MARKDOWN'
 
+THUMB_URL = 'https://i.ibb.co/dpWYP66/Clickermann-v4-MAINICON.jpg'
+
 '''
 db mysql
 engine = create_engine(f'mysql+mysqlconnector://user:pwd@localhost/{DBNAME}', echo = True)
