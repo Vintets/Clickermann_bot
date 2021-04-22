@@ -25,5 +25,6 @@ def indicator_chat_action(message: types.Message):
 def answer_inline_query(query_id, inline_query_result):
     """Ответы инлайн режима"""
 
-    bot.answer_inline_query(query_id, inline_query_result)
+    bot.answer_inline_query(query_id, inline_query_result, cache_time=3600, is_personal=False)
+    # defaultcache_time=300
     time.sleep(0.9)
