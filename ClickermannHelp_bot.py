@@ -1,5 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""
+    Help telegram bot for the Clickermann auto-clicker program
+    ~~~~~~~~~~~~~~
+
+    ClickermannHelp_bot.py Launch File
+
+    To create tables and/or filling tables partitions, elements - run cm_db_models.py
+
+    :copyright: (c) 2020 by Vint.
+    :license: GNU GPL
+"""
 
 import os
 import sys
@@ -23,7 +34,7 @@ from configs.config import PARSE_MODE, THUMB_URL
 from cm_logging2db import logging_user, logging_user_inline, logging_user_single
 
 
-__version__ = '0.3.0'
+__version__ = '0.3.1'
 
 
 def keyboard_main_comands():
