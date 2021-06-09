@@ -5,7 +5,10 @@ import os
 import sys
 import time
 from itertools import chain
+
+import pretty_errors  # noqa
 from telebot import types
+
 from cm_tbot import bot
 from cm_database import db
 from cm_sender import send_message, reply_to, answer_inline_query  # , indicator_chat_action
