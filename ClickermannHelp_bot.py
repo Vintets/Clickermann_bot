@@ -436,6 +436,7 @@ def sending_messages_at_server_start():
     """Sending messages at server start"""
 
     # ToDo sendin messages  <=30 requests per second
+    time.sleep(1)
     menu_remove = types.ReplyKeyboardRemove()
     bot.send_message(
                     '829838425',
@@ -466,8 +467,8 @@ def wait(seconds):
     for s in range(seconds_int, 0, -1):
         cp.cprint2(f'14_\rДо перезапуска ^5_{s} ^14_сек.')
         time.sleep(1)
-    cp.cprint('14_\rДо перезапуска ^5_0 ^14_сек.')
     time.sleep(seconds_rest)
+    cp.cprint('14_\rДо перезапуска ^5_0 ^14_сек.')
 
 
 def notification_restart_bot(seconds=3):
@@ -513,10 +514,12 @@ if __name__ == '__main__':
             except SystemExit:
                 os._exit(0)
         except Exception as ex:
+            print(ex)
             print(time.strftime('%Y.%m.%d %H:%M:%S', time.localtime(time.time())), ex)
-            notification_restart_bot()
-            raise ex
-            break
+            notification_restart_bot(seconds=7)
+            # raise ex
+            # break
+            pass
 
 
 # --------------------------------------------------------------------------------------------------
