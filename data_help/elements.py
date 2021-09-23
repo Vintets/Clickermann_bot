@@ -1763,15 +1763,18 @@ DATA_ELEMENTS.extend([
          name_isupper=1,
          parent_id=9,
          description=('Помещает список зажатых в момент вызова клавиш в массив.'),
-         syntax='SETKBLAYOUT(hwnd, lang)',
+         syntax='GETKEYSDOWN($kvar)',
          parameters=(
-                    'hwnd - hwnd окна\n'
-                    'lang - идентификатор языка ввода'
+                    '$kvar - входной массив'
                     ),
          example=(
-                '$hwnd = WNDFIND("Блокнот")\n'
-                '// английский\n'
-                'SETKBLAYOUT($hwnd, 1033)'
+                'LOGCLEAR\n'
+                'GETKEYSDOWN($kvar)\n'
+                '\n'
+                'FOR($i=0, $i < arrsize($kvar))\n'
+                '    PRINT($kvar[$i])\n'
+                'END_CYC\n'
+                'waitms(100)'
                 ),
          # notes='',
          keywords='getkeysdown, геткейсдовн, получить список нажатых клавиш клавиатуры, получить список зажатых клавиш клавиатуры, все зажатые клавиши клавиатуры, все нажатые клавиши клавиатуры',
