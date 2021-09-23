@@ -6,7 +6,7 @@
 
     ClickermannHelp_bot.py Launch File
 
-    To create tables and/or filling tables partitions, elements - run cm_db_models.py
+    To create tables and/or filling tables partitions, elements - run cm_database.py
 
     :copyright: (c) 2020 by Vint.
     :license: GNU GPL
