@@ -34,7 +34,7 @@ from configs.config import PARSE_MODE, THUMB_URL
 from cm_logging2db import logging_user, logging_user_inline, logging_user_single
 
 
-__version__ = '0.3.2'
+__version__ = '0.3.3'
 
 
 def keyboard_main_comands():
@@ -510,7 +510,7 @@ if __name__ == '__main__':
     __author__ = 'master by Vint'
     __title__ = '--- Clickermann_bot ---'
     __copyright__ = 'Copyright 2020 (c)  bitbucket.org/Vintets'
-    auth_sh.authorship(__author__, __title__, __version__, __copyright__, width=_width)
+    auth_sh.authorship(__author__, __title__, __version__, __copyright__)
 
     cp.cprint('9Clickermann_bot запущен!')
     sending_messages_at_server_start()
