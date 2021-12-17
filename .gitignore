@@ -12,7 +12,7 @@ Thumbs.db
 cm_bot.db
 
 # Project dirs
-*/__pycache__/
+**/__pycache__/
 /zClickermann_bot_development/
 
 # Other files
