@@ -118,7 +118,7 @@ class DB():
         self.session.commit()
 
     def update_user(self, us):
-        self.session.query(Users).filter(Users.tm_user_id == us['tm_user_id']).update(us, synchronize_session=False)
+        self.session.query(Users).filter(Users.tm_user_id == us['tm_user_id']).update(us, synchronize_session='fetch')
         self.session.commit()
 
     def request2log(self, request_):
