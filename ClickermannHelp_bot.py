@@ -455,6 +455,11 @@ def sending_messages_at_server_start():
                     disable_notification=True,
                     reply_markup=menu_remove
                     )
+    # bot.send_message(
+                    # '1018697861',
+                    # '"Ля, очухался" - прихожу на работу, а он лежит падла.',
+                    # disable_notification=True
+                    # )
     time.sleep(0.04)
     time.sleep(1)
 
