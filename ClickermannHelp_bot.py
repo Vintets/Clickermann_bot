@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+
 """
     Help telegram bot for the Clickermann auto-clicker program
     ~~~~~~~~~~~~~~

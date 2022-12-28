@@ -34,7 +34,7 @@ MSG_INFO = (
             '\n'
             'Creator - @Vint\\_CM\n'
             'Пожелания и комментарии по работе бота отправлять на\n'
-            'cm\\_bot@vintets.ru'
+            'admin@vintets.ru'
             )
 
 MSG_NOT_UNDERSTAND = ('Я тебя не понимаю\n'
