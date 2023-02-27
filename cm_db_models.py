@@ -7,6 +7,7 @@ from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import text
 from sqlalchemy.sql.functions import current_timestamp
+from sqlalchemy.orm import relationship
 from sqlalchemy_utils import database_exists, create_database
 # from sqlalchemy.dialects.mysql import INTEGER, DATETIME
 # from sqlalchemy.dialects.mysql import MEDIUMTEXT
@@ -79,6 +80,9 @@ class Users(BaseModel):
                            onupdate=current_timestamp()
                            )
 
+    # requests = relationship('LogRequests', back_populates='user', cascade='all, delete-orphan')
+    requests = relationship('LogRequests', back_populates='user')
+
     # for MySQL
     # datemodified = Column(DateTime, server_default=text('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'))
     # datemodified = Column(DateTime(timezone=True), nullable=False, server_onupdate=text('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'))
@@ -89,9 +93,11 @@ class Users(BaseModel):
 
 class LogRequests(BaseModel):
     __tablename__ = 'log_requests'
-    user_id = Column(Integer, ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
+    user_id = Column(Integer, ForeignKey('users.id', ondelete='SET NULL'))  # , ondelete='CASCADE', nullable=False
     request = Column(String(128), nullable=False)
     rtime = Column(DateTime, nullable=False, server_default=text('CURRENT_TIMESTAMP'))  # или default=current_timestamp()
+
+    user = relationship('Users', back_populates='requests')
 
 
 class CodeKeys(BaseModel):

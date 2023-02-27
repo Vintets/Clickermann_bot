@@ -35,7 +35,7 @@ from configs.config import PARSE_MODE, THUMB_URL
 from cm_logging2db import logging_user, logging_user_inline, logging_user_single
 
 
-__version__ = '0.3.3'
+__version__ = '0.3.4'
 
 
 def keyboard_main_comands():
