@@ -29,6 +29,7 @@ class DB():
         Session = sessionmaker(bind=DB.engine)
         # Создаём объект сессии из вышесозданной фабрики Session
         session = Session()
+        # session.expire_on_commit = False
         return session
 
     def close_session(self):
