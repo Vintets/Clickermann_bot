@@ -26,7 +26,7 @@ from cm_tbot import bot
 from cm_database import db
 from cm_sender import send_message, reply_to, answer_inline_query  # , indicator_chat_action
 import accessory.colorprint as cp
-import accessory.clear_consol as cc
+import accessory.clear_console as cc
 import accessory.authorship as auth_sh
 from accessory.safe_markdown import safe_markdown_symbol
 import configs.msg_const as msg_const
@@ -512,7 +512,7 @@ if __name__ == '__main__':
     cur_script = __file__
     PATH_SCRIPT = Path(__file__).parent
     os.chdir(PATH_SCRIPT)
-    cc.clearConsol()
+    cc.clear_console()
 
     __author__ = 'master by Vint'
     __title__ = '--- Clickermann_bot ---'

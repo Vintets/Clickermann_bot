@@ -2,8 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import time
-from telebot import types
+
 from cm_tbot import bot
+
+from telebot import types
 
 
 def send_message(chat_id, text, **kwargs):

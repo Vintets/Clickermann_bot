@@ -1,17 +1,15 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 from dataclasses import dataclass
+
 from configs.config import PARSE_MODE
 
 
 @dataclass
 class Formatting:
-    b: str
-    i: str
-    u: str
-    s: str
-    c: str
+    b: str  # noqa: VNE001
+    i: str  # noqa: VNE001
+    u: str  # noqa: VNE001
+    s: str  # noqa: VNE001
+    c: str  # noqa: VNE001
     cm: str
     # bold: str
     # ebold: str

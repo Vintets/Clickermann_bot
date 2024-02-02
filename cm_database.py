@@ -14,7 +14,7 @@ from data_help.partitions import DATA_PARTITIONS
 from data_help.elements import DATA_ELEMENTS
 from data_help.code_keys import DATA_CODE_KEYS
 import accessory.colorprint as cp
-import accessory.clear_consol as cc
+import accessory.clear_console as cc
 import accessory.authorship as auth_sh
 
 
@@ -142,7 +142,7 @@ if __name__ == '__main__':
     cur_script = __file__
     PATH_SCRIPT = os.path.abspath(os.path.dirname(cur_script))
     os.chdir(PATH_SCRIPT)
-    cc.clearConsol()
+    cc.clear_console()
 
     __author__ = 'master by Vint'
     __title__ = '--- Clickermann_bot database ---'

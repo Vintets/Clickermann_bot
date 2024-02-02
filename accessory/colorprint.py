@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function
+# from __future__ import print_function
 import os
-import sys
 import re
+import sys
 PLATFORM = sys.platform
 if PLATFORM == 'win32':
     from ctypes import windll
@@ -14,10 +14,7 @@ else:
     pass
 
 
-PY34 = sys.version_info >= (3, 4, 0)
-
-
-def _pr(cstr):
+def _pr(cstr, force_linux=False):
     clst = cstr.split('^')
     color = 0x0001
     for cstr in clst:
@@ -25,70 +22,66 @@ def _pr(cstr):
         if dglen:
             color = int(cstr[:dglen])
         text = cstr[dglen:]
-        text = text.replace(u'\u0456', u'i')
+        text = text.replace('\u0456', u'i')
         if text[:1] == '_':
             text = text[1:]
-        text = _set_color(color) + text
-        if (PLATFORM == 'win32') and (not PY34):
-            text = text.encode('cp866', 'ignore')
+        text = _set_color(color, force_linux) + text
         # sys.stdout.write(text)
-        print(text, end='')
+        print(text, end='')  # noqa: T201
         sys.stdout.flush()
 
 
-def _restore_colors(e=''):
-    # sys.stdout.write(_set_color(20) + u'')
-    print(_set_color(20) + u'', end=e)
+def _restore_colors(end=''):
+    # sys.stdout.write(_set_color(20) + '')
+    print(_set_color(20) + '', end=end)  # noqa: T201
     sys.stdout.flush()
 
 
-def cprint(cstr):
-    _pr(cstr)
-    _restore_colors(e=u'\n')
-    # print('')
+def cprint(cstr, end='\n', force_linux=False):
+    _pr(cstr, force_linux=force_linux)
+    _restore_colors(end=end)
 
 
-def cprint2(cstr):
-    _pr(cstr)
-    _restore_colors()
-    # print('', end='')
+# def cprint2(cstr, force_linux=False):
+    # _pr(cstr, force_linux=force_linux)
+    # _restore_colors()
 
 
 def colors_win():
     return {
-            0 : u'чёрный',  # noqa
-            1 : u'синий',  # noqa
-            2 : u'зелёный',  # noqa
-            3 : u'голубой',  # noqa
-            4 : u'красный',  # noqa
-            5 : u'фиолетовый',  # noqa
-            6 : u'жёлтый',  # noqa
-            7 : u'серый',  # noqa
+            0 : 'чёрный',  # noqa: E203
+            1 : 'синий',  # noqa: E203
+            2 : 'зелёный',  # noqa: E203
+            3 : 'голубой',  # noqa: E203
+            4 : 'красный',  # noqa: E203
+            5 : 'фиолетовый',  # noqa: E203
+            6 : 'жёлтый',  # noqa: E203
+            7 : 'серый',  # noqa: E203
 
-            8 : u'тёмно-серый',  # noqa
-            9 : u'светло-синий',  # noqa
-            10: u'светло-зелёный',
-            11: u'светло-голубой',
-            12: u'светло-красный',
-            13: u'светло-фиолетовый (пурпурный)',
-            14: u'светло-жёлтый',
-            15: u'белый',
+            8 : 'тёмно-серый',  # noqa: E203
+            9 : 'светло-синий',  # noqa: E203
+            10: 'светло-зелёный',
+            11: 'светло-голубой',
+            12: 'светло-красный',
+            13: 'светло-фиолетовый (пурпурный)',
+            14: 'светло-жёлтый',
+            15: 'белый',
             }
 
 
 def colors_win2linux():
     return {
-            0 : 30,  # noqa
-            1 : 34,  # noqa
-            2 : 32,  # noqa
-            3 : 36,  # noqa
-            4 : 31,  # noqa
-            5 : 35,  # noqa
-            6 : 33,  # noqa
-            7 : 37,  # noqa
+            0 : 30,  # noqa: E203
+            1 : 34,  # noqa: E203
+            2 : 32,  # noqa: E203
+            3 : 36,  # noqa: E203
+            4 : 31,  # noqa: E203
+            5 : 35,  # noqa: E203
+            6 : 33,  # noqa: E203
+            7 : 37,  # noqa: E203
 
-            8 : 90,  # noqa
-            9 : 94,  # noqa
+            8 : 90,  # noqa: E203
+            9 : 94,  # noqa: E203
             10: 92,
             11: 96,
             12: 91,
@@ -98,25 +91,25 @@ def colors_win2linux():
             }
 
 
-def _dafault_color():
+def _dafault_color(force_linux):
     # цвет по умолчанию: 20
     # для windows это 1, для linux - сброс
     def_color = 1
-    if PLATFORM == 'win32':
+    if ('linux' in PLATFORM) or force_linux:
+        def_color = 15
+    elif PLATFORM == 'win32':
         def_color = 1
-    elif 'linux' in PLATFORM:
-        def_color = 0
     return def_color
 
 
-def _set_color(color):
+def _set_color(color, force_linux=False):
     if color == 20:
-        color = _dafault_color()
-    prefix_color = u''
-    if PLATFORM == 'win32':
+        color = _dafault_color(force_linux)
+    prefix_color = ''
+    if ('linux' in PLATFORM) or force_linux:
+        prefix_color = '\033[%(col_linux)sm' % {'col_linux': colors_win2linux()[color]}
+    elif PLATFORM == 'win32':
         _SetConsoleTextAttribute(_stdout_handle, color | 0x0070)  # 78
-    elif 'linux' in PLATFORM:
-        prefix_color = u'\033[%(col_linux)sm' % {'col_linux': colors_win2linux()[color]}
     return prefix_color
 
 
@@ -129,19 +122,16 @@ if __name__ == '__main__':
                 'color': col,
                 'name': colors_win()[col]
                 }
-        cprint(u'%(color)dЦвет %(color)d\t %(name)s' % color_win)
+        cprint('%(color)dЦвет %(color)d\t %(name)s' % color_win)
 
-    print(u'\nПримеры')
-    cprint(u'20######### Идем к другу ^14_%s ^8_%d/%d ^20_на ^3_%s ^20_#########' % (12345, 5, 3000, 'main'))
-    cprint(u'13Завершили обход всех ^12_НОВЫХ ^13_друзей')
+    print('\nПримеры')  # noqa: T201
+    cprint('20######### Идем к другу ^14_%s ^8_%d/%d ^20_на ^3_%s ^20_#########' % (12345, 5, 3000, 'main'))
+    cprint('13Завершили обход всех ^12_НОВЫХ ^13_друзей')
 
-    cprint(u'Обрабатываем файл ^5_XXX ^13_YYY')
-    cprint2(u'Обрабатываем файл ^5_XXX ^13_YYY ^14_ZZZ')
-    cprint(u'4 конец')
+    cprint('Обрабатываем файл ^5_XXX ^13_YYY')
+    cprint('Обрабатываем файл ^5_XXX ^13_YYY ^14_ZZZ', end='')
+    cprint('4 конец')
 
-    if PY34:
-        input(u'\n---------------   END   ---------------')
-    else:
-        raw_input(u'\n---------------   END   ---------------')  # noqa
+    # input('\n---------------   END   ---------------')
 
 # ==================================================================================================
