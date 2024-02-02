@@ -12,6 +12,7 @@ ignore =
     # E501 line too long (> 79 characters)
     E501,
     # W504 line break after binary operator
-    W504
+    W504,
+    # too few type annotations (0%)
+    TAE001
 exclude = .git,__pycache__,env,venv,zClickermann_bot_development,old,build,dist,*.db
-
