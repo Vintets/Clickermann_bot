@@ -14,6 +14,7 @@
 """
 
 import os
+from pathlib import Path
 import sys
 import time
 from itertools import chain
@@ -509,7 +510,7 @@ if __name__ == '__main__':
         # ubuntu terminal
         os.system('setterm -term linux -back $blue -fore white -clear')
     cur_script = __file__
-    PATH_SCRIPT = os.path.abspath(os.path.dirname(cur_script))
+    PATH_SCRIPT = Path(__file__).parent
     os.chdir(PATH_SCRIPT)
     cc.clearConsol()
 

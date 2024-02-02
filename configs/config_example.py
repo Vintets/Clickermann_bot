@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
+from pathlib import Path
 
 CLICKERMANN_HELP_BOT_TOKEN = 'token'
 DBNAME = 'cm_bot'
@@ -27,5 +26,5 @@ DATABASE = {
 # engine = create_engine(f'sqlite:///{DBNAME}.db', echo = True)
 DATABASE = {
     'drivername': 'sqlite',
-    'database': f'{DBNAME}.db'
+    'database': str(Path(__file__).parent / f'{DBNAME}.db')
 }
