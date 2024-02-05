@@ -1,5 +1,12 @@
 [flake8]
 max-line-length = 100
+max-complexity = 7
+import-order-style = google
+
+# max_function_length = 25
+max_parameters_amount = 7
+# max_returns_amount = 5
+
 ignore =
     # E123 closing bracket does not match indentation of opening bracket's
     E123,
@@ -13,6 +20,12 @@ ignore =
     E501,
     # W504 line break after binary operator
     W504,
-    # too few type annotations (0%)
-    TAE001
+    # F541 f-string is missing placeholders
+    F541,
+    # too few type annotations
+    TAE001,
+    # module level import not at top of file
+    E402
+    # print found
+    # T201
 exclude = .git,__pycache__,env,venv,zClickermann_bot_development,old,build,dist,*.db

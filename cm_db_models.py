@@ -1,19 +1,19 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from configs.config import DATABASE
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, Text
 from sqlalchemy import create_engine  # MetaData
 from sqlalchemy.engine.url import URL
-from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
 from sqlalchemy.sql import text
 from sqlalchemy.sql.functions import current_timestamp
-from sqlalchemy.orm import relationship
-from sqlalchemy_utils import database_exists, create_database
+from sqlalchemy_utils import create_database, database_exists
 # from sqlalchemy.dialects.mysql import INTEGER, DATETIME
 # from sqlalchemy.dialects.mysql import MEDIUMTEXT
 # UnsignedInt = db.Integer()
 # UnsignedInt = UnsignedInt.with_variant(INTEGER(unsigned=True), 'mysql')
-from configs.config import DATABASE
 
 
 Base = declarative_base()
@@ -22,7 +22,7 @@ Base = declarative_base()
 class BaseModel(Base):
     __abstract__ = True
 
-    id = Column(Integer, nullable=False, unique=True, primary_key=True, autoincrement=True)
+    id = Column(Integer, nullable=False, unique=True, primary_key=True, autoincrement=True)  # noqa: A003, VNE003
     # from sqlalchemy import TIMESTAMP
     # created_at = Column(TIMESTAMP, nullable=False)
     # updated_at = Column(TIMESTAMP, nullable=False)
@@ -116,7 +116,7 @@ def create_db(engine):
 
 
 def create_db_tables(engine):
-    '''создает таблиц в БД'''
+    """создает таблиц в БД"""
 
     create_db(engine)
     Base.metadata.create_all(engine)
@@ -137,7 +137,7 @@ if __name__ == '__main__':
 # server_default =
 
 
-'''
+"""
 from sqlalchemy import Table
 opt_managers_bind = db.Table('opt_managers_bind',
             db.Column('opt_user_id', INTEGER(unsigned=True), db.ForeignKey('opt_users.id'), nullable=False),
@@ -150,4 +150,4 @@ post_tags = db.Table('post_tags',
             )
 
 tags = db.relationship('Tag', secondary=post_tags, backref=db.backref('posts', lazy='dynamic'))
-'''
+"""

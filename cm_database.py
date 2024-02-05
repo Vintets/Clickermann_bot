@@ -2,20 +2,22 @@
 # -*- coding: utf-8 -*-
 
 import os
+from pathlib import Path
 import sys
-from sqlalchemy import create_engine, and_, func
-from sqlalchemy.engine.url import URL
-from sqlalchemy.orm import sessionmaker
-from configs.config import DATABASE, ECHO_SQL
-from cm_db_models import Partitions, Elements, Users, LogRequests, CodeKeys, create_db_tables
-from sqlalchemy.exc import IntegrityError
-# from sqlalchemy_utils import database_exists
-from data_help.partitions import DATA_PARTITIONS
-from data_help.elements import DATA_ELEMENTS
-from data_help.code_keys import DATA_CODE_KEYS
-import accessory.colorprint as cp
-import accessory.clear_console as cc
+
 import accessory.authorship as auth_sh
+import accessory.clear_console as cc
+import accessory.colorprint as cp
+from cm_db_models import CodeKeys, create_db_tables, Elements, LogRequests, Partitions, Users
+from configs.config import DATABASE, ECHO_SQL
+from data_help.code_keys import DATA_CODE_KEYS
+from data_help.elements import DATA_ELEMENTS
+from data_help.partitions import DATA_PARTITIONS
+from sqlalchemy import and_, create_engine, func
+# from sqlalchemy_utils import database_exists
+from sqlalchemy.engine.url import URL
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import sessionmaker
 
 
 class DB():
@@ -25,10 +27,10 @@ class DB():
         self.session = self.create_session()
 
     def create_session(self):
-        # Создаём фабрику Session для создания экземпляров
-        Session = sessionmaker(bind=DB.engine)
-        # Создаём объект сессии из вышесозданной фабрики Session
-        session = Session()
+        # Создаём фабрику _session_fab для создания экземпляров
+        _session_fab = sessionmaker(bind=DB.engine)
+        # Создаём объект сессии из вышесозданной фабрики _session_fab
+        session = _session_fab()
         # session.expire_on_commit = False
         return session
 
@@ -103,9 +105,9 @@ class DB():
         return self.session.query(Elements).filter(
                             and_(Elements.keywords.like(f'%{keywords}%'), Elements.visible == visible))
 
-    def get_partition_by_id(self, id=0, visible=1):
+    def get_partition_by_id(self, _id=0, visible=1):
         return (self.session.query(Partitions).filter(
-                            and_(Partitions.id == id, Partitions.visible == visible)))[0]
+                            and_(Partitions.id == _id, Partitions.visible == visible)))[0]
 
     def get_code_key_by_alias(self, alias):
         alias = f',{alias.lower()},'
@@ -139,14 +141,12 @@ if __name__ == '__main__':
     if sys.platform == 'win32':
         os.system('color 71')
         # os.system('mode con cols=%d lines=%d' % (_width, _hight))
-    cur_script = __file__
-    PATH_SCRIPT = os.path.abspath(os.path.dirname(cur_script))
-    os.chdir(PATH_SCRIPT)
+    os.chdir(Path(__file__).parent)
     cc.clear_console()
 
     __author__ = 'master by Vint'
     __title__ = '--- Clickermann_bot database ---'
-    __version__ = '0.1.2'
+    __version__ = '0.1.3'
     __copyright__ = 'Copyright 2020 (c)  bitbucket.org/Vintets'
     auth_sh.authorship(__author__, __title__, __version__, __copyright__, width=_width)
 

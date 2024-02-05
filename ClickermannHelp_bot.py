@@ -13,30 +13,31 @@
     :license: GNU GPL
 """
 
+from itertools import chain
 import os
 from pathlib import Path
 import sys
 import time
-from itertools import chain
 
+os.chdir(Path(__file__).parent)
+
+import accessory.authorship as auth_sh
+import accessory.clear_console as cc
+import accessory.colorprint as cp
+from accessory.safe_markdown import safe_markdown_symbol
+from cm_database import db
+from cm_logging2db import logging_user, logging_user_inline, logging_user_single
+from cm_sender import answer_inline_query, reply_to, send_message  # , indicator_chat_action
+from cm_tbot import bot
+# from configs.config import IDADMIN
+from configs.config import PARSE_MODE, THUMB_URL
+from configs.formatting import frm
+import configs.msg_const as msg_const
 import pretty_errors  # noqa
 from telebot import types
 
-from cm_tbot import bot
-from cm_database import db
-from cm_sender import send_message, reply_to, answer_inline_query  # , indicator_chat_action
-import accessory.colorprint as cp
-import accessory.clear_console as cc
-import accessory.authorship as auth_sh
-from accessory.safe_markdown import safe_markdown_symbol
-import configs.msg_const as msg_const
-from configs.formatting import frm
-from configs.config import PARSE_MODE, THUMB_URL
-# from configs.config import IDADMIN
-from cm_logging2db import logging_user, logging_user_inline, logging_user_single
 
-
-__version__ = '0.3.4'
+__version__ = '0.3.5'
 
 
 def keyboard_main_comands():
@@ -51,6 +52,7 @@ def keyboard_main_comands():
 @bot.message_handler(commands=['start', 'Start', 'START'])
 @logging_user
 def process_start_command(message: types.Message):
+    # print('user name', str(message.from_user.first_name))
     menu_remove = types.ReplyKeyboardRemove()
     send_message(message.chat.id, msg_const.MSG_WELCOME, reply_markup=menu_remove)
 
@@ -118,7 +120,7 @@ def process_search_command(message: types.Message):
 
 @bot.message_handler(content_types=['sticker'])
 def get_sticker_id(message: types.Message):
-    print(f'sticker id: {message}')
+    print(f'sticker id: {message}')  # noqa: T201
 
 
 @bot.message_handler(commands=['cm_help'])
@@ -242,10 +244,7 @@ def is_partition_processing(chat_id, text):
         for children in chain(output_childrens, output_childrens_el):
             # print(children)
             child_name = children.name
-            try:
-                isupper = getattr(children, 'name_isupper')
-            except AttributeError:
-                isupper = 0
+            isupper = getattr(children, 'name_isupper', 0)
             if isupper:
                 child_name = child_name.upper()
             key = types.KeyboardButton(child_name)
@@ -305,10 +304,7 @@ def is_search_elements(chat_id, text):
         for children_el in found_elements:
             cp.cprint(f'14_найдено: {children_el}')
             child_name = children_el.name
-            try:
-                isupper = getattr(children_el, 'name_isupper')
-            except AttributeError:
-                isupper = 0
+            isupper = getattr(children_el, 'name_isupper', 0)
             if isupper:
                 child_name = child_name.upper()
             key = types.KeyboardButton(child_name)
@@ -330,14 +326,11 @@ def inline_search_elements(text):
     found_elements = db.get_elements_by_keywords(keywords=text.lower())
     inline_query_result = []
     if found_elements.count() > 0:
-        print(f'-‡INLINE‡- {text}')
+        print(f'-‡INLINE‡- {text}')  # noqa: T201
         for num, children_el in enumerate(found_elements):
             cp.cprint(f'14_найдено: {children_el}')
             child_name = children_el.name
-            try:
-                isupper = getattr(children_el, 'name_isupper')
-            except AttributeError:
-                isupper = 0
+            isupper = getattr(children_el, 'name_isupper', 0)
             if isupper:
                 child_name = child_name.upper()
 
@@ -345,7 +338,7 @@ def inline_search_elements(text):
             if len(description) > 70:
                 description = f'{children_el.description[:70]}…'
 
-            r = types.InlineQueryResultArticle(
+            resp = types.InlineQueryResultArticle(
                     id=num + 1,
                     title=child_name,
                     description=description,
@@ -357,7 +350,7 @@ def inline_search_elements(text):
                     thumb_width=48,
                     thumb_height=48
                     )
-            inline_query_result.append(r)
+            inline_query_result.append(resp)
     return inline_query_result
 
 
@@ -435,7 +428,7 @@ def assembly_version(el):
 
 @bot.callback_query_handler(func=lambda call: True)
 def callback_worker(call):
-    '''InlineKeyboard click handler'''
+    """InlineKeyboard click handler"""
 
     if call.data.startswith('return_partition'):
         parent_id = int(call.data[17:])
@@ -457,11 +450,13 @@ def sending_messages_at_server_start():
                     disable_notification=True,
                     reply_markup=menu_remove
                     )
-    # bot.send_message(
-                    # '1018697861',
-                    # '"Ля, очухался" - прихожу на работу, а он лежит падла.',
-                    # disable_notification=True
-                    # )
+    """
+    bot.send_message(
+                    '1018697861',
+                    '"Ля, очухался" - прихожу на работу, а он лежит падла.',
+                    disable_notification=True
+                    )
+    """
     time.sleep(0.04)
     time.sleep(1)
 
@@ -482,8 +477,8 @@ def sending_messages_at_server_restart():
 def wait(seconds):
     seconds_int = int(seconds)
     seconds_rest = seconds - seconds_int
-    for s in range(seconds_int, 0, -1):
-        cp.cprint2(f'14_\rДо перезапуска ^5_{s} ^14_сек.')
+    for sec in range(seconds_int, 0, -1):
+        cp.cprint(f'14_\rДо перезапуска ^5_{sec} ^14_сек.', end='')
         time.sleep(1)
     time.sleep(seconds_rest)
     cp.cprint('14_\rДо перезапуска ^5_0 ^14_сек.')
@@ -499,9 +494,9 @@ def main():
     bot.polling(none_stop=True, interval=2)
 
 
-if __name__ == '__main__':
-    _width = 100
-    _hight = 50
+def init_console():
+    # _width = 100
+    # _hight = 50
     if sys.platform == 'win32':
         os.system('color 71')
         # os.system('mode con cols=%d lines=%d' % (_width, _hight))
@@ -509,10 +504,11 @@ if __name__ == '__main__':
         os.system('setterm -background white -foreground white -store')
         # ubuntu terminal
         os.system('setterm -term linux -back $blue -fore white -clear')
-    cur_script = __file__
-    PATH_SCRIPT = Path(__file__).parent
-    os.chdir(PATH_SCRIPT)
     cc.clear_console()
+
+
+if __name__ == '__main__':  # noqa: C901
+    init_console()
 
     __author__ = 'master by Vint'
     __title__ = '--- Clickermann_bot ---'
@@ -532,8 +528,8 @@ if __name__ == '__main__':
             except SystemExit:
                 os._exit(0)
         except Exception as ex:
-            print(ex)
-            print(time.strftime('%Y.%m.%d %H:%M:%S', time.localtime(time.time())), ex)
+            print(ex)  # noqa: T201
+            print(time.strftime('%Y.%m.%d %H:%M:%S', time.localtime(time.time())), ex)  # noqa: T201
             notification_restart_bot(seconds=7)
             # raise ex
             # break

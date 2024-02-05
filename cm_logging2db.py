@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from telebot import types
+from accessory.safe_markdown import safe_markdown_symbol
 from cm_database import db
 from cm_sender import send_message
-from configs.formatting import frm
 from configs.config import IDADMIN
-from accessory.safe_markdown import safe_markdown_symbol
+from configs.formatting import frm
+from telebot import types
 
 
 def logging_user(handler):
@@ -64,7 +64,7 @@ def adding_or_updating_user_information_in_db(message: types.Message):
         )
     if user is None:
         db.add_user(us)
-        print(f"Add user: id={us['tm_user_id']}, username={us['username']}, first_name={us['first_name']}")
+        print(f"Add user: id={us['tm_user_id']}, username={us['username']}, first_name={us['first_name']}")  # noqa: T201
 
         # Оповещение Админу
         msg_to_admin = (
@@ -83,7 +83,7 @@ def adding_or_updating_user_information_in_db(message: types.Message):
             user.last_name != us['last_name']
             ):
         db.update_user(us)
-        print('Update user:', user)
+        print('Update user:', user)  # noqa: T201
         # запишем в лог что данные пользователя изменились
         msg = (
                 f"Пользователь {user.tm_user_id} сменил данные на "
