@@ -105,9 +105,9 @@ class DB():
         return self.session.query(Elements).filter(
                             and_(Elements.keywords.like(f'%{keywords}%'), Elements.visible == visible))
 
-    def get_partition_by_id(self, _id=0, visible=1):
+    def get_partition_by_id(self, id=0, visible=1):  # noqa: A002, VNE003
         return (self.session.query(Partitions).filter(
-                            and_(Partitions.id == _id, Partitions.visible == visible)))[0]
+                            and_(Partitions.id == id, Partitions.visible == visible)))[0]
 
     def get_code_key_by_alias(self, alias):
         alias = f',{alias.lower()},'
