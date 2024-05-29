@@ -21,7 +21,9 @@ from sqlalchemy.orm import sessionmaker
 
 
 class DB():
-    engine = create_engine(URL(**DATABASE), connect_args={'check_same_thread': False}, echo=ECHO_SQL)
+    engine = create_engine(URL(**DATABASE),
+                           connect_args={'check_same_thread': False},
+                           pool_recycle=3600, echo=ECHO_SQL)
 
     def __init__(self):
         self.session = self.create_session()
