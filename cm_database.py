@@ -43,6 +43,11 @@ class DB():
         create_db_tables(DB.engine)
 
     def filling_db(self):
+        self.filling_db_partition()
+        self.filling_db_element()
+        self.filling_db_code_keys()
+
+    def filling_db_partition(self):
         for partition in DATA_PARTITIONS:
             new_partition = Partitions(**partition)
             has_name = self.session.query(Partitions).filter(Partitions.name == partition['name'])
@@ -56,6 +61,7 @@ class DB():
             # self.session.rollback()
             cp.cprint('12Дубль уникальных значений разделов')
 
+    def filling_db_element(self):
         for element in DATA_ELEMENTS:
             new_element = Elements(**element)
             has_name = self.session.query(Elements).filter(Elements.name == element['name'])
@@ -69,6 +75,7 @@ class DB():
             # self.session.rollback()
             cp.cprint('12Дубль уникальных значений элементов')
 
+    def filling_db_code_keys(self):
         for code_keys in DATA_CODE_KEYS:
             new_element = CodeKeys(**code_keys)
             has_name = self.session.query(CodeKeys).filter(CodeKeys.name == code_keys['name'])
@@ -148,7 +155,7 @@ if __name__ == '__main__':
 
     __author__ = 'master by Vint'
     __title__ = '--- Clickermann_bot database ---'
-    __version__ = '0.1.3'
+    __version__ = '0.1.4'
     __copyright__ = 'Copyright 2020 (c)  bitbucket.org/Vintets'
     auth_sh.authorship(__author__, __title__, __version__, __copyright__, width=_width)
 

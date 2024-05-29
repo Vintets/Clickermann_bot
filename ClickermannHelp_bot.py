@@ -37,7 +37,7 @@ import pretty_errors  # noqa
 from telebot import types
 
 
-__version__ = '0.3.5'
+__version__ = '0.3.6'
 
 
 def keyboard_main_comands():
